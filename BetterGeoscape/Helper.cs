@@ -11,6 +11,8 @@ using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
+
+
 namespace PhoenixRising.BetterGeoscape
 {
     internal class Helper
@@ -20,32 +22,26 @@ namespace PhoenixRising.BetterGeoscape
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
         internal static string ModDirectory;
         internal static string LocalizationDirectory;
-        internal static string ManagedDirectory;
+        
 
         public static readonly string GeoscapeLocalizationFileName = "PR_BG_Localization.csv";
         public static readonly string CHStoryLocalizationFileName = "PR_CH_Story_Localization.csv";
-
-        // Desearialize dictionary from Json to map non localized texts to ViewDefs
-        public static readonly string TextMapFileName = "NotLocalizedTextMap.json";
-        public static Dictionary<string, Dictionary<string, string>> NotLocalizedTextMap;
-
-
+               
         public static void Initialize()
         {
             try
             {
                 ModDirectory = BetterGeoscapeMain.ModDirectory;
-                ManagedDirectory = BetterGeoscapeMain.ManagedDirectory;
                 LocalizationDirectory = BetterGeoscapeMain.LocalizationDirectory;
                 if (File.Exists(Path.Combine(LocalizationDirectory, GeoscapeLocalizationFileName)))
                 {
                     AddLocalizationFromCSV(GeoscapeLocalizationFileName, null);
                 }
-                if (File.Exists(Path.Combine(LocalizationDirectory, CHStoryLocalizationFileName)))
+                if (File.Exists(Path.Combine(LocalizationDirectory, CHStoryLocalizationFileName))&& BetterGeoscapeMain.Config.ActivateCHRework)
                 {
                     AddLocalizationFromCSV(CHStoryLocalizationFileName, null);
                 }
-                NotLocalizedTextMap = ReadJson<Dictionary<string, Dictionary<string, string>>>(TextMapFileName);
+               
             }
             catch (Exception e)
             {
@@ -154,86 +150,6 @@ namespace PhoenixRising.BetterGeoscape
             {
                 Logger.Error(e);
                 return null;
-            }
-        }
-
-        
-
-        // Read embedded or external json file
-        public static T ReadJson<T>(string fileName)
-        {
-            try
-            {
-                string json = null;
-                Assembly assembly = Assembly.GetExecutingAssembly();
-                string source = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName));
-                string filePath = Path.Combine(ManagedDirectory, fileName);
-                DateTime fileLastChanged = File.GetLastWriteTime(filePath);
-                DateTime assemblyLastChanged = File.GetLastWriteTime(assembly.Location);
-                if (source != null && source != "" && fileLastChanged < assemblyLastChanged)
-                {
-                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    Logger.Always("Read JSON from assembly: " + source);
-                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    using (Stream stream = assembly.GetManifestResourceStream(source))
-                    using (StreamReader reader = new StreamReader(stream))
-                    {
-                        json = reader.ReadToEnd();
-                    }
-                }
-                if (json == null || json == "")
-                {
-                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    Logger.Always("Read JSON from file: " + filePath);
-                    Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    json = File.Exists(filePath) ? File.ReadAllText(filePath) : throw new FileNotFoundException(filePath);
-                }
-                return JsonConvert.DeserializeObject<T>(json);
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-                return default;
-            }
-        }
-
-        // Write to external json file
-        public static void WriteJson(string fileName, object obj, bool toFile = true)
-        {
-            try
-            {
-                string jsonString = JsonConvert.SerializeObject(obj, Formatting.Indented);
-                if (toFile)
-                {
-                    //string ModDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-                    string filePath = Path.Combine(ManagedDirectory, fileName);
-                    if (File.Exists(filePath))
-                    {
-                        File.WriteAllText(Path.Combine(ManagedDirectory, fileName), jsonString);
-                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                        Logger.Always("Write JSON to file: " + filePath);
-                        Logger.Always("----------------------------------------------------------------------------------------------------", false);
-                    }
-                    else
-                    {
-                        throw new FileNotFoundException(filePath);
-                    }
-                }
-                // Writing in running assembly -- TODO: if really needed -> figure out to make it possible
-                //Assembly assembly = Assembly.GetExecutingAssembly();
-                //string source = assembly.GetManifestResourceNames().Single(str => str.EndsWith(fileName));
-                //if (source != null || source != "")
-                //{
-                //    using (Stream stream = assembly.GetManifestResourceStream(source))
-                //    using (StreamWriter writer = new StreamWriter(stream))
-                //    {
-                //        writer.Write(jsonString);
-                //    }
-                //}
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
             }
         }
     }

@@ -1,0 +1,155 @@
+Key,Type,Desc,English
+PROG_LE1_WIN_CHOICE_2_OUTCOME_GENERAL,Text,,"MESSAGE 
+From:Colonel Jack Harlson (New Jericho) 
+To: Phoenix Point
+
+The Pandorans grow ever more cunning and deliberate in their attacks. We need more and better weapons. West is right: whatever the wishful thinkers may be dreaming, any feasible solution to this menace requires force and the willingness to use it."
+PROG_LE1_WIN_CHOICE_2_TEXT,Text,,"The Pandorans did it, all of it!"
+PROG_LE1_WIN_CHOICE_1_OUTCOME_GENERAL,Text,,"MESSAGE 
+From: Colonel Jack Harlson (New Jericho) 
+To: Phoenix Point
+
+I wanted to thank you personally for delivering this information. It is crucial that all of us understand the peril we are facing. Over the years we have gathered a lot of evidence showing how the Anu cultists are collaborating with the enemy. In due time, they will pay for their crimes against humanity."
+PROG_LE1_WIN_CHOICE_1_TEXT,Text,,Provide New Jericho with intelligence <i>proving</i> that Anu instigated the Pandoran attack
+PROG_LE1_WIN_CHOICE_0_OUTCOME_GENERAL,Text,,"MESSAGE 
+From: Colonel Jack Harlson (New Jericho) 
+To: Phoenix Point 
+
+It has been reported that your organization is in the possession of an armored vehicle stolen from a New Jericho facility that came under heavy attack by Pandorans and unknown human or pseudo-human assailants. 
+
+I'll be looking into this matter personally. 
+
+West is showing great leniency to your organization in the expectation of the role it will play in the delivery of our species. For my part, sometimes I'm not so sure that we need you at all."
+PROG_LE1_WIN_CHOICE_0_TEXT,Text,,Keep the Armadillo
+PROG_LE1_WIN_TEXT_GENERAL_0,Text,,We succeeded in our mission despite the unexpected appearance of Pandorans on the scene. Now we have to decide on our response to New Jericho.
+PROG_LE1_WIN_TITLE,Text,,Playing the Blame Game
+PROG_LE1_MISS_CHOICE_0_TEXT,Text,,START MISSION
+PROG_LE1_MISS_CHOICE_1_TEXT,Text,,CANCEL
+PROG_LE1_MISS_TEXT_GENERAL_0,Text,,"MISSION BRIEFING
+
+We have come up with a simple plan to obtain the NG+ Weapon Systems research without prejudicing our relations with New Jericho or drawing their attention to the value of the data in their possession. 
+
+Your team will be inserted outside the operational perimeter and proceed to the objective on foot. After obtaining a copy of the data, they will steal an armored vehicle from the garrison and make their getaway in it. They will subsequently abandon and destroy the vehicle. We will present the facts to New Jericho as a raid by an unknown third party. As long as we can maintain plausible deniability, our relations with NJ should not be affected."
+PROG_LE1_MISS_TITLE,Text,,Grand Theft Auto
+PROG_LE1_TEXT_GENERAL_0,Text,,"Impossible Weapons 
+
+Vanadium Co had an R & D division, Next Generation+ Weapon Systems, focused on designing armaments that required as of yet undiscovered technologies, energy sources or materials with impossible tensile strengths or conductivity. 
+
+Though at the time it was deemed little more than a publicity stunt and part of Vanadium's talent retention strategy, we speculate that these weapons could be indeed developed using the materials harnessed by the Ancients.
+
+We have located a New Jericho archive facility harboring the NG+ Weapon Systems research."
+PROG_LE1_TITLE,Text,,Impossible Weapons
+PX_CRYSTALCROSSBOW_RESEARCHDEF_COMPLETE,Text,,"At a first glance it seemed to us that Kristian Luft came up with a design for a very high air powered bow; a long shot from the marvels of the other projects of the NG+ Vanadium division. This until we realized that Prof. Luft did away with the glaring deficiency of all crossbows: that they require bolts. The Crystal Crossbow does not shoot bolts at all, but rather air particles accelerated to incredible speeds!"
+PX_CRYSTALCROSSBOW_RESEARCHDEF_NAME,Text,,Crystal Crossbow
+PX_CRYSTALCROSSBOW_RESEARCHDEF_UNLOCK,Text,,"A design for what appears to be a high powered pneumatic crossbow by Kristian Luft, acclaimed particle physicist and medieval history buff."
+PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_COMPLETE,Text,,"The Mattock appears to have been designed by Valygar Prazac to address in hand to hand combat a variety of diverse hypothetical adversaries such as Golems, Gargoyles and (interestingly enough) intelligent crustaceans from outer space."
+PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_NAME,Text,,Mattock of the Ancients
+PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_UNLOCK,Text,,"An impossible melee weapon dreamt up by Valygar Prazac of the NG+ Weapon Systems at Vanadium Co., and former professor in the experimental physics department of the Taras Shevchenko University of Kyiv."
+PX_REBUKE_RESEARCHDEF_COMPLETE,Text,,"Mr. Stridrahen was an imminently practical man and this practicality paradoxically shows throughout the impracticable (before the Antediluvian materials) Rebuke. It is somewhat of a misnomer to describe this weapon as a grenade launcher, and what happens when it is activated as an explosion, but it will have to do until we are ready to update our physics models to account for the Antediluvian materials."
+PX_REBUKE_RESEARCHDEF_NAME,Text,,Rebuke
+PX_REBUKE_RESEARCHDEF_UNLOCK,Text,,"Hristos Stridrahen, the mind behind the Rebuke, rose from Vanadium Mining and Rare Earths division to NG+ Weapon Systems through his passion for high explosives."
+PX_SCORPION_RESEARCHDEF_COMPLETE,Text,,"The ultimate purpose of the Scorpion is to make all forms of armor obsolete. Surprisingly, it seems like Mr. Antonasov’s work has provided a foundational basis for a lot of technologies with practical applications developed first by Vanadium and later New Jericho."
+PX_SCORPION_RESEARCHDEF_NAME,Text,,Scorpion
+PX_SCORPION_RESEARCHDEF_UNLOCK,Text,,This blueprint by renowned rocket engineer John Antonasov is for some sort of long rifle with incredible penetration and damage capacity.
+PX_SCYTHER_RESEARCHDEF_COMPLETE,Text,,"According to the notes accompanying the recovered data, Jules Godfry designed the Scyther after his disappointing performance in some sort of corporate ludic e-competition called ""Chaos Reborn 2022 Annual Tournament”. In psychological terms it is the expression of unfathomable anger directed at all things, living and inanimate, though its practical military applications in the real world were doubtful until the appearance of the Pandoran monstrosities."
+PX_SCYTHER_RESEARCHDEF_NAME,Text,,Scyther
+PX_SCYTHER_RESEARCHDEF_UNLOCK,Text,,"A curious design by Jules Godfry, head of NG+ Weapon Systems at Vanadium, that looks like an electro blade powered by a miniaturized fusion reactor."
+PX_SHARDGUN_RESEARCHDEF_COMPLETE,Text,,"The Shard Gun is perhaps the less theoretically impressive of the NG+ Weapon Systems designs. But what it lacks in mathematical panache, it compensates in sheer effectiveness; in the words of its promoter, Emmanuel ""SG"" Erickson, ""it will be a bad*** shotgun that will **** you up, you trespassing ***********"" (Mr. Erickson's streams were notable for their profanity. They tragically ended at the beginning of the First Mist, when a Triton invaded Emmanuel's Malibu beachfront, ironically vindicating the streamer's plea for a next generation home defense weapon)."
+PX_SHARDGUN_RESEARCHDEF_NAME,Text,,Shard Gun
+PX_SHARDGUN_RESEARCHDEF_UNLOCK,Text,,"Emmanuel ""Shotgun"" Erickson, publicist, streaming celebrity and the face of NG+ Weapon Systems, advertised the work of his team as ""the next generation home defense weapons against next generation home invaders""."
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,
+,Text,,

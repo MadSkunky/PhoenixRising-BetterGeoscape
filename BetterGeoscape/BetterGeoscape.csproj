@@ -93,8 +93,10 @@
     <EmbeddedResource Include="mod_info.js" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Localization\PR_BG_Localization.csv" />
     <None Include="Assets\Localization\PR_CH_Story_Localization.csv" />
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -2,6 +2,7 @@
 using Base.Defs;
 using Base.Eventus;
 using Base.Eventus.Filters;
+using Base.UI;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.Entities.Research;
 using PhoenixPoint.Geoscape.Entities.Research.Requirement;
@@ -10,7 +11,9 @@ using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Conditions;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Events.Eventus.Filters;
+using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Tactical.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -82,8 +85,6 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.LairLimitations.HoursBuildTime = 150;
                 veryhard.CitadelLimitations.HoursBuildTime = 240;
 
-
-
                 // KE Story rework - remove missions + Maker
                 TheMarketplaceSettingsDef theMarketplaceSettings = Repo.GetAllDefs<TheMarketplaceSettingsDef>().FirstOrDefault(ged => ged.name.Equals("TheMarketplaceSettingsDef"));
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[0].MaxNumberOfOffers = theMarketplaceSettings.TheMarketplaceItemOfferAmounts[4].MaxNumberOfOffers;
@@ -104,11 +105,11 @@ namespace PhoenixRising.BetterGeoscape
                 LE1Win.GeoscapeEventData.Choices[0].Outcome.SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents;
                 LE1Win.GeoscapeEventData.Choices[0].Outcome.TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters;
                 //Unlock all ancient weapons research and add hidden variable to unlock final cinematic
-                GeoscapeEventDef LE2Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE3Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE4Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE5Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE6Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
+                GeoscapeEventDef LE2Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE2_WIN_GeoscapeEventDef"));
+                GeoscapeEventDef LE3Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE3_WIN_GeoscapeEventDef"));
+                GeoscapeEventDef LE4Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE4_WIN_GeoscapeEventDef"));
+                GeoscapeEventDef LE5Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE5_WIN_GeoscapeEventDef"));
+                GeoscapeEventDef LE6Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE6_WIN_GeoscapeEventDef"));
                 OutcomeVariableChange Schemata2Res = LE2Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
                 OutcomeVariableChange Schemata3Res = LE3Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
                 OutcomeVariableChange Schemata4Res = LE4Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
@@ -121,6 +122,86 @@ namespace PhoenixRising.BetterGeoscape
                 LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata5Res);
                 LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata6Res);
                 LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(var6LE);
+                //Remove 50 SP
+                LE1Win.GeoscapeEventData.Choices[0].Outcome.FactionSkillPoints = 0;
+                LE1Win.GeoscapeEventData.Leader = "Jack_Harlson01";
+                //Require capturing ancient site for LOTA Schemata missions
+                //GeoscapeEventDef LE1Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_GeoscapeEventDef"));
+                //GeoscapeEventDef LEFinalEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE_FINAL_GeoscapeEventDef"));
+                //GeoLevelConditionDef sourceCondition = Repo.GetAllDefs<GeoLevelConditionDef>().FirstOrDefault(ged => ged.name.Equals("[PROG_LE_FINAL] Condition 1"));
+                //GeoLevelConditionDef newCondition = Helper.CreateDefFromClone(sourceCondition, "0358D502-421D-4D9A-9505-491FC80F1C56", "[PROG_LE_1] Condition 2");
+                //newCondition.VariableCompareToNumber = 1;
+                //LE1Event.GeoscapeEventData.Conditions.Add(newCondition);
+                //Add choices for LE1Win
+
+                GeoFactionDef PhoenixPoint=Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
+                GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
+                GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
+                                
+                LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_1_TEXT"),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        UntrackEncounters = LE1Win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        VariablesChange = LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_1_OUTCOME_GENERAL")
+                        },
+                        SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents,
+                        TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters,
+                        FactionSkillPoints = 0
+                    }
+                });
+                LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_2_TEXT"),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        UntrackEncounters = LE1Win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        VariablesChange = LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_2_OUTCOME_GENERAL")
+                        },
+                        SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents,
+                        TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters,
+                        FactionSkillPoints = 0
+                    }
+                });
+                LE1Win.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_LE1_WIN_CHOICE_0_OUTCOME_GENERAL";
+                TacCharacterDef armadillo = Repo.GetAllDefs<TacCharacterDef>().FirstOrDefault(ged => ged.name.Equals("NJ_Armadillo_CharacterTemplateDef"));
+                LE1Win.GeoscapeEventData.Choices[0].Outcome.Units.Add(armadillo);
+                LE1Win.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -8
+                    
+                });
+                LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +8
+                });
+                LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Anu,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -8
+                });
+                LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = Anu,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -16
+                });
 
             }
             catch (Exception e)
