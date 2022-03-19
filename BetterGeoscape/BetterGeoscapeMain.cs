@@ -14,11 +14,9 @@ namespace PhoenixRising.BetterGeoscape
 
         internal static string LogPath;
         internal static string ModDirectory;
-        internal static string ManagedDirectory;
         internal static string LocalizationDirectory;
         internal static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        internal static bool doNotLocalize = true;
-
+        
         public static void HomeMod(Func<string, object, object> api)
         {
             InitBetterGeoscape(api);
@@ -42,7 +40,6 @@ namespace PhoenixRising.BetterGeoscape
                 CHReworkMain.Apply_Changes();
             }
 
-
         }
         public static void GeoscapeOnHide()
         {
@@ -61,6 +58,7 @@ namespace PhoenixRising.BetterGeoscape
             ModDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             // Path to localization CSVs
             LocalizationDirectory = Path.Combine(ModDirectory, "Assets", "Localization");
+            
             // Initialize Logger
             LogPath = Path.Combine(ModDirectory, "BetterGeoscape.log");
             Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(BetterGeoscapeMain));

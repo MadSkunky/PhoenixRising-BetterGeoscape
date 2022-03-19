@@ -120,9 +120,6 @@ namespace PhoenixRising.BetterGeoscape
                 // Remove final cinematic
                 GeoscapeEventDef winCH2 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH2_WIN_GeoscapeEventDef"));
                 winCH2.GeoscapeEventData.Choices[0].Outcome.Cinematic = CH_Event_NeedLair.GeoscapeEventData.Choices[0].Outcome.Cinematic;
-
-
-
             }
             
             catch (Exception e)
