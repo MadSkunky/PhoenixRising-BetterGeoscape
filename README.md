@@ -17,7 +17,7 @@ Increases the time to build a Citadel (Legend only)
 
 Removes all DLC5 KE missions; prices and items available as if all missions had been completed
 
-Replaces all LOTA Schemata missions with KE2 mission (note: all storytelling elements pending)
+Replaces all LOTA Schemata missions with KE2 mission
 
 Changes how corruption works (on by default, can be turned off in config):
 

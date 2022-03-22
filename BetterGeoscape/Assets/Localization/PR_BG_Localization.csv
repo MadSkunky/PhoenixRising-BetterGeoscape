@@ -1,16 +1,16 @@
-Key,Type,Desc,English
+Key,Type,Desc,English,Chinese (Simplified),French,German,Italian,Polish,Russian,Spanish,UI_Tester
 PROG_LE1_WIN_CHOICE_2_OUTCOME_GENERAL,Text,,"MESSAGE 
 From:Colonel Jack Harlson (New Jericho) 
 To: Phoenix Point
 
-The Pandorans grow ever more cunning and deliberate in their attacks. We need more and better weapons. West is right: whatever the wishful thinkers may be dreaming, any feasible solution to this menace requires force and the willingness to use it."
-PROG_LE1_WIN_CHOICE_2_TEXT,Text,,"The Pandorans did it, all of it!"
+The Pandorans grow ever more cunning and deliberate in their attacks. We need more and better weapons. West is right: whatever the wishful thinkers may be dreaming, any feasible solution to this menace requires force and the willingness to use it.",,,,,,,,
+PROG_LE1_WIN_CHOICE_2_TEXT,Text,,"The Pandorans did it, all of it!",,,,,,,,
 PROG_LE1_WIN_CHOICE_1_OUTCOME_GENERAL,Text,,"MESSAGE 
 From: Colonel Jack Harlson (New Jericho) 
 To: Phoenix Point
 
-I wanted to thank you personally for delivering this information. It is crucial that all of us understand the peril we are facing. Over the years we have gathered a lot of evidence showing how the Anu cultists are collaborating with the enemy. In due time, they will pay for their crimes against humanity."
-PROG_LE1_WIN_CHOICE_1_TEXT,Text,,Provide New Jericho with intelligence <i>proving</i> that Anu instigated the Pandoran attack
+I wanted to thank you personally for delivering this information. It is crucial that all of us understand the peril we are facing. Over the years we have gathered a lot of evidence showing how the Anu cultists are collaborating with the enemy. In due time, they will pay for their crimes against humanity.",,,,,,,,
+PROG_LE1_WIN_CHOICE_1_TEXT,Text,,Provide New Jericho with intelligence <i>proving</i> that Anu instigated the Pandoran attack,,,,,,,,
 PROG_LE1_WIN_CHOICE_0_OUTCOME_GENERAL,Text,,"MESSAGE 
 From: Colonel Jack Harlson (New Jericho) 
 To: Phoenix Point 
@@ -19,137 +19,85 @@ It has been reported that your organization is in the possession of an armored v
 
 I'll be looking into this matter personally. 
 
-West is showing great leniency to your organization in the expectation of the role it will play in the delivery of our species. For my part, sometimes I'm not so sure that we need you at all."
-PROG_LE1_WIN_CHOICE_0_TEXT,Text,,Keep the Armadillo
-PROG_LE1_WIN_TEXT_GENERAL_0,Text,,We succeeded in our mission despite the unexpected appearance of Pandorans on the scene. Now we have to decide on our response to New Jericho.
-PROG_LE1_WIN_TITLE,Text,,Playing the Blame Game
-PROG_LE1_MISS_CHOICE_0_TEXT,Text,,START MISSION
-PROG_LE1_MISS_CHOICE_1_TEXT,Text,,CANCEL
+West is showing great leniency to your organization in the expectation of the role it will play in the delivery of our species. For my part, sometimes I'm not so sure that we need you at all.",,,,,,,,
+PROG_LE1_WIN_CHOICE_0_TEXT,Text,,Keep the Armadillo,,,,,,,,
+PROG_LE1_WIN_TEXT_GENERAL_0,Text,,We succeeded in our mission despite the unexpected appearance of Pandorans on the scene. Now we have to decide on our response to New Jericho.,,,,,,,,
+PROG_LE1_WIN_TITLE,Text,,Playing the Blame Game,,,,,,,,
+PROG_LE1_MISS_CHOICE_0_TEXT,Text,,START MISSION,,,,,,,,
+PROG_LE1_MISS_CHOICE_1_TEXT,Text,,CANCEL,,,,,,,,
 PROG_LE1_MISS_TEXT_GENERAL_0,Text,,"MISSION BRIEFING
 
 We have come up with a simple plan to obtain the NG+ Weapon Systems research without prejudicing our relations with New Jericho or drawing their attention to the value of the data in their possession. 
 
-Your team will be inserted outside the operational perimeter and proceed to the objective on foot. After obtaining a copy of the data, they will steal an armored vehicle from the garrison and make their getaway in it. They will subsequently abandon and destroy the vehicle. We will present the facts to New Jericho as a raid by an unknown third party. As long as we can maintain plausible deniability, our relations with NJ should not be affected."
-PROG_LE1_MISS_TITLE,Text,,Grand Theft Auto
+Your team will be inserted outside the operational perimeter and proceed to the objective on foot. After obtaining a copy of the data, they will steal an armored vehicle from the garrison and make their getaway in it. They will subsequently abandon and destroy the vehicle. We will present the facts to New Jericho as a raid by an unknown third party. As long as we can maintain plausible deniability, our relations with NJ should not be affected.",,,,,,,,
+PROG_LE1_MISS_TITLE,Text,,Grand Theft Auto,,,,,,,,
 PROG_LE1_TEXT_GENERAL_0,Text,,"Impossible Weapons 
 
 Vanadium Co had an R & D division, Next Generation+ Weapon Systems, focused on designing armaments that required as of yet undiscovered technologies, energy sources or materials with impossible tensile strengths or conductivity. 
 
 Though at the time it was deemed little more than a publicity stunt and part of Vanadium's talent retention strategy, we speculate that these weapons could be indeed developed using the materials harnessed by the Ancients.
 
-We have located a New Jericho archive facility harboring the NG+ Weapon Systems research."
-PROG_LE1_TITLE,Text,,Impossible Weapons
-PX_CRYSTALCROSSBOW_RESEARCHDEF_COMPLETE,Text,,"At a first glance it seemed to us that Kristian Luft came up with a design for a very high air powered bow; a long shot from the marvels of the other projects of the NG+ Vanadium division. This until we realized that Prof. Luft did away with the glaring deficiency of all crossbows: that they require bolts. The Crystal Crossbow does not shoot bolts at all, but rather air particles accelerated to incredible speeds!"
-PX_CRYSTALCROSSBOW_RESEARCHDEF_NAME,Text,,Crystal Crossbow
-PX_CRYSTALCROSSBOW_RESEARCHDEF_UNLOCK,Text,,"A design for what appears to be a high powered pneumatic crossbow by Kristian Luft, acclaimed particle physicist and medieval history buff."
-PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_COMPLETE,Text,,"The Mattock appears to have been designed by Valygar Prazac to address in hand to hand combat a variety of diverse hypothetical adversaries such as Golems, Gargoyles and (interestingly enough) intelligent crustaceans from outer space."
-PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_NAME,Text,,Mattock of the Ancients
-PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_UNLOCK,Text,,"An impossible melee weapon dreamt up by Valygar Prazac of the NG+ Weapon Systems at Vanadium Co., and former professor in the experimental physics department of the Taras Shevchenko University of Kyiv."
-PX_REBUKE_RESEARCHDEF_COMPLETE,Text,,"Mr. Stridrahen was an imminently practical man and this practicality paradoxically shows throughout the impracticable (before the Antediluvian materials) Rebuke. It is somewhat of a misnomer to describe this weapon as a grenade launcher, and what happens when it is activated as an explosion, but it will have to do until we are ready to update our physics models to account for the Antediluvian materials."
-PX_REBUKE_RESEARCHDEF_NAME,Text,,Rebuke
-PX_REBUKE_RESEARCHDEF_UNLOCK,Text,,"Hristos Stridrahen, the mind behind the Rebuke, rose from Vanadium Mining and Rare Earths division to NG+ Weapon Systems through his passion for high explosives."
-PX_SCORPION_RESEARCHDEF_COMPLETE,Text,,"The ultimate purpose of the Scorpion is to make all forms of armor obsolete. Surprisingly, it seems like Mr. Antonasov’s work has provided a foundational basis for a lot of technologies with practical applications developed first by Vanadium and later New Jericho."
-PX_SCORPION_RESEARCHDEF_NAME,Text,,Scorpion
-PX_SCORPION_RESEARCHDEF_UNLOCK,Text,,This blueprint by renowned rocket engineer John Antonasov is for some sort of long rifle with incredible penetration and damage capacity.
-PX_SCYTHER_RESEARCHDEF_COMPLETE,Text,,"According to the notes accompanying the recovered data, Jules Godfry designed the Scyther after his disappointing performance in some sort of corporate ludic e-competition called ""Chaos Reborn 2022 Annual Tournament”. In psychological terms it is the expression of unfathomable anger directed at all things, living and inanimate, though its practical military applications in the real world were doubtful until the appearance of the Pandoran monstrosities."
-PX_SCYTHER_RESEARCHDEF_NAME,Text,,Scyther
-PX_SCYTHER_RESEARCHDEF_UNLOCK,Text,,"A curious design by Jules Godfry, head of NG+ Weapon Systems at Vanadium, that looks like an electro blade powered by a miniaturized fusion reactor."
-PX_SHARDGUN_RESEARCHDEF_COMPLETE,Text,,"The Shard Gun is perhaps the less theoretically impressive of the NG+ Weapon Systems designs. But what it lacks in mathematical panache, it compensates in sheer effectiveness; in the words of its promoter, Emmanuel ""SG"" Erickson, ""it will be a bad*** shotgun that will **** you up, you trespassing ***********"" (Mr. Erickson's streams were notable for their profanity. They tragically ended at the beginning of the First Mist, when a Triton invaded Emmanuel's Malibu beachfront, ironically vindicating the streamer's plea for a next generation home defense weapon)."
-PX_SHARDGUN_RESEARCHDEF_NAME,Text,,Shard Gun
-PX_SHARDGUN_RESEARCHDEF_UNLOCK,Text,,"Emmanuel ""Shotgun"" Erickson, publicist, streaming celebrity and the face of NG+ Weapon Systems, advertised the work of his team as ""the next generation home defense weapons against next generation home invaders""."
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
-,Text,,
+We have located a New Jericho archive facility harboring the NG+ Weapon Systems research.",,,,,,,,
+PROG_LE1_TITLE,Text,,Impossible Weapons,,,,,,,,
+PX_CRYSTALCROSSBOW_RESEARCHDEF_COMPLETE,Text,,"At a first glance it seemed to us that Kristian Luft came up with a design for a very high air powered bow; a long shot from the marvels of the other projects of the NG+ Vanadium division. This until we realized that Prof. Luft did away with the glaring deficiency of all crossbows: that they require bolts. The Crystal Crossbow does not shoot bolts at all, but rather air particles accelerated to incredible speeds!",,,,,,,,
+PX_CRYSTALCROSSBOW_RESEARCHDEF_NAME,Text,,Crystal Crossbow,,,,,,,,
+PX_CRYSTALCROSSBOW_RESEARCHDEF_UNLOCK,Text,,"A design for what appears to be a high powered pneumatic crossbow by Kristian Luft, acclaimed particle physicist and medieval history buff.",,,,,,,,
+PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_COMPLETE,Text,,"The Mattock appears to have been designed by Valygar Prazac to address in hand to hand combat a variety of diverse hypothetical adversaries such as Golems, Gargoyles and (interestingly enough) intelligent crustaceans from outer space.",,,,,,,,
+PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_NAME,Text,,Mattock of the Ancients,,,,,,,,
+PX_MATTOCKOFTHEANCIENTS_RESEARCHDEF_UNLOCK,Text,,"An impossible melee weapon dreamt up by Valygar Prazac of the NG+ Weapon Systems at Vanadium Co., and former professor in the experimental physics department of the Taras Shevchenko University of Kyiv.",,,,,,,,
+PX_REBUKE_RESEARCHDEF_COMPLETE,Text,,"Mr. Stridrahen was an imminently practical man and this practicality paradoxically shows throughout the impracticable (before the Antediluvian materials) Rebuke. It is somewhat of a misnomer to describe this weapon as a grenade launcher, and what happens when it is activated as an explosion, but it will have to do until we are ready to update our physics models to account for the Antediluvian materials.",,,,,,,,
+PX_REBUKE_RESEARCHDEF_NAME,Text,,Rebuke,,,,,,,,
+PX_REBUKE_RESEARCHDEF_UNLOCK,Text,,"Hristos Stridrahen, the mind behind the Rebuke, rose from Vanadium Mining and Rare Earths division to NG+ Weapon Systems through his passion for high explosives.",,,,,,,,
+PX_SCORPION_RESEARCHDEF_COMPLETE,Text,,"The ultimate purpose of the Scorpion is to make all forms of armor obsolete. Surprisingly, it seems like Mr. Antonasov’s work has provided a foundational basis for a lot of technologies with practical applications developed first by Vanadium and later New Jericho.",,,,,,,,
+PX_SCORPION_RESEARCHDEF_NAME,Text,,Scorpion,,,,,,,,
+PX_SCORPION_RESEARCHDEF_UNLOCK,Text,,This blueprint by renowned rocket engineer John Antonasov is for some sort of long rifle with incredible penetration and damage capacity.,,,,,,,,
+PX_SCYTHER_RESEARCHDEF_COMPLETE,Text,,"According to the notes accompanying the recovered data, Jules Godfry designed the Scyther after his disappointing performance in some sort of corporate ludic e-competition called ""Chaos Reborn 2022 Annual Tournament”. In psychological terms it is the expression of unfathomable anger directed at all things, living and inanimate, though its practical military applications in the real world were doubtful until the appearance of the Pandoran monstrosities.",,,,,,,,
+PX_SCYTHER_RESEARCHDEF_NAME,Text,,Scyther,,,,,,,,
+PX_SCYTHER_RESEARCHDEF_UNLOCK,Text,,"A curious design by Jules Godfry, head of NG+ Weapon Systems at Vanadium, that looks like an electro blade powered by a miniaturized fusion reactor.",,,,,,,,
+PX_SHARDGUN_RESEARCHDEF_COMPLETE,Text,,"The Shard Gun is perhaps the less theoretically impressive of the NG+ Weapon Systems designs. But what it lacks in mathematical panache, it compensates in sheer effectiveness; in the words of its promoter, Emmanuel ""SG"" Erickson, ""it will be a bad*** shotgun that will **** you up, you trespassing ***********"" (Mr. Erickson's streams were notable for their profanity. They tragically ended at the beginning of the First Mist, when a Triton invaded Emmanuel's Malibu beachfront, ironically vindicating the streamer's plea for a next generation home defense weapon).",,,,,,,,
+PX_SHARDGUN_RESEARCHDEF_NAME,Text,,Shard Gun,,,,,,,,
+PX_SHARDGUN_RESEARCHDEF_UNLOCK,Text,,"Emmanuel ""Shotgun"" Erickson, publicist, streaming celebrity and the face of NG+ Weapon Systems, advertised the work of his team as ""the next generation home defense weapons against next generation home invaders"".",,,,,,,,
+KEY_K2_MISSION_FLAVOUR_TEXT,Text,,DOWNLOAD IMPOSSIBLE WEAPONS RESEARCH,,,,,,,,
+KEY_MARKETPLACE_HAVEN_ADDITIONAL_HEADER,Text,,The Bazaar,,,,,,,,
+KEY_MARKETPLACE_DESCRIPTION_1,Text,,"The leader of the haven, Sol ""Maker"" Markus, is fascinated by the esoteric and the occult. He has requested that we retrieve a Drop-Ka stone that he has located in a Pre-War collection. ",,,,,,,,
+KEY_MARKETPLACE_DESCRIPTION_2,Text,,Sol is happy and reminds us to do as we are told if we want to receive further blessings,,,,,,,,
+KEY_MARKETPLACE_DESCRIPTION_3,Text,,Sol has received the Bionics tech. He hints that Subject 24 should be destroyed.,,,,,,,,
+KEY_MARKETPLACE_DESCRIPTION_4,Text,,Sol is happy because we destroyed the fortress,,,,,,,,
+KEY_MARKETPLACE_DESCRIPTION_5,Text,,Sol is most happy because we stole Bionics tech and destroyed the fortress,,,,,,,,
+DLC5/KEY_MARKETPLACE_HAVEN_HEADER,Text,,BAZAAR HAVEN,,,,,,,,
+DLC5/KEY_KAOS_SYNDICATE,Text,,The Bazaar,,,,,,,,
+PROG_KE1_TITLE,Text,,Mind Tricks,,,,,,,,
+PROG_KE1_CHOICE_0_TEXT,Text,,Enter the crypt and retrieve the Drop-Ka stone. ,,,,,,,,
+PROG_KE1_TEXT_GENERAL_0,Text,,"The coordinates provided by the Maker take you to the overgrown ruins of the collector's estate. It would have taken you weeks to find the Drop-Ka stone, but for the precise instructions given by Markus, directing you towards the ancient family crypt. ",,,,,,,,
+PROG_KE1_TEXT_OUTCOME_0,Text,,"As you step inside the crypt, alien thoughts are projected into your mind. You are *listening* to a *voice* you cannot *hear*.
+
+<i>""Soon you will be contacted by string Subject integer twenty four. Accept proposal. Share data. Satisfactory outcome will lead to much preferred customer status. Beware of your Amygdala, it reeks of betrayal.""</i>
+
+There is no Drop-Ka stone to be found, but you suspect that's not why you were sent here anyway.",,,,,,,,
+DLC5/KEY_MARKETPLACE_ACCEPT_MISSION,Text,,ACCEPT ,,,,,,,,
+DLC5/KEY_MARKETPLACE_LOCATE_MISSION,Text,,DO NOT TRY SOL'S PATIENCE,,,,,,,,
+DLC5/KEY_MARKETPLACE_MISSION_AVAILABLE,Text,,NEW MISSION AVAILABLE,,,,,,,,
+DLC5/KEY_MARKETPLACE_MISSION_IN_PROGRESS,Text,,DO AS SOL COMMANDS,,,,,,,,
+DLC5/KEY_MARKETPLACE_NO_MISSIONS,Text,,SOL IS PLEASED,,,,,,,,
+SDI_01_TEXT_GENERAL_0,Text,,"We are ready to share our preliminary findings regarding the new Pandoravirus outbreak.
+
+The viral mist is an extremely unusual phenomenon. It is in fact a highly complex aerosol, capable of moving with deliberation and transporting viral DNA and other microbes.
+
+It is our belief that the vast waves of mist that helped cause the destruction of civilization were generated underwater by gigantic, mutated structures. Each wave, including the current one (referred to by the population as the Third Mist) has slightly different properties.",,,,,,,,
+SDI1_OUTCOME,Text,,"We have received reports of a variety of afflictions suffered by individuals who have traveled or reside in areas covered by the mist: tiredness, lack of energy, brain fog, anguish and sometimes hallucinations.
+
+So far we can conclude the following:
+
+1) Symptoms never fully disappear, but are negligible when the subjects are fully rested, and progressively become worse as they exert themselves. 
+2) Symptoms get worse if the subject stays or returns to locations where mist is present. 
+
+We have termed this condition ""Oneiric Delirium"", on account of the subjects complaining of nightmares, or ""crazy dreams"", with similar themes of monstrosities and smothering. 
+
+<b>Our operatives can now be afflicted with a Delirium status of up to a third of their Willpower</b>",,,,,,,,
+SDI_01_TITLE,Text,,The Third Mist,,,,,,,,
+SDI6_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
+
+<b>Our operatives can now be afflicted with a Delirium status of up to half of their Willpower</b>",,,,,,,,
+SDI16_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
+
+<b>Our operatives can now be afflicted with a Delirium status equal to their Willpower</b>",,,,,,,,

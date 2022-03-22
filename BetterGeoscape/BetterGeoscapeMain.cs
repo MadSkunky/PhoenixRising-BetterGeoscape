@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Base.Core;
 using Base.Defs;
-
+using Harmony;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -25,7 +25,7 @@ namespace PhoenixRising.BetterGeoscape
             
 
             // Only needed if Harmony patches are used
-            //HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
+            HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
 
             // Modnix logging
             api("log verbose", "Mod Initialised.");
