@@ -608,13 +608,28 @@ namespace PhoenixRising.BetterGeoscape
 
         // Harmony patch to save the characters geoscape stamina by acor ID, this mehtod is called in the deployment phase before switching to tactical mode
         [HarmonyPatch(typeof(CharacterFatigue), "ApplyToTacticalInstance")]
+        
         internal static class BC_CharacterFatigue_ApplyToTacticalInstance_Patch
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(CharacterFatigue __instance, TacCharacterData data)
             {
-                //Logger.Always($"BC_CharacterFatigue_ApplyToTacticalInstance_Patch.POSTFIX called, GeoUnitID {data.Id} with {__instance.Stamina.IntValue} stamina added to dictionary.", false);
-                StaminaMap.Add(data.Id, __instance.Stamina.IntValue);
+                try
+                {
+                    //Logger.Always($"BC_CharacterFatigue_ApplyToTacticalInstance_Patch.POSTFIX called, GeoUnitID {data.Id} with {__instance.Stamina.IntValue} stamina added to dictionary.", false);
+                    if (StaminaMap.ContainsKey(data.Id))
+                    {
+                        StaminaMap[data.Id] = __instance.Stamina.IntValue;
+                    }
+                    else
+                    {
+                        StaminaMap.Add(data.Id, __instance.Stamina.IntValue);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
             }
         }
 
@@ -675,6 +690,8 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
+
+
 
     }
 }
