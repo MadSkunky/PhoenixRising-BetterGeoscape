@@ -177,9 +177,41 @@ namespace PhoenixRising.BetterGeoscape
                     Value = -10
                 });
 
-                ProgSynSupportive2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                ProgSynSupportive1.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
-                    PartyFaction = Anu,
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -10
+                });
+
+                ProgSynSupportive1.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -10
+                });
+
+                ProgSynSupportive2.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -10
+                });
+
+                ProgSynSupportive2.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -10
+                });
+
+                ProgSynSupportive2.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -10
@@ -650,25 +682,30 @@ namespace PhoenixRising.BetterGeoscape
                     TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
 
                     // Get characters geoscape stamina by his actor ID
-                    int stamina = StaminaMap[base_TacticalActor.GeoUnitId];
+
+                    int stamina = 40;
+                    if (StaminaMap.ContainsKey(base_TacticalActor.GeoUnitId))
+                    {
+                        stamina = StaminaMap[base_TacticalActor.GeoUnitId];
+                    }
 
                     // Calculate WP reduction dependent on stamina
                     float wpReduction = 0; // stamina > 35
                     if (stamina > 30 && stamina <= 35)
                     {
-                        wpReduction = base_TacticalActor.CharacterStats.Corruption * 0.25f;
+                        wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
                     }
                     else
                     {
                         if (stamina > 25 && stamina <= 30)
                         {
-                            wpReduction = base_TacticalActor.CharacterStats.Corruption * 0.5f;
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
                         }
                         else
                         {
                             if (stamina > 20 && stamina <= 25)
                             {
-                                wpReduction = base_TacticalActor.CharacterStats.Corruption * 0.75f;
+                                wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
                             }
                             else // stamina <= 20
                             {
@@ -683,6 +720,10 @@ namespace PhoenixRising.BetterGeoscape
                                                     -wpReduction,
                                                     __instance.CorruptionStatusDef,
                                                     -wpReduction);
+
+                    // Get characters geoscape stamina by his actor ID
+                    
+
                 }
                 catch (Exception e)
                 {
