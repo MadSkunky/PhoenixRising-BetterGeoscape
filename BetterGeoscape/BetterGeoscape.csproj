@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CHReworkMain.cs" />
+    <Compile Include="ReverseEgineeringResearch.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ModConfig.cs" />

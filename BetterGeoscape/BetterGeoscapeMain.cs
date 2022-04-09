@@ -40,6 +40,12 @@ namespace PhoenixRising.BetterGeoscape
                 CHReworkMain.Apply_Changes();
             }
 
+            if (Config.ActivateReverseEngineeringResearch)
+            {
+                ReverseEgineeringResearch.Apply_Changes();
+            }
+
+
         }
         public static void GeoscapeOnHide()
         {

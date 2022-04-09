@@ -14,6 +14,8 @@ using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Abilities;
+using PhoenixPoint.Geoscape.Entities.Missions;
+using PhoenixPoint.Geoscape.Entities.Missions.Outcomes;
 using PhoenixPoint.Geoscape.Entities.Research;
 using PhoenixPoint.Geoscape.Entities.Research.Requirement;
 using PhoenixPoint.Geoscape.Entities.Research.Reward;
@@ -82,7 +84,10 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
                     {
-                        foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
+                        
+                        if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN")
+                        {
+                            foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
                         {
                             for (int i = 0; i < choice.Outcome.Diplomacy.Count; i++)
                             {
@@ -93,6 +98,7 @@ namespace PhoenixRising.BetterGeoscape
                                     choice.Outcome.Diplomacy[i] = diplomacyChange;
                                 }
                             }
+                        }
                         }
                     }
                     ApplyChangeDiplomacy = false;
@@ -113,12 +119,12 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef ProgSynAllianceTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN2_GeoscapeEventDef"));
 
 
-                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add (new OutcomeDiplomacyChange()
-                { 
-                     PartyFaction = NewJericho,
-                     TargetFaction = PhoenixPoint,
-                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                     Value = -10
+                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -10
                 });
 
                 ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
@@ -180,7 +186,7 @@ namespace PhoenixRising.BetterGeoscape
                 ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
                 {
                     VariableName = "Polyphonic",
-                    Value = { Min = 1, Max = 1 },        
+                    Value = { Min = 1, Max = 1 },
                     IsSetOperation = false,
                 });
 
@@ -246,7 +252,7 @@ namespace PhoenixRising.BetterGeoscape
                 });
 
                 ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                
+
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
@@ -363,7 +369,7 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef KE2Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE2_GeoscapeEventDef"));
                 GeoscapeEventDef KE3Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE3_GeoscapeEventDef"));
                 GeoscapeEventDef KE4Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE4_GeoscapeEventDef"));
-                
+
 
                 KE1Miss.GeoscapeEventData.Choices[0] = KE1MissWin.GeoscapeEventData.Choices[0];
                 KE1MissWin.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters.Add("PROG_KE1");
@@ -377,7 +383,7 @@ namespace PhoenixRising.BetterGeoscape
                     VariableName = "NumberOfDLC5MissionsCompletedVariable",
                     Value = KE1MissWin.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0].Value,
                     IsSetOperation = false,
-                
+
                 });
                 //Increase marketplace variable after destroying Bionic Fortress
                 GeoscapeEventDef dlc1missfinalwin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU14_WIN_GeoscapeEventDef"));
@@ -388,7 +394,7 @@ namespace PhoenixRising.BetterGeoscape
                     IsSetOperation = false,
 
                 });
-                
+
                 TheMarketplaceSettingsDef theMarketplaceSettings = Repo.GetAllDefs<TheMarketplaceSettingsDef>().FirstOrDefault(ged => ged.name.Equals("TheMarketplaceSettingsDef"));
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[1].PriceMultiplier = 3;
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[2].PriceMultiplier = 2;
@@ -434,8 +440,8 @@ namespace PhoenixRising.BetterGeoscape
                 //LE1Event.GeoscapeEventData.Conditions.Add(newCondition);
                 //Add choices for LE1Win
 
-                
-                                
+
+
                 LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_1_TEXT"),
@@ -477,7 +483,7 @@ namespace PhoenixRising.BetterGeoscape
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -8
-                    
+
                 });
                 LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
@@ -508,13 +514,119 @@ namespace PhoenixRising.BetterGeoscape
                 sdi6.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI6_OUTCOME";
                 GeoscapeEventDef sdi16 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_16_GeoscapeEventDef"));
                 sdi16.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI16_OUTCOME";
+
+                //Adding peaceful option for Saving Helena
+                GeoscapeEventDef savingHelenaWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE0_WIN_GeoscapeEventDef"));
+                GeoscapeEventDef savingHelenaMiss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE0_MISS_GeoscapeEventDef"));
+                savingHelenaMiss.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = new LocalizedTextBind("PROG_LE0_MISS_CHOICE_2_TEXT"),
+                    Requirments = new GeoEventChoiceRequirements()
+                    {
+                        Diplomacy = new List<GeoEventChoiceDiplomacy>()
+
+                        {
+                            new GeoEventChoiceDiplomacy ()
+                            {
+                            Target = GeoEventChoiceDiplomacy.DiplomacyTarget.SiteFaction,
+                            Operator = GeoEventChoiceDiplomacy.DiplomacyOperator.Greater,
+                            Value = 24,
+                            }
+                         },
+                    },
+
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        UntrackEncounters = savingHelenaWin.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        VariablesChange = savingHelenaWin.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        Cinematic = savingHelenaWin.GeoscapeEventData.Choices[0].Outcome.Cinematic,
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_LE0_MISS_CHOICE_2_OUTCOME_GENERAL")
+                        },
+
+                    }
+                });
+
+                // Add new choices to DLC1
+                GeoscapeEventDef subject24offer = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU2_GeoscapeEventDef"));
+                subject24offer.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = (new LocalizedTextBind("PROG_PU2_CHOICE_2_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_PU2_CHOICE_2_OUTCOME_GENERAL")
+                        },
+                    }
+
+                });
+
+                subject24offer.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = (new LocalizedTextBind("PROG_PU2_CHOICE_3_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_PU2_CHOICE_3_OUTCOME_GENERAL")
+                        },
+                    }
+                });
+
+                subject24offer.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +3
+                });
+
+                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -5
+                });
+
+                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +5
+                });
+
+                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = NewJericho,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -5
+                });
+
+                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = Synedrion,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -5
+                });
+
+
             }
+
+
+
+
             catch (Exception e)
             {
                 Logger.Error(e);
             }
         }
-
+       
         
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
         [HarmonyPatch(typeof(GeoAlienFaction), "TryRevealAlienBase")]
@@ -623,6 +735,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
         
+
         // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
         // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
         // Tell Harmony what original method in what class should get patched, the following class after this directive will be used to perform own code by injection
@@ -773,10 +886,13 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Error(e);
                 }
+        
             }
+
+            
         }
 
-
+        
 
     }
 }
