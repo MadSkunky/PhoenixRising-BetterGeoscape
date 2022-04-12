@@ -101,3 +101,38 @@ SDI6_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
 SDI16_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
 
 <b>Our operatives can now be afflicted with a Delirium status equal to their Willpower</b>",,,,,,,,
+PROG_LE0_MISS_CHOICE_2_TEXT,Text,,Ask West to release Dr. Helena,,,,,,,,
+PROG_LE0_MISS_CHOICE_2_OUTCOME_GENERAL,Text,,"MESSAGE
+FROM: West (New Jericho) 
+TO: Phoenix Point 
+
+We are passing on the custody of Dr. Helena to the Phoenix Project. I trust your judgment on the matter, but I advise you against diverting too many resources on digging into the past. 
+
+The war of extermination against our species is in the present.",,,,,,,,
+PROG_PU2_CHOICE_0_OUTCOME_GENERAL,Text,,"MESSAGE
+
+Subject 24 has requested that we perform the raid on a New Jericho facility. Should we agree, he will send us specific details, including the exact location of the facility and potentially its security defences. 
+",,,,,,,,
+PROG_PU2_CHOICE_0_TEXT,Text,,Agree to help Subject 24.,,,,,,,,
+PROG_PU2_CHOICE_1_OUTCOME_GENERAL,Text,,"MESSAGE
+
+When I contacted you I thought I was dealing with intelligent people, aware of the stakes. Instead, I found spineless cowards whose convictions are as hollow as the module in Tobias West’s head! 
+
+We'll find a way to obtain the research data, but the chance of alliance between the Pure and the Phoenix Project is gone forever.
+",,,,,,,,
+PROG_PU2_CHOICE_1_TEXT,Text,,Refuse to help Subject 24.,,,,,,,,
+PROG_PU2_TEXT_GENERAL_0,Text,,"MESSAGE
+
+Subject 24 has requested that we perform the raid on a New Jericho facility. Should we agree, he will send us specific details, including the exact location of the facility and potentially its security defences. ",,,,,,,,
+PROG_PU2_CHOICE_2_OUTCOME_GENERAL,Text,,"MESSAGE
+FROM: West (New Jericho) 
+TO: Phoenix Point
+
+I appreciate your discretion in this matter. Rest assured that all necessary precautions will be taken. I trust you will not pay any attention to the ravings of this lunatic. ",,,,,,,,
+PROG_PU2_CHOICE_2_TEXT,Text,,Inform New Jericho,,,,,,,,
+PROG_PU2_CHOICE_3_OUTCOME_GENERAL,Text,,"MESSAGE 
+FROM: Nicholas (Synedrion) 
+TO: Phoenix Point 
+
+So another dirty little secret from West's not-so-distant past emerges. I hope that your actions in this matter reflect a new found belief in transparency and in the free exchange of information, rather than political opportunism.",,,,,,,,
+PROG_PU2_CHOICE_3_TEXT,Text,,Publicly denounce New Jericho's covert bionics program,,,,,,,,
