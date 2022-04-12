@@ -12,6 +12,7 @@ using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Characters;
+using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Abilities;
 using PhoenixPoint.Geoscape.Entities.Missions;
@@ -61,6 +62,9 @@ namespace PhoenixRising.BetterGeoscape
                 GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
                 GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
 
+                //Source for creating new events
+                GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
+
                 //Testing MadSkunky reduce rewards by 25%
                 if (ApplyChangeReduceResources)
                 {
@@ -85,7 +89,13 @@ namespace PhoenixRising.BetterGeoscape
                     foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
                     {
                         
-                        if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN")
+                        if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN" 
+                            || geoEvent.GeoscapeEventData.EventID != "PROG_SY7_GeoscapeEventDef" 
+                            || geoEvent.GeoscapeEventData.EventID != "PROG_SY8_GeoscapeEventDef" 
+                            || geoEvent.GeoscapeEventData.EventID != "PROG_AN3_GeoscapeEventDef"
+                            || geoEvent.GeoscapeEventData.EventID != "PROG_AN5_GeoscapeEventDef"
+                            || geoEvent.GeoscapeEventData.EventID != "PROG_NJ7_GeoscapeEventDef"
+                            || geoEvent.GeoscapeEventData.EventID != "PROG_NJ8_GeoscapeEventDef")
                         {
                             foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
                         {
@@ -345,6 +355,11 @@ namespace PhoenixRising.BetterGeoscape
                 OutcomeDiplomacyChange outcomeDiplomacyChange = ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
                 outcomeDiplomacyChange.Value = -20;
 
+                //Change Reward introductory mission Synedrion
+                GeoscapeEventDef ProgSynIntroWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY0_WIN_GeoscapeEventDef"));
+                ProgSynIntroWin.GeoscapeEventData.Choices[1].Outcome.Diplomacy[0] = new OutcomeDiplomacyChange {};
+
+
                 //Testing Less Pandoran Colonies
                 GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
                 veryhard.NestLimitations.MaxNumber = 3;
@@ -391,11 +406,16 @@ namespace PhoenixRising.BetterGeoscape
                 });
 
                 TheMarketplaceSettingsDef theMarketplaceSettings = Repo.GetAllDefs<TheMarketplaceSettingsDef>().FirstOrDefault(ged => ged.name.Equals("TheMarketplaceSettingsDef"));
-                theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[1].PriceMultiplier = 3;
+                theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[1].PriceMultiplier = 2.5f;
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[2].PriceMultiplier = 2;
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[3].PriceMultiplier = 1.5f;
                 theMarketplaceSettings.Missions[1] = null; theMarketplaceSettings.Missions[2] = null; theMarketplaceSettings.Missions[3] = null;
-
+                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[1].MinNumberOfOffers = 10;
+                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[1].MinNumberOfOffers = 12;
+                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[2].MinNumberOfOffers = 13;
+                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[2].MinNumberOfOffers = 15;
+                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[3].MinNumberOfOffers = 16;
+                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[3].MinNumberOfOffers = 20;
 
                 //Replace all LOTA Schemata missions with KE2 mission
                 GeoscapeEventDef LE1Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_MISS_GeoscapeEventDef"));
@@ -434,8 +454,6 @@ namespace PhoenixRising.BetterGeoscape
                 //newCondition.VariableCompareToNumber = 1;
                 //LE1Event.GeoscapeEventData.Conditions.Add(newCondition);
                 //Add choices for LE1Win
-
-
 
                 LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
@@ -509,6 +527,8 @@ namespace PhoenixRising.BetterGeoscape
                 sdi6.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI6_OUTCOME";
                 GeoscapeEventDef sdi16 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_16_GeoscapeEventDef"));
                 sdi16.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI16_OUTCOME";
+                GeoscapeEventDef sdi20 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_20_GeoscapeEventDef"));
+                sdi20.GeoscapeEventData.Choices[0].Outcome.GameOverVictoryFaction = null;
 
                 //Adding peaceful option for Saving Helena
                 GeoscapeEventDef savingHelenaWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE0_WIN_GeoscapeEventDef"));
@@ -543,18 +563,76 @@ namespace PhoenixRising.BetterGeoscape
                     }
                 });
 
-                // Add new choices to DLC1 and remove S24 pic
+                // Add new choices to DLC1
+                // Snitch to NJ
+                GeoscapeEventDef prog_PU2_Choice2Event = Helper.CreateDefFromClone(sourceLoseGeoEvent, "903EB514-4807-4E1B-8650-421524C0F68E", "PROG_PU2_CHOICE2EVENT_GeoscapeEventDef");
+                prog_PU2_Choice2Event.GeoscapeEventData.EventID = "PROG_PU2_CHOICE2EVENT";
+                prog_PU2_Choice2Event.GeoscapeEventData.Leader = "NJ_TW";
+                prog_PU2_Choice2Event.GeoscapeEventData.Title.LocalizationKey = "PROG_PU2_CHOICE2EVENT_TITLE";
+                prog_PU2_Choice2Event.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU2_CHOICE2EVENT_TEXT_GENERAL_0";
+                prog_PU2_Choice2Event.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +3
+                });
+                prog_PU2_Choice2Event.GeoscapeEventData.Choices[0].Outcome.Resources.Add(new ResourceUnit()
+                {
+                    Type = ResourceType.Materials,
+                    Value = 300
+                });
+
+
+                //Publicly denounce NJ
+                GeoscapeEventDef prog_PU2_Choice3Event = Helper.CreateDefFromClone(sourceLoseGeoEvent, "957656FF-BE70-40FA-8091-015112331970", "PROG_PU2_CHOICE3EVENT_GeoscapeEventDef");
+                prog_PU2_Choice3Event.GeoscapeEventData.EventID = "PROG_PU2_CHOICE3EVENT";
+                prog_PU2_Choice3Event.GeoscapeEventData.Leader = "SY_Nikolai";
+                prog_PU2_Choice3Event.GeoscapeEventData.Title.LocalizationKey = "PROG_PU2_CHOICE3EVENT_TITLE";
+                prog_PU2_Choice3Event.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU2_CHOICE3EVENT_TEXT_GENERAL_0";
+
+                prog_PU2_Choice3Event.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -5
+                });
+
+                prog_PU2_Choice3Event.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +5
+                });
+
+                prog_PU2_Choice3Event.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = NewJericho,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -5
+                });
+
+                prog_PU2_Choice3Event.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = Synedrion,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -5
+                });
+
+
+                //Add the choices to the event
+                //New events have to be created rather than using Outcomes within each choice to replace leader pic
                 GeoscapeEventDef subject24offer = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU2_GeoscapeEventDef"));
-                subject24offer.GeoscapeEventData.Leader = "";
                 subject24offer.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = (new LocalizedTextBind("PROG_PU2_CHOICE_2_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
                     {
-                        OutcomeText = new EventTextVariation()
-                        {
-                            General = new LocalizedTextBind("PROG_PU2_CHOICE_2_OUTCOME_GENERAL")
-                        },
+                        TriggerEncounterID = "PROG_PU2_CHOICE2EVENT",                 
                     }
                 });
 
@@ -563,52 +641,10 @@ namespace PhoenixRising.BetterGeoscape
                     Text = (new LocalizedTextBind("PROG_PU2_CHOICE_3_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
                     {
-                        OutcomeText = new EventTextVariation()
-                        {
-                            General = new LocalizedTextBind("PROG_PU2_CHOICE_3_OUTCOME_GENERAL")
-                        },
+                       TriggerEncounterID = "PROG_PU3_CHOICE3EVENT",
                     }
                 });
-
-                subject24offer.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = +3
-                });
-
-                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
-
-                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = +5
-                });
-
-                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = NewJericho,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
-
-                subject24offer.GeoscapeEventData.Choices[3].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = Synedrion,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
+                              
 
                 //Add options for DLC1MISS WIN
                 GeoscapeEventDef DLC1missWIN = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU4_WIN_GeoscapeEventDef"));
@@ -700,6 +736,114 @@ namespace PhoenixRising.BetterGeoscape
                     Value = -3
                 });
 
+                //Add options to Guided by Whispers
+                //If relations with Synedrion Aligned, can opt for HD vs Pure
+                //Event if HD successful
+                GeoscapeEventDef sourceWinGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_WIN_GeoscapeEventDef"));
+                var pu12miss = sourceWinGeoEvent.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters[0];
+                GeoscapeEventDef newWinPU12 = Helper.CreateDefFromClone(sourceWinGeoEvent, "23435C5E-B933-484D-990E-5B4C0B2B32FE", "PROG_PU12_WIN2_GeoscapeEventDef");
+                newWinPU12.GeoscapeEventData.EventID = "PROG_PU12WIN2";
+                newWinPU12.GeoscapeEventData.Title.LocalizationKey = "PROG_PU12_WIN2_TITLE";
+                newWinPU12.GeoscapeEventData.Choices[0].Text.LocalizationKey = "PROG_PU12_WIN2_CHOICE_0_TEXT";
+
+                newWinPU12.GeoscapeEventData.Choices[0].Outcome.Diplomacy[0] = new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = PhoenixPoint,
+                    Value = 6,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,   
+                };
+                
+                //Event if HD Failure
+                GeoscapeEventDef newFailPU12 = Helper.CreateDefFromClone(sourceLoseGeoEvent, "D77EB7A7-FE26-49EF-BB7A-449A51D4D519", "PROG_PU12_FAIL2_GeoscapeEventDef");
+                newFailPU12.GeoscapeEventData.EventID = "PROG_PU12FAIL2";
+                newFailPU12.GeoscapeEventData.Title.LocalizationKey = "PROG_PU12_FAIL2_TITLE";
+                newFailPU12.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU12_FAIL2_TEXT_GENERAL_0";
+                newFailPU12.GeoscapeEventData.Choices[0].Text.LocalizationKey = "PROG_PU12_FAIL2_CHOICE_0_TEXT";
+                newFailPU12.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters.Add(pu12miss);
+                newFailPU12.GeoscapeEventData.Choices[0].Outcome.RemoveTimers.Add(pu12miss);
+                
+                //New event for outcome if selling info about lab or research after stealing it by completing original mission                
+                GeoscapeEventDef newPU12NJOption = Helper.CreateDefFromClone(sourceLoseGeoEvent, "D556A16F-41D8-4852-8DC4-5FB945652C50", "PROG_PU12_NewNJOption_GeoscapeEventDef");
+                newPU12NJOption.GeoscapeEventData.EventID = "PROG_PU12NewNJOption";
+                newPU12NJOption.GeoscapeEventData.Leader = "NJ_Abongameli";
+                newPU12NJOption.GeoscapeEventData.Title.LocalizationKey = "PROG_PU12_NEWNJOPT_TITLE";
+                newPU12NJOption.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU12_NEWNJOPT_GENERAL";
+                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.Resources.Add (new ResourceUnit () 
+                {
+                    Type = ResourceType.Materials, Value = 750
+                });
+
+                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add (new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    Value = 3,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                });
+                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters.Add(pu12miss);
+                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.RemoveTimers.Add(pu12miss);
+
+                //Adding options to the original event, fetching it first
+                GeoscapeEventDef guidedByWhispers = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_MISS_GeoscapeEventDef"));
+                 
+                //Fetching Syn HD vs Pure with protect civillians type, to use as alternative mission
+                CustomMissionTypeDef havenDefPureSY_CustomMissionTypeDef = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("HavenDefPureSY_Civ_CustomMissionTypeDef"));
+
+                //Adding Syn Aligned options
+                guidedByWhispers.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = (new LocalizedTextBind("PROG_PU12_MISS_CHOICE_2_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_PU12_MISS_CHOICE_2_OUTCOME_GENERAL")
+                        },
+                        StartMission = new OutcomeStartMission()
+                        { 
+                        MissionTypeDef = havenDefPureSY_CustomMissionTypeDef,
+                        WonEventID = "PROG_PU12WIN2",
+                        LostEventID = "PROG_PU12_FAIL2"
+                        }
+                    },
+                    Requirments = new GeoEventChoiceRequirements()
+                    {
+                        Diplomacy = new List<GeoEventChoiceDiplomacy>()
+
+                        {
+                            new GeoEventChoiceDiplomacy ()
+                            {
+                            Target = GeoEventChoiceDiplomacy.DiplomacyTarget.SiteFaction,
+                            Operator = GeoEventChoiceDiplomacy.DiplomacyOperator.Greater,
+                            Value = 49,
+                            }
+                         },
+                    },
+                });
+
+               //Adding sell info to NJ option to original event
+               guidedByWhispers.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+               {
+                  Text = (new LocalizedTextBind("PROG_PU12_MISS_CHOICE_3_TEXT")),
+                  Outcome = new GeoEventChoiceOutcome()
+                  {
+                      TriggerEncounterID = "PROG_PU12NewNJOption",
+                  }   
+               });
+
+                //Add option after winning original mission to sell research to NJ
+                sourceWinGeoEvent.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                  Text = (new LocalizedTextBind("PROG_PU12_WIN_CHOICE_1_TEXT")),
+                  Outcome = new GeoEventChoiceOutcome()
+                  {
+                      TriggerEncounterID = "PROG_PU12NewNJOption",
+                  },
+                        
+                 });
+
+
             }
 
             catch (Exception e)
@@ -790,7 +934,12 @@ namespace PhoenixRising.BetterGeoscape
                 // Get the GeoLevelController to get access to the event system and the variable
                 GeoLevelController geoLevelController = geoAlienFaction.GeoLevel;
                 // If current calculated level is different to last saved one then new ODI level is reached, show the new ODI event
-                if (CurrentODI_Level != geoLevelController.EventSystem.GetVariable("BC_SDI", -1))
+                if (geoLevelController.EventSystem.GetVariable("CorruptionActive") == 0 && geoLevelController.EventSystem.GetVariable("PandoraVirus") == 1)
+                { }
+
+                else
+
+                    if (CurrentODI_Level != geoLevelController.EventSystem.GetVariable("BC_SDI", -1))
                 {
                     // Get the Event ID from array dependent on calculated level index
                     string eventID = ODI_EventIDs[CurrentODI_Level];
@@ -798,7 +947,8 @@ namespace PhoenixRising.BetterGeoscape
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
                     geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
                 }
-            }
+                }
+
             catch (Exception e)
             {
                 Logger.Error(e);
