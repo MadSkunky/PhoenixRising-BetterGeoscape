@@ -543,8 +543,9 @@ namespace PhoenixRising.BetterGeoscape
                     }
                 });
 
-                // Add new choices to DLC1
+                // Add new choices to DLC1 and remove S24 pic
                 GeoscapeEventDef subject24offer = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU2_GeoscapeEventDef"));
+                subject24offer.GeoscapeEventData.Leader = "";
                 subject24offer.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = (new LocalizedTextBind("PROG_PU2_CHOICE_2_TEXT")),
@@ -555,7 +556,6 @@ namespace PhoenixRising.BetterGeoscape
                             General = new LocalizedTextBind("PROG_PU2_CHOICE_2_OUTCOME_GENERAL")
                         },
                     }
-
                 });
 
                 subject24offer.GeoscapeEventData.Choices.Add(new GeoEventChoice()
@@ -610,6 +610,95 @@ namespace PhoenixRising.BetterGeoscape
                     Value = -5
                 });
 
+                //Add options for DLC1MISS WIN
+                GeoscapeEventDef DLC1missWIN = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU4_WIN_GeoscapeEventDef"));
+                
+                //Anu option
+                GeoscapeEventDef an28event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("AN28_GeoscapeEventDef"));
+                dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.Units = an28event.GeoscapeEventData.Choices[0].Outcome.Units;
+                dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_PU4_WIN_CHOICE_0_OUTCOME_GENERAL";
+
+
+                //Syn choice
+                dlc1miss1win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = (new LocalizedTextBind ("PROG_PU4_WIN_CHOICE_1_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_PU4_WIN_CHOICE_1_OUTCOME_GENERAL")
+                        },
+                    VariablesChange = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                    UntrackEncounters = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                    RemoveTimers = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
+                    },
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = Synedrion,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +3
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = NewJericho,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +3
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -6
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +2
+                });
+
+                //Deny deny deny option
+                dlc1miss1win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = (new LocalizedTextBind("PROG_PU4_WIN_CHOICE_2_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind("PROG_PU4_WIN_CHOICE_2_OUTCOME_GENERAL")
+                        },
+                        VariablesChange = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        UntrackEncounters = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        RemoveTimers = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
+                    },
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = Anu,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -3
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = Synedrion,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -3
+                });
+                dlc1miss1win.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = NewJericho,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = -3
+                });
 
             }
 
@@ -619,7 +708,6 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
        
-        
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
         [HarmonyPatch(typeof(GeoAlienFaction), "TryRevealAlienBase")]
         internal static class BC_GeoAlienFaction_TryRevealAlienBase_patch
@@ -677,17 +765,7 @@ namespace PhoenixRising.BetterGeoscape
     "SDI_19",
     "SDI_20"
         };
-        // Harmony patch to gather some game stats from the alien faction (pandorans) when geo level starts (campaign start, game loaded, after tactical missions)
-       // [HarmonyPatch(typeof(GeoAlienFaction), "OnAfterFactionsLevelStart")]
-       // internal static class BC_GeoAlienFaction_OnAfterFactionsLevelStart_patch
-       // {
-         //   [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-          //  private static void Postfix(GeoAlienFaction __instance, int ____evolutionProgress)
-           // {
-          //      Calculate_ODI_Level(__instance, ____evolutionProgress);
-          //  }
-     //   }
-        // Harmony patch to gather some game stats from the alien faction (pandorans) each day in game
+        
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
         {
@@ -697,7 +775,7 @@ namespace PhoenixRising.BetterGeoscape
                 Calculate_ODI_Level(__instance, ____evolutionProgress);
             }
         }
-                
+        
         internal static void Calculate_ODI_Level(GeoAlienFaction geoAlienFaction, int evolutionProgress)
         {
             try
