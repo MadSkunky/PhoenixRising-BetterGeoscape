@@ -342,13 +342,8 @@ namespace PhoenixRising.BetterGeoscape
                     Value = -20
                 });
 
-                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
+                OutcomeDiplomacyChange outcomeDiplomacyChange = ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
+                outcomeDiplomacyChange.Value = -20;
 
                 //Testing Less Pandoran Colonies
                 GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
@@ -618,9 +613,6 @@ namespace PhoenixRising.BetterGeoscape
 
             }
 
-
-
-
             catch (Exception e)
             {
                 Logger.Error(e);
@@ -852,23 +844,17 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
                     }
-                    else
+                    else if (stamina > 25 && stamina <= 30)
                     {
-                        if (stamina > 25 && stamina <= 30)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
-                        }
-                        else
-                        {
-                            if (stamina > 20 && stamina <= 25)
-                            {
-                                wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
-                            }
-                            else // stamina <= 20
-                            {
-                                wpReduction = base_TacticalActor.CharacterStats.Corruption;
-                            }
-                        }
+                        wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
+                    }
+                    else if (stamina > 20 && stamina <= 25)
+                    {
+                        wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+                    }
+                    else if (stamina <= 20)
+                    {
+                        wpReduction = base_TacticalActor.CharacterStats.Corruption;
                     }
 
                     // Like the original calculation, but adapted with 'maxCorruption'
@@ -877,9 +863,8 @@ namespace PhoenixRising.BetterGeoscape
                                                     -wpReduction,
                                                     __instance.CorruptionStatusDef,
                                                     -wpReduction);
-
-                    // Get characters geoscape stamina by his actor ID
                     
+
 
                 }
                 catch (Exception e)
