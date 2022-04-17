@@ -103,7 +103,7 @@ SDI16_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
 <b>Our operatives can now be afflicted with a Delirium status equal to their Willpower</b>",,,,,,,,
 PROG_LE0_MISS_CHOICE_2_TEXT,Text,,Ask West to release Dr. Helena,,,,,,,,
 PROG_LE0_MISS_CHOICE_2_OUTCOME_GENERAL,Text,,"MESSAGE
-FROM: West (New Jericho) 
+FROM: Tobias West (New Jericho) 
 TO: Phoenix Point 
 
 We are passing on the custody of Dr. Helena to the Phoenix Project. I trust your judgment on the matter, but I advise you against diverting too many resources on digging into the past. 
@@ -124,15 +124,58 @@ PROG_PU2_CHOICE_1_TEXT,Text,,Refuse to help Subject 24.,,,,,,,,
 PROG_PU2_TEXT_GENERAL_0,Text,,"MESSAGE
 
 Subject 24 has requested that we perform the raid on a New Jericho facility. Should we agree, he will send us specific details, including the exact location of the facility and potentially its security defences. ",,,,,,,,
-PROG_PU2_CHOICE_2_OUTCOME_GENERAL,Text,,"MESSAGE
-FROM: West (New Jericho) 
+PROG_PU2_CHOICE2EVENT_TEXT_GENERAL_0,Text,,"MESSAGE
+FROM: Tobias West (New Jericho) 
 TO: Phoenix Point
 
-I appreciate your discretion in this matter. Rest assured that all necessary precautions will be taken. I trust you will not pay any attention to the ravings of this lunatic. ",,,,,,,,
+I appreciate your discretion in this matter. Rest assured that all necessary precautions will be taken. I trust you will not pay any attention to the ravings of this lunatic. ",,,,,,,,
+PROG_PU2_CHOICE2EVENT_TITLE,Text,,The Rewards of Silence,,,,,,,,
 PROG_PU2_CHOICE_2_TEXT,Text,,Inform New Jericho,,,,,,,,
-PROG_PU2_CHOICE_3_OUTCOME_GENERAL,Text,,"MESSAGE 
-FROM: Nicholas (Synedrion) 
+PROG_PU2_CHOICE3EVENT_TEXT_GENERAL_0,Text,,"MESSAGE 
+FROM: Nikolai (Synedrion) 
 TO: Phoenix Point 
 
-So another dirty little secret from West's not-so-distant past emerges. I hope that your actions in this matter reflect a new found belief in transparency and in the free exchange of information, rather than political opportunism.",,,,,,,,
+So another dirty little secret from West's not-so-distant past emerges. I hope that your actions in this matter reflect a new found belief in transparency and in the free exchange of information, rather than political opportunism.",,,,,,,,
+PROG_PU2_CHOICE3EVENT_TITLE,Text,,Disclose and Denounce,,,,,,,,
 PROG_PU2_CHOICE_3_TEXT,Text,,Publicly denounce New Jericho's covert bionics program,,,,,,,,
+PROG_PU4_WIN_TEXT_GENERAL_0,Text,,"New Jericho is not happy with our raid on their clandestine research facility. But we may be able to repair some of the damage to our relations. A lot depends on how we describe what happened; sometimes words are more important than actions.
+
+So what was it?",,,,,,,,
+PROG_PU4_WIN_CHOICE_0_OUTCOME_GENERAL,Text,,Anu's leadership seeks to distance itself from the raid to avoid provoking New Jericho. We do succeed in attracting the attention of some zealots. One of them decides to join our cause.,,,,,,,,
+PROG_PU4_WIN_CHOICE_0_TEXT,Text,,A righteous purge of dangerous technology,,,,,,,,
+PROG_PU4_WIN_CHOICE_1_OUTCOME_GENERAL,Text,,"Synedrion and New Jericho netizens endlessly debate the raid and Phoenix Project actions. Interestingly, the debate is not drawn strictly across faction lines, with some in New Jericho justifying our raid as a legitimate police action against extraneous rogue elements and some in Synedrion criticizing us for overreach. 
+
+West is naturally upset, but we have gained some traction among Synedrion public opinion and fostered some much needed interaction between the members of both factions.",,,,,,,,
+PROG_PU4_WIN_CHOICE_1_TEXT,Text,,"An exercise in civic duty, with some unfortunate casualties",,,,,,,,
+PROG_PU4_WIN_CHOICE_2_OUTCOME_GENERAL,Text,,"We are not entirely in the clear, but New Jericho doesn't want to draw attention to its secret research and therefore avoids making an issue of the raid.
+
+At the same time, our strenuous denials result in West suspecting the involvement of other factions.",,,,,,,,
+PROG_PU4_WIN_CHOICE_2_TEXT,Text,,"What was what? Deny, deny, deny",,,,,,,,
+PROG_PU12_NEWNJOPT_GENERAL,Text,,"MESSAGE 
+From: Abongameli Smith (New Jericho)
+To: Phoenix Point
+
+I won't ask you how you came across this intelligence, but it is much appreciated. Unlike others, I'm not even a little surprised that Synedrion would be engaging in this kind of research. 
+
+They preach about ""radical transparency"" and ""non-hierarchical societal structures founded on absence of material scarcity"", but humans are humans and if there is one thing they can never get enough of, it's power, power over their fellow human beings.
+
+It is part of our nature. We have to acknowledge it, and institute checks and balances to preserve our freedoms. It's the only way.  ",,,,,,,,
+PROG_PU12_NEWNJOPT_TITLE,Text,,Of Human Bondage,,,,,,,,
+PROG_PU12_MISS_CHOICE_3_TEXT,Text,,Sell the information about the secret Synedrion lab at [HavenName] to New Jericho,,,,,,,,
+PROG_PU12_MISS_CHOICE_2_TEXT,Text,,Join Synedrion in the defense against the raid by the Pure,,,,,,,,
+PROG_PU12_MISS_CHOICE_1_TEXT,Text,,Return later,,,,,,,,
+PROG_PU12_MISS_CHOICE_0_TEXT,Text,,Wait for the Pure raid to start and attack the Synedrion lab,,,,,,,,
+PROG_PU12_WIN_CHOICE_0_TEXT,Text,,Our secrets are our own,,,,,,,,
+PROG_PU12_WIN_CHOICE_1_TEXT,Text,,Share the research with New Jericho,,,,,,,,
+PROG_PU12_MISS_TEXT_GENERAL_0,Text,,"[AircraftName] is overflying [HavenName]. 
+
+This is where Synedrion's clandestine lab doing advanced research into bionics is located. It is well guarded. 
+
+The leader of [HavenName], [HavenLeaderForename] [HavenLeaderSurname], will not  allow our operatives anywhere near the lab grounds, unless, or until, they come under attack by the Pure. Then we can probably use the confusion to break in, but we will have to fight both the Pure and Synedrion. 
+
+There might be other options as well.",,,,,,,,
+PROG_PU12_WIN2_TITLE,Text,,Just Doing Our Job,,,,,,,,
+PROG_PU12_WIN2_TEXT_GENERAL_0,Text,,"Given the good relations between Phoenix Project and Synedrion, [HavenLeaderForename] [HavenLeaderSurname] was not surprised at the presence of [AircraftName] in the [HavenName] at the time of the attack, and [HavenLeaderForename] assumed that you were aware of the research going on in the restricted research campus. After defending [HavenName] from the raid, Phoenix operatives stole the secrets to Synderion bionics research.",,,,,,,,
+PROG_PU12_FAIL2_TITLE,Text,,Miserable Failure!,,,,,,,,
+PROG_PU12_FAIL2_TEXT_GENERAL_0,Text,,You suck!,,,,,,,,
+PROG_PU12_FAIL2_CHOICE_0_TEXT,Text,,:(,,,,,,,,
