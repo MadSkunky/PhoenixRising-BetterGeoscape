@@ -898,9 +898,20 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushSY.CratesDeploymentPointsRange.Min = 30;
                 AmbushSY.CratesDeploymentPointsRange.Max = 50;
 
+                //Create Ambush with rescue
+               // CustomMissionTypeDef scavRescueALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("ScavRescueALN_CustomMissionTypeDef"));
+               // CustomMissionTypeDef AmbushALNRescue = Helper.CreateDefFromClone(AmbushALN, "C5BD29BE-2A61-4C5E-A578-F58FCB40BE14", "AmbushALNRescue_CustomMissionTypeDef");
+               // var participantDataRescue = scavRescueALN.ParticipantsData[1];
+               // var objectiveRescueSoldiers = scavRescueALN.CustomObjectives[2];
+               // AmbushALNRescue.ParticipantsData.Add(participantDataRescue);
+               // AmbushALNRescue.ParticipantsRelations = scavRescueALN.ParticipantsRelations;
+               // AmbushALNRescue.CustomObjectives.Add(objectiveRescueSoldiers);
+
+
+
                 //Experiment, attempt to remove empty explo event
-                GeoscapeEventDef emptyExploEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("EXPSITE_02_GeoscapeEventDef"));
-                emptyExploEvent.GeoscapeEventData.Mute = true;
+                //GeoscapeEventDef emptyExploEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("EXPSITE_02_GeoscapeEventDef"));
+                //emptyExploEvent.GeoscapeEventData.Mute = true;
 
             }
 
