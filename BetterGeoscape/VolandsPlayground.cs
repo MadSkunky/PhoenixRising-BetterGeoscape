@@ -1,5 +1,6 @@
 ﻿using AK.Wwise;
 using Assets.Code.PhoenixPoint.Geoscape.Entities.Sites.TheMarketplace;
+using Base;
 using Base.Core;
 using Base.Defs;
 using Base.Entities.Statuses;
@@ -91,12 +92,12 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         
                         if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN" 
-                            || geoEvent.GeoscapeEventData.EventID != "PROG_SY7_GeoscapeEventDef" 
-                            || geoEvent.GeoscapeEventData.EventID != "PROG_SY8_GeoscapeEventDef" 
-                            || geoEvent.GeoscapeEventData.EventID != "PROG_AN3_GeoscapeEventDef"
-                            || geoEvent.GeoscapeEventData.EventID != "PROG_AN5_GeoscapeEventDef"
-                            || geoEvent.GeoscapeEventData.EventID != "PROG_NJ7_GeoscapeEventDef"
-                            || geoEvent.GeoscapeEventData.EventID != "PROG_NJ8_GeoscapeEventDef")
+                            && geoEvent.GeoscapeEventData.EventID != "PROG_SY7"
+                            && geoEvent.GeoscapeEventData.EventID != "PROG_SY8"
+                            && geoEvent.GeoscapeEventData.EventID != "PROG_AN3"
+                            && geoEvent.GeoscapeEventData.EventID != "PROG_AN5"
+                            && geoEvent.GeoscapeEventData.EventID != "PROG_NJ7"
+                            && geoEvent.GeoscapeEventData.EventID != "PROG_NJ8")
                         {
                             foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
                         {
@@ -850,11 +851,13 @@ namespace PhoenixRising.BetterGeoscape
                 //Changing ambush missions so that all of them have crates
                 CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
                 CustomMissionTypeDef SourceScavCratesALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("ScavCratesALN_CustomMissionTypeDef"));
+                var pickResourceCratesObjective = SourceScavCratesALN.CustomObjectives[2];
                 AmbushALN.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushALN.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushALN.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushALN.CratesDeploymentPointsRange.Min = 30;
                 AmbushALN.CratesDeploymentPointsRange.Max = 50;
+                AmbushALN.CustomObjectives[2]=pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushAN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAN_CustomMissionTypeDef"));
                 AmbushAN.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
@@ -862,6 +865,7 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushAN.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushAN.CratesDeploymentPointsRange.Min = 30;
                 AmbushAN.CratesDeploymentPointsRange.Max = 50;
+                AmbushAN.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushBandits = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushBandits_CustomMissionTypeDef"));
                 AmbushBandits.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
@@ -869,6 +873,7 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushBandits.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushBandits.CratesDeploymentPointsRange.Min = 30;
                 AmbushBandits.CratesDeploymentPointsRange.Max = 50;
+                AmbushBandits.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushFallen = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushFallen_CustomMissionTypeDef"));
                 AmbushFallen.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
@@ -876,6 +881,7 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushFallen.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushFallen.CratesDeploymentPointsRange.Min = 30;
                 AmbushFallen.CratesDeploymentPointsRange.Max = 50;
+                AmbushFallen.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushNJ = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushNJ_CustomMissionTypeDef"));
                 AmbushNJ.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
@@ -883,6 +889,7 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushNJ.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushNJ.CratesDeploymentPointsRange.Min = 30;
                 AmbushNJ.CratesDeploymentPointsRange.Max = 50;
+                AmbushNJ.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushPure = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushPure_CustomMissionTypeDef"));
                 AmbushPure.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
@@ -890,6 +897,7 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushPure.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushPure.CratesDeploymentPointsRange.Min = 30;
                 AmbushPure.CratesDeploymentPointsRange.Max = 50;
+                AmbushPure.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushSY = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushSY_CustomMissionTypeDef"));
                 AmbushSY.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
@@ -897,21 +905,19 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushSY.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushSY.CratesDeploymentPointsRange.Min = 30;
                 AmbushSY.CratesDeploymentPointsRange.Max = 50;
+                AmbushSY.CustomObjectives[2] = pickResourceCratesObjective;
 
-                //Create Ambush with rescue
-               // CustomMissionTypeDef scavRescueALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("ScavRescueALN_CustomMissionTypeDef"));
-               // CustomMissionTypeDef AmbushALNRescue = Helper.CreateDefFromClone(AmbushALN, "C5BD29BE-2A61-4C5E-A578-F58FCB40BE14", "AmbushALNRescue_CustomMissionTypeDef");
-               // var participantDataRescue = scavRescueALN.ParticipantsData[1];
-               // var objectiveRescueSoldiers = scavRescueALN.CustomObjectives[2];
-               // AmbushALNRescue.ParticipantsData.Add(participantDataRescue);
-               // AmbushALNRescue.ParticipantsRelations = scavRescueALN.ParticipantsRelations;
-               // AmbushALNRescue.CustomObjectives.Add(objectiveRescueSoldiers);
-
-
-
-                //Experiment, attempt to remove empty explo event
-                //GeoscapeEventDef emptyExploEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("EXPSITE_02_GeoscapeEventDef"));
-                //emptyExploEvent.GeoscapeEventData.Mute = true;
+                //Experiment new HD
+                var survive3turnsobjective = AmbushALN.CustomObjectives[0];
+                CustomMissionTypeDef ALNvsANUHD = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("HavenDefAlienAN_CustomMissionTypeDef"));
+                //CustomMissionTypeDef NewALNvsANUHD = Helper.CreateDefFromClone(AmbushALN, "C5BD29BE-2A61-4C5E-A578-F58FCB40BE14", "NewHavenDefAlienAN_CustomMissionTypeDef");
+                ALNvsANUHD.ParticipantsData[0].InfiniteReinforcements = true;
+                ALNvsANUHD.ParticipantsData[0].ReinforcementsDeploymentPart.Max = 0.3f;
+                ALNvsANUHD.ParticipantsData[0].ReinforcementsDeploymentPart.Min = 0.3f;
+                ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Max = 1;
+                ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                ALNvsANUHD.CustomObjectives[0]=survive3turnsobjective;
+                           
 
             }
 
@@ -920,7 +926,10 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
         }
+
        
+
+
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
         [HarmonyPatch(typeof(GeoAlienFaction), "TryRevealAlienBase")]
         internal static class BC_GeoAlienFaction_TryRevealAlienBase_patch
@@ -1111,6 +1120,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
+        
         // Harmony patch before Geoscape world is created
         [HarmonyPatch(typeof(GeoInitialWorldSetup), "SimulateFactions")]
         internal static class BC_GeoInitialWorldSetup_SimulateFactions_Patch
@@ -1145,9 +1155,30 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Error(e);
                 }
+               
             }
         }
 
+        //Harmony patch to increase ambush chance
+        [HarmonyPatch(typeof(GeoscapeEventSystem), "OnLevelStart")]
+        public static class GeoscapeEventSystem_PhoenixFaction_OnLevelStart_Patch
+        {
+            public static void Prefix(GeoscapeEventSystem __instance)
+            {
+                try
+                {
+                    Logger.Debug($"[GeoscapeEventSystem_PhoenixFaction_OnLevelStart_PREFIX] Increasing ambush chance.");
+                    __instance.ExplorationAmbushChance = 100;
+                    __instance.AmbushExploredSitesProtection = 3;
+                    __instance.StartingAmbushProtection = 5;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        
         // Harmony patch to change the result of CorruptionStatus.GetStatModification() to take Stamina into account
         // Corruption application get reduced by 100% when Stamina is between 35-40, by 75% between 30-35, by 50% between 25-30.
         [HarmonyPatch(typeof(CorruptionStatus), "GetStatModification")]
