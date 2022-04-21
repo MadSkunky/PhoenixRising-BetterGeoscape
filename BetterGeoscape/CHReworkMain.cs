@@ -67,18 +67,6 @@ namespace PhoenixRising.BetterGeoscape
                 CH0_Won.GeoscapeEventData.Choices[0].Outcome.RevealSites.Add(revealSiteCH1_Miss);
                 CH0_Won.GeoscapeEventData.Choices[0].Outcome.SetEvents.Add(setEventCH1_Miss);
                 CH0_Won.GeoscapeEventData.Choices[0].Outcome.TrackEncounters.Add(trackEventCH1_Miss);
-                //Break the panel in 2, to avoid text wall and give rep bonus with Syn
-                CH0_Won.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_CH1_WIN_OUTCOME_0";
-                GeoFactionDef PhoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
-                GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
-                CH0_Won.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = +4
-                });
-
                 CH1_Event.GeoscapeEventData.Mute = true;
 
                 // Make Treatment available after completing Research of Escaped Specimen, instead of after Acheron Autopsy
@@ -99,6 +87,18 @@ namespace PhoenixRising.BetterGeoscape
                 // Put Barnabas in the picture of CH1MISSWIN
                 GeoscapeEventDef CH1_Won = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH1_WIN_GeoscapeEventDef"));
                 CH1_Won.GeoscapeEventData.Leader = "SY_Barnabas";
+                //Break the panel in 2, to avoid text wall and give rep bonus with Syn
+                CH1_Won.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_CH1_WIN_OUTCOME_0";
+                GeoFactionDef PhoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
+                GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
+                CH1_Won.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = PhoenixPoint,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                    Value = +4
+                });
+
 
                 // Remove event reminding Lair is needed 
                 GeoscapeEventDef CH_Event_NeedLair = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH_NEED_LAIR_GeoscapeEventDef"));

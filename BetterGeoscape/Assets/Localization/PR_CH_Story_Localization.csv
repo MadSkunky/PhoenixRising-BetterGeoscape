@@ -113,8 +113,6 @@ KEY_GEO_HINT_ENEMY_SPECIAL_MUTOID_DESCRIPTION,Text,,"Mutoids are artificially cr
  Mutoids can only be healed at a base using MUTAGENS.",,,,,,,,
 KEY_GEO_HINT_ENEMY_SPECIAL_MUTOID_NAME,Text,,MUTOID SOLDIERS,,,,,,,,
 KEY_GEOSCAPE_CLEAN_LAIR_MISSION_OBJECTIVE_TITLE,Text,NEED TO CHANGE,Obtain Corruption Sample from Lair,,,,,,,,
-KEY_RECRUITS_RECRUITS_SPECIALIZAION_HEADING,Text,,CHOOSE RECRUIT SPECIALIZATION,,,,,,,,
-KEY_RECRUITS_SCREEN_DESCRIPTION,Text,,"Recruits come from armed groups that have managed to survive on their own in the wilderness. While most of them havenâ€™t undergone official military training, they can be valuable assets for the battle against the Pandorans.",,,,,,,,
 KEY_TAC_HINT_ENEMY_SPECIAL_CO_CORRUPT_DESCRIPTION,Text,,This allows any other creature on the battlefield to be capable of dealing delirium damage.,,,,,,,,
 KEY_TAC_HINT_ENEMY_SPECIAL_CO_CORRUPT_NAME,Text,,PANDORAN SUPPLEMENTAL - CO-DELIRIUM,,,,,,,,
 KEY_TAC_HINT_ENEMY_SPECIAL_CORRUPTION_DESCRIPTION,Text,,"Delirium damage inflicts an operative with Oneiric Delirium or insanity. For every 1 point of Delirium, damage dealt in combat increases by 2%.",,,,,,,,
@@ -162,13 +160,12 @@ PROG_CH1_TEXT_GENERAL_0,Text,,"We have discovered one of the original Acheron sp
 PROG_CH1_TITLE,Text,,One to Go,,,,,,,,
 PROG_CH1_WIN_CHOICE_0_TEXT,Text,,"OK.
 NEW RESEARCH AVAILABLE",,,,,,,,
+PROG_CH1_WIN_OUTCOME_0,Text,,"You have been a good friend to me. Not only have you done as I asked, but you have refrained from exposing my unfortunate mishap. I know you understand I acted selflessly and for the greater good. As an expression of my gratitude, I have adjusted Synedrion public feed relevance and accuracy verification algorithms to improve public perception of the Phoenix Project within our havens.",,,,,,,,
 PROG_CH1_WIN_TEXT_GENERAL_0,Text,,"MESSAGE
 FROM: Barnabas (Synedrion)
 TO: Phoenix Point
 
-The Acheron you have captured, prior to its escape, had been infected with an RDNA virus that was designed to turn its unique chemistry into generating zeta-blockers capable of countering the effects of the Oneiric Delirium. The DNA recombination was successful only with this specimen (hypothesis: a unique feature in the genetic makeup of the particular human individual from which this Acheron was spliced). You must study it.
-
-You have been a good friend to me. Not only have you done as I asked, but you have refrained from exposing my unfortunate mishap. I know you understand I acted selflessly and for the greater good. As an expression of my gratitude, I have adjusted Synedrion public feed relevance and accuracy verification algorithms to improve public perception of the Phoenix Project within our havens.",,,,,,,,
+The Acheron you have captured, prior to its escape, had been infected with an RDNA virus that was designed to turn its unique chemistry into generating zeta-blockers capable of countering the effects of the Oneiric Delirium. The DNA recombination was successful only with this specimen (hypothesis: a unique feature in the genetic makeup of the particular human individual from which this Acheron was spliced). You must study it.",,,,,,,,
 PROG_CH1_WIN_TITLE,Text,,Success!,,,,,,,,
 PROG_CH2_CHOICE_0_TEXT,Text,,OK.,,,,,,,,
 PROG_CH2_FAIL_CHOICE_0_TEXT,Text,,OK.,,,,,,,,

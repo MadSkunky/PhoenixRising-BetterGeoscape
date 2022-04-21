@@ -1169,8 +1169,8 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Debug($"[GeoscapeEventSystem_PhoenixFaction_OnLevelStart_PREFIX] Increasing ambush chance.");
                     __instance.ExplorationAmbushChance = 100;
-                    __instance.AmbushExploredSitesProtection = 3;
-                    __instance.StartingAmbushProtection = 5;
+                    __instance.AmbushExploredSitesProtection = 1;
+                    __instance.StartingAmbushProtection = 1;
                 }
                 catch (Exception e)
                 {
