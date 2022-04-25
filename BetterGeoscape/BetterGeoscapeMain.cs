@@ -22,7 +22,6 @@ namespace PhoenixRising.BetterGeoscape
             InitBetterGeoscape(api);
             // Read config and assign to the local field 'Config'.
             Config = api("config", null) as ModConfig ?? new ModConfig();
-            
 
             // Only needed if Harmony patches are used
             HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
@@ -33,7 +32,6 @@ namespace PhoenixRising.BetterGeoscape
             // call Volands playground method
             VolandsPlayground.Apply_Changes();
             
-
             // Apply story rework changes (Voland)
             if (Config.ActivateCHRework)
             {
@@ -44,6 +42,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 ReverseEgineeringResearch.Apply_Changes();
             }
+
 
 
         }
