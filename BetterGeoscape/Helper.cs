@@ -26,7 +26,8 @@ namespace PhoenixRising.BetterGeoscape
 
         public static readonly string GeoscapeLocalizationFileName = "PR_BG_Localization.csv";
         public static readonly string CHStoryLocalizationFileName = "PR_CH_Story_Localization.csv";
-               
+        public static readonly string FsStoryLocalizationFileName = "PR_FS_Story_Localization.csv";
+
         public static void Initialize()
         {
             try
@@ -36,6 +37,10 @@ namespace PhoenixRising.BetterGeoscape
                 if (File.Exists(Path.Combine(LocalizationDirectory, GeoscapeLocalizationFileName)))
                 {
                     AddLocalizationFromCSV(GeoscapeLocalizationFileName, null);
+                }
+                if (File.Exists(Path.Combine(LocalizationDirectory, FsStoryLocalizationFileName)))
+                {
+                    AddLocalizationFromCSV(FsStoryLocalizationFileName, null);
                 }
                 if (File.Exists(Path.Combine(LocalizationDirectory, CHStoryLocalizationFileName))&& BetterGeoscapeMain.Config.ActivateCHRework)
                 {

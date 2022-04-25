@@ -175,7 +175,8 @@ The leader of [HavenName], [HavenLeaderForename] [HavenLeaderSurname], will not 
 
 There might be other options as well.",,,,,,,,
 PROG_PU12_WIN2_TITLE,Text,,Just Doing Our Job,,,,,,,,
-PROG_PU12_WIN2_TEXT_GENERAL_0,Text,,"Given the good relations between Phoenix Project and Synedrion, [HavenLeaderForename] [HavenLeaderSurname] was not surprised at the presence of [AircraftName] in the [HavenName] at the time of the attack, and [HavenLeaderForename] assumed that you were aware of the research going on in the restricted research campus. After defending [HavenName] from the raid, Phoenix operatives stole the secrets to Synderion bionics research.",,,,,,,,
+PROG_PU12_WIN2_CHOICE_0_TEXT,Text,,OK,,,,,,,,
+,Text,,"Given the good relations between Phoenix Project and Synedrion, [HavenLeaderForename] [HavenLeaderSurname] was not surprised at the presence of [AircraftName] in the [HavenName] at the time of the attack, and [HavenLeaderForename] assumed that you were aware of the research going on in the restricted research campus. After defending [HavenName] from the raid, Phoenix operatives stole the secrets to Synderion bionics research.",,,,,,,,
 PROG_PU12_FAIL2_TITLE,Text,,Miserable Failure!,,,,,,,,
 PROG_PU12_FAIL2_TEXT_GENERAL_0,Text,,You suck!,,,,,,,,
 PROG_PU12_FAIL2_CHOICE_0_TEXT,Text,,:(,,,,,,,,

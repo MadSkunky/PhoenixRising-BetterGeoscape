@@ -1,42 +1,26 @@
-﻿using AK.Wwise;
-using Assets.Code.PhoenixPoint.Geoscape.Entities.Sites.TheMarketplace;
-using Base;
-using Base.Core;
+﻿using Base.Core;
 using Base.Defs;
 using Base.Entities.Statuses;
-using Base.Eventus;
-using Base.Eventus.Filters;
 using Base.UI;
-using Base.UI.MessageBox;
-using Base.Utils;
-using Base.Utils.GameConsole;
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Entities;
-using PhoenixPoint.Geoscape.Entities.Abilities;
+using PhoenixPoint.Geoscape.Entities.Interception.Equipments;
 using PhoenixPoint.Geoscape.Entities.Missions;
-using PhoenixPoint.Geoscape.Entities.Missions.Outcomes;
-using PhoenixPoint.Geoscape.Entities.Research;
-using PhoenixPoint.Geoscape.Entities.Research.Requirement;
-using PhoenixPoint.Geoscape.Entities.Research.Reward;
+using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
 using PhoenixPoint.Geoscape.Events;
-using PhoenixPoint.Geoscape.Events.Conditions;
 using PhoenixPoint.Geoscape.Events.Eventus;
-using PhoenixPoint.Geoscape.Events.Eventus.Filters;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
-using PhoenixPoint.Geoscape.View.ViewStates;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.ActorsInstance;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace PhoenixRising.BetterGeoscape
@@ -63,6 +47,8 @@ namespace PhoenixRising.BetterGeoscape
                 GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
                 GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
                 GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
+
+                
 
                 //Source for creating new events
                 GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
@@ -266,7 +252,7 @@ namespace PhoenixRising.BetterGeoscape
                 ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
 
                 {
-                    PartyFaction = NewJericho,
+                    PartyFaction = Anu,
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -18
@@ -274,7 +260,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 ProgSynPact.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
-                    PartyFaction = Anu,
+                    PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -18
@@ -375,6 +361,7 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.LairLimitations.MaxConcurrent = 3;
                 veryhard.LairLimitations.HoursBuildTime = 100;
                 veryhard.CitadelLimitations.HoursBuildTime = 180;
+                veryhard.EvolutionProgressPerDay = 50;
 
                 // KE Story rework - remove missions + Maker
                 GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
@@ -749,9 +736,10 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef newWinPU12 = Helper.CreateDefFromClone(sourceWinGeoEvent, "23435C5E-B933-484D-990E-5B4C0B2B32FE", "PROG_PU12_WIN2_GeoscapeEventDef");
                 newWinPU12.GeoscapeEventData.EventID = "PROG_PU12WIN2";
                 newWinPU12.GeoscapeEventData.Title.LocalizationKey = "PROG_PU12_WIN2_TITLE";
+                newWinPU12.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU12_WIN2_TEXT_GENERAL_0";
                 newWinPU12.GeoscapeEventData.Choices[0].Text.LocalizationKey = "PROG_PU12_WIN2_CHOICE_0_TEXT";
-
                 newWinPU12.GeoscapeEventData.Choices[0].Outcome.Diplomacy[0] = new OutcomeDiplomacyChange()
+               
                 {
                     PartyFaction = Synedrion,
                     TargetFaction = PhoenixPoint,
@@ -917,7 +905,12 @@ namespace PhoenixRising.BetterGeoscape
                 ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Max = 1;
                 ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Min = 1;
                 ALNvsANUHD.CustomObjectives[0]=survive3turnsobjective;
-                           
+
+                //Change medbay
+                //PhoenixFacilityDef medicalBay_PhoenixFacilityDef = Repo.GetAllDefs<PhoenixFacilityDef>().FirstOrDefault(ged => ged.name.Equals("MedicalBay_PhoenixFacilityDef"));
+                HealFacilityComponentDef e_HealMedicalBay_PhoenixFacilityDe = Repo.GetAllDefs<HealFacilityComponentDef>().FirstOrDefault(ged => ged.name.Equals("E_Heal [MedicalBay_PhoenixFacilityDef]"));
+                e_HealMedicalBay_PhoenixFacilityDe.BaseHeal = 16;
+
 
             }
 
@@ -926,8 +919,6 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
         }
-
-       
 
 
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
@@ -998,6 +989,8 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
         
+       
+
         internal static void Calculate_ODI_Level(GeoAlienFaction geoAlienFaction, int evolutionProgress)
         {
             try
@@ -1120,57 +1113,25 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        
-        // Harmony patch before Geoscape world is created
-        [HarmonyPatch(typeof(GeoInitialWorldSetup), "SimulateFactions")]
-        internal static class BC_GeoInitialWorldSetup_SimulateFactions_Patch
-        {
-            public static void Prefix(GeoInitialWorldSetup __instance, GeoLevelController level, IList<GeoSiteSceneDef.SiteInfo> worldSites, TimeSlice timeSlice)
-            {
-                try
-
-                {
-                    // __instance holds all variables of GeoInitialWorldSetup, here the initial amount of all scavenging sites
-                    __instance.InitialScavengingSiteCount = 4; // default 16
-
-                    // ScavengingSitesDistribution is an array with the weights for scav, rescue soldier and vehicle
-                    foreach (GeoInitialWorldSetup.ScavengingSiteConfiguration scavSiteConf in __instance.ScavengingSitesDistribution)
-                    {
-                        if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_ResourceCrates_MissionTagDef")))
-                        {
-                            scavSiteConf.Weight = 2; // default 4
-                        }
-                        if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_RescueSoldier_MissionTagDef")))
-                        {
-                            scavSiteConf.Weight = 1;
-                        }
-                        if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_RescueVehicle_MissionTagDef")))
-                        {
-                            scavSiteConf.Weight = 1;
-                        }
-                    }
-                }
-
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-               
-            }
-        }
-
-        //Harmony patch to increase ambush chance
+            
+        //Harmony patch to increase ambush chance/remove ambush protection
         [HarmonyPatch(typeof(GeoscapeEventSystem), "OnLevelStart")]
+        
+          
         public static class GeoscapeEventSystem_PhoenixFaction_OnLevelStart_Patch
         {
+
+           
             public static void Prefix(GeoscapeEventSystem __instance)
             {
+                              
                 try
                 {
                     Logger.Debug($"[GeoscapeEventSystem_PhoenixFaction_OnLevelStart_PREFIX] Increasing ambush chance.");
-                    __instance.ExplorationAmbushChance = 100;
-                    __instance.AmbushExploredSitesProtection = 1;
-                    __instance.StartingAmbushProtection = 1;
+                    __instance.ExplorationAmbushChance = 35;
+                    __instance.AmbushExploredSitesProtection = 0;
+                    __instance.StartingAmbushProtection = 0;
+      
                 }
                 catch (Exception e)
                 {
@@ -1227,22 +1188,40 @@ namespace PhoenixRising.BetterGeoscape
                                                     StatModificationTarget.Willpower.ToString(),
                                                     -wpReduction,
                                                     __instance.CorruptionStatusDef,
-                                                    -wpReduction);
-
-                    
+                                                    -wpReduction);                  
 
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e);
                 }
-        
+                
             }
-
-            
+          
         }
+            
+        [HarmonyPatch(typeof(GeoscapeEventSystem), "PhoenixFaction_OnSiteFirstTimeVisited")]
+        public static class GeoscapeEventSystem_PhoenixFaction_OnSiteFirstTimeVisited_Patch
+        {
+            public static void Postfix(GeoscapeEventSystem __instance, GeoSite site, GeoLevelController ____level)
+            {
+                try
+                {
+                    if (site != null)
+                    {
+                        ____level.AlienFaction.AddEvolutionProgress(10);
+                    }
 
-        
 
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
     }
+
+
 }
+

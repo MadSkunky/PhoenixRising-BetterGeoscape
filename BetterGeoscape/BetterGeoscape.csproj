@@ -82,6 +82,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CHReworkMain.cs" />
+    <Compile Include="FesteringSkiesRework.cs" />
+    <Compile Include="Interceptors.cs" />
+    <Compile Include="ScavengingSettings.cs" />
     <Compile Include="ReverseEgineeringResearch.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Helper.cs" />
@@ -96,6 +99,7 @@
   <ItemGroup>
     <None Include="Assets\Localization\PR_BG_Localization.csv" />
     <None Include="Assets\Localization\PR_CH_Story_Localization.csv" />
+    <None Include="Assets\Localization\PR_FS_Story_Localization.csv" />
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup />
