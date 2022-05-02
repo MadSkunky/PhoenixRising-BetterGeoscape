@@ -912,6 +912,7 @@ namespace PhoenixRising.BetterGeoscape
                 e_HealMedicalBay_PhoenixFacilityDe.BaseHeal = 16;
 
 
+
             }
 
             catch (Exception e)
