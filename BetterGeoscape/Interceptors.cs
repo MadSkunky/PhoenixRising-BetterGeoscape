@@ -89,7 +89,7 @@ namespace PhoenixRising.BetterGeoscape
                 hibernationModuleResearch.Faction = PhoenixPoint;
                 hibernationModuleResearch.RevealRequirements = sourcePX_SDI_ResearchDef.RevealRequirements;
                 hibernationModuleResearch.ResearchCost = 100;
-                hibernationmodule.GeoVehicleModuleBonusValue = 0.5f;
+                hibernationmodule.GeoVehicleModuleBonusValue = 0.35f;
 
 
 
@@ -119,33 +119,24 @@ namespace PhoenixRising.BetterGeoscape
         }
 
 
-      private static void emptyAircraft(GeoVehicle __instance)
+        private static void emptyAircraft(GeoVehicle aircraft)
         {
-            if (__instance.CurrentSite != null && __instance.CurrentSite.Type == GeoSiteType.PhoenixBase)
+            if (aircraft.CurrentSite != null && aircraft.CurrentSite.Type == GeoSiteType.PhoenixBase)
             {
-                List<GeoCharacter> list = new List<GeoCharacter>(from u in __instance.Units orderby u.OccupingSpace descending select u);
-                for (int i = list.Count - 1; i >= 0; i--)
+                List<GeoCharacter> list = new List<GeoCharacter>(from u in aircraft.Units orderby u.OccupingSpace descending select u);
+                foreach (GeoCharacter character in list)
                 {
-                    GeoCharacter geoCharacter = list[i];
-                    __instance.RemoveCharacter(geoCharacter);
-                    if (__instance.FreeCharacterSpace < geoCharacter.OccupingSpace)
+                    if (aircraft.FreeCharacterSpace >= 0)
                     {
                         break;
                     }
-                    list.RemoveAt(i);
-                    __instance.AddCharacter(geoCharacter);
+                    aircraft.RemoveCharacter(character);
+                    aircraft.CurrentSite.AddCharacter(character);
                 }
-                foreach (GeoCharacter character in list)
-                {
-                    __instance.RemoveCharacter(character);
-                    __instance.CurrentSite.AddCharacter(character);
-
-                }
-
             }
-      }
-        
-        
+        }
+
+
         [HarmonyPatch(typeof(GeoVehicle), "UpdateVehicleBonusCache")]
         internal static class BG_HybernationModuleIncreaseSpaceForUnits_patch
         {
