@@ -89,9 +89,9 @@ namespace PhoenixRising.BetterGeoscape
                 hibernationModuleResearch.Faction = PhoenixPoint;
                 hibernationModuleResearch.RevealRequirements = sourcePX_SDI_ResearchDef.RevealRequirements;
                 hibernationModuleResearch.ResearchCost = 100;
+                hibernationmodule.GeoVehicleModuleBonusValue = 0.5f;
 
-             
-                
+
 
             }
             catch (Exception e)
@@ -119,24 +119,22 @@ namespace PhoenixRising.BetterGeoscape
         }
 
 
-        private static void emptyAircraft(GeoVehicle __instance)
+      private static void emptyAircraft(GeoVehicle __instance)
         {
-
-            if (__instance.CurrentSite.Type == GeoSiteType.PhoenixBase)
+            if (__instance.CurrentSite != null && __instance.CurrentSite.Type == GeoSiteType.PhoenixBase)
             {
                 List<GeoCharacter> list = new List<GeoCharacter>(from u in __instance.Units orderby u.OccupingSpace descending select u);
                 for (int i = list.Count - 1; i >= 0; i--)
                 {
                     GeoCharacter geoCharacter = list[i];
                     __instance.RemoveCharacter(geoCharacter);
-                    if (__instance.MaxCharacterSpace >= __instance.UsedCharacterSpace)
+                    if (__instance.FreeCharacterSpace < geoCharacter.OccupingSpace)
                     {
                         break;
                     }
                     list.RemoveAt(i);
                     __instance.AddCharacter(geoCharacter);
                 }
-
                 foreach (GeoCharacter character in list)
                 {
                     __instance.RemoveCharacter(character);
@@ -145,7 +143,7 @@ namespace PhoenixRising.BetterGeoscape
                 }
 
             }
-        }
+      }
         
         
         [HarmonyPatch(typeof(GeoVehicle), "UpdateVehicleBonusCache")]
@@ -154,14 +152,14 @@ namespace PhoenixRising.BetterGeoscape
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             
                       
-            private static void Prefix(GeoVehicle __instance)
+            private static void Postfix(GeoVehicle __instance)
             {
                 try
                 {
-
-                    GeoVehicleEquipment hybenationPods = __instance.Modules.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Recuperation);
-                    GeoVehicleEquipment fuelTank = __instance.Modules.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Range);
-                    GeoVehicleEquipment cruiseControl = __instance.Modules.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Speed);
+                  
+                    GeoVehicleEquipment hybenationPods = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Recuperation);
+                    GeoVehicleEquipment fuelTank = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Range);
+                    GeoVehicleEquipment cruiseControl = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Speed);
                     string geoVehicle = __instance.VehicleDef.ViewElement.Name;
 
                     //if hybernation pods are present, take the stats of the new defs with increased capacity
@@ -178,9 +176,7 @@ namespace PhoenixRising.BetterGeoscape
                         {
 
                             __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_Manticore_Def"));
-                            
-                            emptyAircraft(__instance);
-                            
+                           emptyAircraft(__instance);
 
                         }
                     }
@@ -198,9 +194,8 @@ namespace PhoenixRising.BetterGeoscape
                   else
                   {
                             __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("SYN_Helios_Def"));
-                           
-                                emptyAircraft(__instance);
-                           
+                            emptyAircraft(__instance);
+
                         }
                 }
 
@@ -219,10 +214,8 @@ namespace PhoenixRising.BetterGeoscape
                   {
 
                    __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("NJ_Thunderbird_Def"));
-                           
-                                emptyAircraft(__instance);
-                           
-                        }
+                   emptyAircraft(__instance);
+                   }
                 }
 
                 if (geoVehicle == "Geoscape Blimp")
@@ -241,10 +234,9 @@ namespace PhoenixRising.BetterGeoscape
                    {
 
                    __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("ANU_Blimp_Def"));
-                          
-                                emptyAircraft(__instance);
-                            
-                        }
+                   emptyAircraft(__instance);
+
+                      }
                     }
 
                 if (geoVehicle == "Geoscape Masked Manticore")
@@ -262,9 +254,8 @@ namespace PhoenixRising.BetterGeoscape
                   {
 
                     __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_ManticoreMasked_Def"));
-                           
-                                emptyAircraft(__instance);
-                            
+                        emptyAircraft(__instance);
+
                         }
                  }
 
@@ -315,7 +306,28 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
 
+            public static void Postfix(GeoLevelController __instance)
+            {
+                try
+                {
+                    foreach (GeoVehicle geoVehicle in __instance.PhoenixFaction.Vehicles)
+                    {
+                        if (geoVehicle.Name.Equals("Aurora"))
+                        {
+                            clonedAircraft.TeleportToSite(geoVehicle.CurrentSite);
+                            clonedAircraft.ReloadAllEquipments();
+                            return;
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+
         }
+
 
 
 
