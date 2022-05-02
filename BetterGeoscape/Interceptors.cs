@@ -123,23 +123,26 @@ namespace PhoenixRising.BetterGeoscape
 
         private static void emptyAircraft(GeoVehicle __instance) 
         {
-            List<GeoCharacter> list = new List<GeoCharacter>(from u in __instance.Units orderby u.OccupingSpace descending select u);
-            for (int i = list.Count - 1; i >= 0; i--)
-            {
-                GeoCharacter geoCharacter = list[i];
-                __instance.RemoveCharacter(geoCharacter);
-                if (__instance.FreeCharacterSpace < geoCharacter.OccupingSpace)
+           if (__instance.CurrentSite != null)
+           {
+                List<GeoCharacter> list = new List<GeoCharacter>(from u in __instance.Units orderby u.OccupingSpace descending select u);
+                for (int i = list.Count - 1; i >= 0; i--)
                 {
-                    break;
+                    GeoCharacter geoCharacter = list[i];
+                    __instance.RemoveCharacter(geoCharacter);
+                    if (__instance.FreeCharacterSpace < geoCharacter.OccupingSpace)
+                    {
+                        break;
+                    }
+                    list.RemoveAt(i);
+                    __instance.AddCharacter(geoCharacter);
                 }
-                list.RemoveAt(i);
-                __instance.AddCharacter(geoCharacter);
-            }
-            foreach (GeoCharacter character in list)
-            {
-                __instance.RemoveCharacter(character);
-                __instance.CurrentSite.AddCharacter(character);
+                foreach (GeoCharacter character in list)
+                {
+                    __instance.RemoveCharacter(character);
+                    __instance.CurrentSite.AddCharacter(character);
 
+                }
             }
         }
         
@@ -175,8 +178,8 @@ namespace PhoenixRising.BetterGeoscape
                   {       
             
                    __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_Manticore_Def"));
-                   emptyAircraft(__instance);
-                  
+                    emptyAircraft(__instance);
+
                   }
 
                 }

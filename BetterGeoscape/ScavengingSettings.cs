@@ -11,6 +11,7 @@ namespace PhoenixRising.BetterGeoscape
 {
     internal class ScavengingSettings
     {
+        
 
 
         // Harmony patch before Geoscape world is created
@@ -22,6 +23,8 @@ namespace PhoenixRising.BetterGeoscape
                 try
 
                 {
+                  
+
                     // __instance holds all variables of GeoInitialWorldSetup, here the initial amount of all scavenging sites
                     __instance.InitialScavengingSiteCount = 8; // default 16
 

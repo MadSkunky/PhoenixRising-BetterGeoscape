@@ -14,7 +14,10 @@
         public int ChancesScavCrates = 4;
         public int ChancesScavSoldiers = 1;
         public int ChancesScavGroundVehicleRescue = 1;
-    
+
+   
+
+
     }
 
    
