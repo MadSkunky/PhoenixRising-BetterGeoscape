@@ -290,6 +290,16 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         clonedAircraft.AddEquipment(equipment);
                     }
+
+                    GeoSite geoSite = (from p in __instance.Map.SitesByType[GeoSiteType.PhoenixBase]
+                                       where p.Owner == __instance.PhoenixFaction && p.State == GeoSiteState.Functioning
+                                       select p into d
+                                       orderby GeoMap.Distance(d, clonedAircraft.CurrentSite)
+                                       select d).FirstOrDefault();
+                    clonedAircraft.TeleportToSite(geoSite);
+                    clonedAircraft.ReloadAllEquipments();
+
+
                 }
                 catch (Exception e)
                 {
@@ -297,25 +307,6 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
 
-            public static void Postfix(GeoLevelController __instance)
-            {
-                try
-                {
-                    foreach (GeoVehicle geoVehicle in __instance.PhoenixFaction.Vehicles)
-                    {
-                        if (geoVehicle.Name.Equals("Aurora"))
-                        {
-                            clonedAircraft.TeleportToSite(geoVehicle.CurrentSite);
-                            clonedAircraft.ReloadAllEquipments();
-                            return;
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
 
         }
 
