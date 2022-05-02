@@ -895,6 +895,10 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushSY.CratesDeploymentPointsRange.Max = 50;
                 AmbushSY.CustomObjectives[2] = pickResourceCratesObjective;
 
+                //Allow equipment before The Hatching
+                CustomMissionTypeDef storyFS1_CustomMissionTypeDef = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("StoryFS1_CustomMissionTypeDef"));
+                storyFS1_CustomMissionTypeDef.SkipDeploymentSelection = false;
+
                 //Experiment new HD
                 var survive3turnsobjective = AmbushALN.CustomObjectives[0];
                 CustomMissionTypeDef ALNvsANUHD = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("HavenDefAlienAN_CustomMissionTypeDef"));
@@ -910,6 +914,7 @@ namespace PhoenixRising.BetterGeoscape
                 //PhoenixFacilityDef medicalBay_PhoenixFacilityDef = Repo.GetAllDefs<PhoenixFacilityDef>().FirstOrDefault(ged => ged.name.Equals("MedicalBay_PhoenixFacilityDef"));
                 HealFacilityComponentDef e_HealMedicalBay_PhoenixFacilityDe = Repo.GetAllDefs<HealFacilityComponentDef>().FirstOrDefault(ged => ged.name.Equals("E_Heal [MedicalBay_PhoenixFacilityDef]"));
                 e_HealMedicalBay_PhoenixFacilityDe.BaseHeal = 16;
+
 
 
             }

@@ -90,6 +90,9 @@ namespace PhoenixRising.BetterGeoscape
                 hibernationModuleResearch.RevealRequirements = sourcePX_SDI_ResearchDef.RevealRequirements;
                 hibernationModuleResearch.ResearchCost = 100;
 
+             
+                
+
             }
             catch (Exception e)
             {
@@ -173,6 +176,7 @@ namespace PhoenixRising.BetterGeoscape
             
                    __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_Manticore_Def"));
                    emptyAircraft(__instance);
+                  
                   }
 
                 }

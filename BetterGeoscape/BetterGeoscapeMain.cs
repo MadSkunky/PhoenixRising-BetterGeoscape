@@ -51,6 +51,7 @@ namespace PhoenixRising.BetterGeoscape
                 Interceptors.Apply_Changes();
             }
 
+
         }
         public static void GeoscapeOnHide()
         {
