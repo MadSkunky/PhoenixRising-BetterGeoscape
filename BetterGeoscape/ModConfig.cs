@@ -9,14 +9,12 @@
         public bool ActivateReverseEngineeringResearch = true;
         public bool ActivateInterceptors = true;
         public int Debug = 1;
+        public bool DisableStaminaRecuperatonModule = false;
     
-        public int InitialScavSites = 16;
+        public int InitialScavSites = 8;
         public int ChancesScavCrates = 4;
         public int ChancesScavSoldiers = 1;
         public int ChancesScavGroundVehicleRescue = 1;
-
-   
-
 
     }
 

@@ -11,9 +11,7 @@ namespace PhoenixRising.BetterGeoscape
 {
     internal class ScavengingSettings
     {
-        
-
-
+                       
         // Harmony patch before Geoscape world is created
         [HarmonyPatch(typeof(GeoInitialWorldSetup), "SimulateFactions")]
         internal static class BC_GeoInitialWorldSetup_SimulateFactions_Patch
@@ -23,25 +21,29 @@ namespace PhoenixRising.BetterGeoscape
                 try
 
                 {
-                  
+
+                    int initialScavSites = BetterGeoscapeMain.Config.InitialScavSites;
+                    int crateScavSites = BetterGeoscapeMain.Config.ChancesScavCrates;
+                    int recruitScavSites = BetterGeoscapeMain.Config.ChancesScavSoldiers;
+                    int vehicleScavSites = BetterGeoscapeMain.Config.ChancesScavGroundVehicleRescue;
 
                     // __instance holds all variables of GeoInitialWorldSetup, here the initial amount of all scavenging sites
-                    __instance.InitialScavengingSiteCount = 8; // default 16
+                    __instance.InitialScavengingSiteCount = (uint)initialScavSites; // default 16
 
                     // ScavengingSitesDistribution is an array with the weights for scav, rescue soldier and vehicle
                     foreach (GeoInitialWorldSetup.ScavengingSiteConfiguration scavSiteConf in __instance.ScavengingSitesDistribution)
                     {
                         if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_ResourceCrates_MissionTagDef")))
                         {
-                            scavSiteConf.Weight = 2; // default 4
+                            scavSiteConf.Weight = crateScavSites; // default 4
                         }
                         if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_RescueSoldier_MissionTagDef")))
                         {
-                            scavSiteConf.Weight = 1;
+                            scavSiteConf.Weight = recruitScavSites;
                         }
                         if (scavSiteConf.MissionTags.Any(mt => mt.name.Equals("Contains_RescueVehicle_MissionTagDef")))
                         {
-                            scavSiteConf.Weight = 1;
+                            scavSiteConf.Weight = vehicleScavSites;
                         }
                     }
                 }

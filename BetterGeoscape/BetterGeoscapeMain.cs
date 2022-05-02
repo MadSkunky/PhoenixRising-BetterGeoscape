@@ -34,7 +34,7 @@ namespace PhoenixRising.BetterGeoscape
             
             // Call FS rework
             FesteringSkiesRework.ApplyChanges();
-            
+           
             // Apply story rework changes (Voland)
             if (Config.ActivateCHRework)
             {
@@ -51,7 +51,12 @@ namespace PhoenixRising.BetterGeoscape
                 Interceptors.Apply_Changes();
             }
 
+            if (Config.DisableStaminaRecuperatonModule)
+            {
+                DisableHibernationPodStamina.Apply_Changes();
+            }
 
+         
         }
         public static void GeoscapeOnHide()
         {
@@ -77,6 +82,10 @@ namespace PhoenixRising.BetterGeoscape
 
             // Initialize Helper
             Helper.Initialize();
+
+
         }
+
+
     }
 }

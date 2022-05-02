@@ -123,7 +123,7 @@ namespace PhoenixRising.BetterGeoscape
 
         private static void emptyAircraft(GeoVehicle __instance) 
         {
-           if (__instance.CurrentSite != null)
+           if (__instance.CurrentSite.Type == GeoSiteType.PhoenixBase)
            {
                 List<GeoCharacter> list = new List<GeoCharacter>(from u in __instance.Units orderby u.OccupingSpace descending select u);
                 for (int i = list.Count - 1; i >= 0; i--)

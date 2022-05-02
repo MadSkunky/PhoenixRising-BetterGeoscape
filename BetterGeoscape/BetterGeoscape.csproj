@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CHReworkMain.cs" />
+    <Compile Include="DisableHibernationPodStamina.cs" />
     <Compile Include="FesteringSkiesRework.cs" />
     <Compile Include="Interceptors.cs" />
     <Compile Include="ScavengingSettings.cs" />
