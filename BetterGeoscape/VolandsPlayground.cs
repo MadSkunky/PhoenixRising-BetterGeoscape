@@ -5,7 +5,9 @@ using Base.UI;
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
+using PhoenixPoint.Common.Entities.Addons;
 using PhoenixPoint.Common.Entities.Characters;
+using PhoenixPoint.Common.Entities.Items;
 using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Interception.Equipments;
@@ -936,7 +938,9 @@ namespace PhoenixRising.BetterGeoscape
                 HealFacilityComponentDef e_HealMedicalBay_PhoenixFacilityDe = Repo.GetAllDefs<HealFacilityComponentDef>().FirstOrDefault(ged => ged.name.Equals("E_Heal [MedicalBay_PhoenixFacilityDef]"));
                 e_HealMedicalBay_PhoenixFacilityDe.BaseHeal = 16;
 
-
+                //Bonus damage from corruption reduce to 0%
+                CorruptionStatusDef corruption_StatusDef = Repo.GetAllDefs<CorruptionStatusDef>().FirstOrDefault(ged => ged.name.Equals("Corruption_StatusDef"));
+                corruption_StatusDef.Multiplier = 0.0f;
 
             }
 
@@ -1051,7 +1055,9 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
         }
-        
+
+       
+
 
         // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
         // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
@@ -1101,6 +1107,9 @@ namespace PhoenixRising.BetterGeoscape
                     // Like the original calculation, but adapted with 'maxCorruption'
                     // Also '__result' for 'return', '__instance' for 'this' and 'base_TacticalActor' for 'base.TacticalActor'
                     __result = Mathf.Min(__instance.CorruptionStatusDef.ValueIncrement, maxCorruption - base_TacticalActor.CharacterStats.Corruption.IntValue);
+                   
+                   
+
                 }
                 catch (Exception e)
                 {
@@ -1108,6 +1117,7 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
+        
 
         // Dictionary to transfer the characters geoscape stamina to tactical level by actor ID
         public static Dictionary<GeoTacUnitId, int> StaminaMap = new Dictionary<GeoTacUnitId, int>();
@@ -1139,7 +1149,9 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-            
+       
+                   
+  
         //Harmony patch to increase ambush chance/remove ambush protection
         [HarmonyPatch(typeof(GeoscapeEventSystem), "OnLevelStart")]
         

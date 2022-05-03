@@ -54,12 +54,20 @@ namespace PhoenixRising.BetterGeoscape
                 ResearchDef ALN_AcheronResearch1 = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_Acheron1_ResearchDef"));
                 ALN_AcheronResearch1.RevealRequirements.Container[0] = requirementForAlienAcheronResearch;
 
-                // Make CH0 Mission appear when Player completes Acheron Autopsy
+                // Make CH0 Mission appear when Player completes Acheron Autopsy and Capture and Containment doesn't work atmo
                 GeoResearchEventFilterDef PP_ResearchConditionCH0_Miss = Repo.GetAllDefs<GeoResearchEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_CH0_ResearchCompleted [GeoResearchEventFilterDef]"));
-                PP_ResearchConditionCH0_Miss.ResearchID = "PX_Alien_Acheron_ResearchDef";
+                
+                OrEventFilterDef triggerCH1 = Repo.GetAllDefs<OrEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_CH1_MultipleTriggers [OrEventFilterDef]"));
+                triggerCH1.OR_Filters[1] = PP_ResearchConditionCH0_Miss;
+                GeoscapeEventDef CH0_Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH0_GeoscapeEventDef"));
+                CH0Event.Filters[0] = triggerCH1;
+                                
 
                 // Make CH1 Mission appear when Player win CH0 Mission; CH1 Event will not be used!
                 GeoscapeEventDef CH1_Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH1_GeoscapeEventDef"));
+                CH0Event.GeoscapeEventData.Conditions.Add(CH1_Event.GeoscapeEventData.Conditions[1]);
+                CH0Event.GeoscapeEventData.Conditions.Add(CH1_Event.GeoscapeEventData.Conditions[3]);
+                
                 var revealSiteCH1_Miss = CH1_Event.GeoscapeEventData.Choices[0].Outcome.RevealSites[0];
                 var setEventCH1_Miss = CH1_Event.GeoscapeEventData.Choices[0].Outcome.SetEvents[0];
                 var trackEventCH1_Miss = CH1_Event.GeoscapeEventData.Choices[0].Outcome.TrackEncounters[0];
