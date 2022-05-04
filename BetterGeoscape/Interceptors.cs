@@ -66,12 +66,12 @@ namespace PhoenixRising.BetterGeoscape
                 cruisecontrolmodule.ManufactureMaterials = 600;
                 cruisecontrolmodule.ManufactureTech = 75;
                 cruisecontrolmodule.ManufacturePointsCost = 505;
-                //Change Fuel Tanmk module
+                //Change Fuel Tank module
                 GeoVehicleModuleDef fueltankmodule = Repo.GetAllDefs<GeoVehicleModuleDef>().FirstOrDefault(ged => ged.name.Equals("NJ_FuelTanks_GeoVehicleModuleDef"));
                 //Increase cost to 50% of Vanilla Manti
-                cruisecontrolmodule.ManufactureMaterials = 600;
-                cruisecontrolmodule.ManufactureTech = 75;
-                cruisecontrolmodule.ManufacturePointsCost = 505;
+                fueltankmodule.ManufactureMaterials = 600;
+                fueltankmodule.ManufactureTech = 75;
+                fueltankmodule.ManufacturePointsCost = 505;
 
 
                 //Make Hibernation module available for manufacture from start of game - doesn't work because HM is not an ItemDef
@@ -119,7 +119,7 @@ namespace PhoenixRising.BetterGeoscape
         }
 
 
-        private static void emptyAircraft(GeoVehicle aircraft)
+        private static void EmptyAircraft(GeoVehicle aircraft)
         {
             if (aircraft.CurrentSite != null && aircraft.CurrentSite.Type == GeoSiteType.PhoenixBase)
             {
@@ -167,7 +167,7 @@ namespace PhoenixRising.BetterGeoscape
                         {
 
                             __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_Manticore_Def"));
-                           emptyAircraft(__instance);
+                           EmptyAircraft(__instance);
 
                         }
                     }
@@ -185,7 +185,7 @@ namespace PhoenixRising.BetterGeoscape
                   else
                   {
                             __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("SYN_Helios_Def"));
-                            emptyAircraft(__instance);
+                            EmptyAircraft(__instance);
 
                         }
                 }
@@ -205,7 +205,7 @@ namespace PhoenixRising.BetterGeoscape
                   {
 
                    __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("NJ_Thunderbird_Def"));
-                   emptyAircraft(__instance);
+                   EmptyAircraft(__instance);
                    }
                 }
 
@@ -225,7 +225,7 @@ namespace PhoenixRising.BetterGeoscape
                    {
 
                    __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("ANU_Blimp_Def"));
-                   emptyAircraft(__instance);
+                   EmptyAircraft(__instance);
 
                       }
                     }
@@ -245,9 +245,9 @@ namespace PhoenixRising.BetterGeoscape
                   {
 
                     __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_ManticoreMasked_Def"));
-                        emptyAircraft(__instance);
+                        EmptyAircraft(__instance);
 
-                        }
+                  }
                  }
 
 

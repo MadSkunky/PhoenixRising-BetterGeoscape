@@ -4,6 +4,7 @@ using System.Reflection;
 using Base.Core;
 using Base.Defs;
 using Harmony;
+using PhoenixPoint.Common.Core;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -15,8 +16,14 @@ namespace PhoenixRising.BetterGeoscape
         internal static string LogPath;
         internal static string ModDirectory;
         internal static string LocalizationDirectory;
+        internal static string TexturesDirectory;
         internal static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+        internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
+       
         
+        internal static bool doNotLocalize = false;
+
+
         public static void HomeMod(Func<string, object, object> api)
         {
             InitBetterGeoscape(api);
@@ -75,7 +82,8 @@ namespace PhoenixRising.BetterGeoscape
             ModDirectory = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
             // Path to localization CSVs
             LocalizationDirectory = Path.Combine(ModDirectory, "Assets", "Localization");
-            
+            //Texture Directory (for Dtony's DeliriumPerks)
+            TexturesDirectory = Path.Combine(ModDirectory, "Assets", "Textures");
             // Initialize Logger
             LogPath = Path.Combine(ModDirectory, "BetterGeoscape.log");
             Logger.Initialize(LogPath, Config.Debug, ModDirectory, nameof(BetterGeoscapeMain));

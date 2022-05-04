@@ -83,6 +83,7 @@
   <ItemGroup>
     <Compile Include="CHReworkMain.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="DeliriumPerks.cs" />
     <Compile Include="DisableHibernationPodStamina.cs" />
     <Compile Include="FesteringSkiesRework.cs" />
     <Compile Include="Interceptors.cs" />

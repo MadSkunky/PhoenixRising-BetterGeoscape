@@ -7,20 +7,31 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Addons;
 using PhoenixPoint.Common.Entities.Characters;
+using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.Items;
 using PhoenixPoint.Common.Levels.Missions;
+using PhoenixPoint.Common.View.ViewControllers.Inventory;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Interception.Equipments;
 using PhoenixPoint.Geoscape.Entities.Missions;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
+using PhoenixPoint.Geoscape.InterceptionPrototype.UI;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
+using PhoenixPoint.Geoscape.View.ViewControllers.Inventory;
+using PhoenixPoint.Geoscape.View.ViewModules;
 using PhoenixPoint.Tactical.Entities;
+using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.ActorsInstance;
+using PhoenixPoint.Tactical.Entities.Effects;
+using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixPoint.Tactical.Levels.FactionObjectives;
+using PhoenixPoint.Tactical.View.ViewControllers;
+using PhoenixPoint.Tactical.View.ViewStates;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -30,11 +41,13 @@ namespace PhoenixRising.BetterGeoscape
 {
     class VolandsPlayground
     {
-        
+
+
 
         // Get config, definition repository and shared data
 
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
+
 
         private static bool ApplyChangeReduceResources = true;
 
@@ -51,7 +64,7 @@ namespace PhoenixRising.BetterGeoscape
                 GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
                 GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
 
-                
+
 
                 //Source for creating new events
                 GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
@@ -79,8 +92,8 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
                     {
-                        
-                        if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN" 
+
+                        if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN"
                             && geoEvent.GeoscapeEventData.EventID != "PROG_SY7"
                             && geoEvent.GeoscapeEventData.EventID != "PROG_SY8"
                             && geoEvent.GeoscapeEventData.EventID != "PROG_AN3"
@@ -89,17 +102,17 @@ namespace PhoenixRising.BetterGeoscape
                             && geoEvent.GeoscapeEventData.EventID != "PROG_NJ8")
                         {
                             foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
-                        {
-                            for (int i = 0; i < choice.Outcome.Diplomacy.Count; i++)
                             {
-                                if (choice.Outcome.Diplomacy[i].TargetFaction == geoPhoenixFaction && choice.Outcome.Diplomacy[i].Value <= 0)
+                                for (int i = 0; i < choice.Outcome.Diplomacy.Count; i++)
                                 {
-                                    OutcomeDiplomacyChange diplomacyChange = choice.Outcome.Diplomacy[i];
-                                    diplomacyChange.Value *= 2;
-                                    choice.Outcome.Diplomacy[i] = diplomacyChange;
+                                    if (choice.Outcome.Diplomacy[i].TargetFaction == geoPhoenixFaction && choice.Outcome.Diplomacy[i].Value <= 0)
+                                    {
+                                        OutcomeDiplomacyChange diplomacyChange = choice.Outcome.Diplomacy[i];
+                                        diplomacyChange.Value *= 2;
+                                        choice.Outcome.Diplomacy[i] = diplomacyChange;
+                                    }
                                 }
                             }
-                        }
                         }
                     }
                     ApplyChangeDiplomacy = false;
@@ -443,7 +456,7 @@ namespace PhoenixRising.BetterGeoscape
                 //Remove 50 SP
                 LE1Win.GeoscapeEventData.Choices[0].Outcome.FactionSkillPoints = 0;
                 LE1Win.GeoscapeEventData.Leader = "Jack_Harlson01";
-               
+
                 //Require capturing ancient site for LOTA Schemata missions
                 //GeoscapeEventDef LE1Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_GeoscapeEventDef"));
                 //GeoscapeEventDef LEFinalEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE_FINAL_GeoscapeEventDef"));
@@ -451,7 +464,7 @@ namespace PhoenixRising.BetterGeoscape
                 //GeoLevelConditionDef newCondition = Helper.CreateDefFromClone(sourceCondition, "0358D502-421D-4D9A-9505-491FC80F1C56", "[PROG_LE_1] Condition 2");
                 //newCondition.VariableCompareToNumber = 1;
                 //LE1Event.GeoscapeEventData.Conditions.Add(newCondition);
-                
+
                 //Add choices for LE1Win
 
                 LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
@@ -570,7 +583,7 @@ namespace PhoenixRising.BetterGeoscape
                 prog_PU2_Choice2Event.GeoscapeEventData.Title.LocalizationKey = "PROG_PU2_CHOICE2EVENT_TITLE";
                 prog_PU2_Choice2Event.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU2_CHOICE2EVENT_TEXT_GENERAL_0";
                 prog_PU2_Choice2Event.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-              
+
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
@@ -578,7 +591,7 @@ namespace PhoenixRising.BetterGeoscape
                     Value = +3
                 });
                 prog_PU2_Choice2Event.GeoscapeEventData.Choices[0].Outcome.Resources.Add(new ResourceUnit()
-              
+
                 {
                     Type = ResourceType.Materials,
                     Value = 300
@@ -631,7 +644,7 @@ namespace PhoenixRising.BetterGeoscape
                     Text = (new LocalizedTextBind("PROG_PU2_CHOICE_2_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
                     {
-                        TriggerEncounterID = "PROG_PU2_CHOICE2EVENT",                 
+                        TriggerEncounterID = "PROG_PU2_CHOICE2EVENT",
                     }
                 });
 
@@ -640,13 +653,13 @@ namespace PhoenixRising.BetterGeoscape
                     Text = (new LocalizedTextBind("PROG_PU2_CHOICE_3_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
                     {
-                       TriggerEncounterID = "PROG_PU2_CHOICE3EVENT",
+                        TriggerEncounterID = "PROG_PU2_CHOICE3EVENT",
                     }
-                });                            
+                });
 
                 //Add options for DLC1MISS WIN
                 GeoscapeEventDef DLC1missWIN = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU4_WIN_GeoscapeEventDef"));
-                
+
                 //Anu option
                 GeoscapeEventDef an28event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("AN28_GeoscapeEventDef"));
                 dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.Units = an28event.GeoscapeEventData.Choices[0].Outcome.Units;
@@ -655,16 +668,16 @@ namespace PhoenixRising.BetterGeoscape
                 //Syn choice
                 dlc1miss1win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
-                    Text = (new LocalizedTextBind ("PROG_PU4_WIN_CHOICE_1_TEXT")),
+                    Text = (new LocalizedTextBind("PROG_PU4_WIN_CHOICE_1_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
                     {
                         OutcomeText = new EventTextVariation()
                         {
                             General = new LocalizedTextBind("PROG_PU4_WIN_CHOICE_1_OUTCOME_GENERAL")
                         },
-                    VariablesChange = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
-                    UntrackEncounters = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
-                    RemoveTimers = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
+                        VariablesChange = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        UntrackEncounters = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        RemoveTimers = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
                     },
                 });
                 dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
@@ -744,14 +757,14 @@ namespace PhoenixRising.BetterGeoscape
                 newWinPU12.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU12_WIN2_TEXT_GENERAL_0";
                 newWinPU12.GeoscapeEventData.Choices[0].Text.LocalizationKey = "PROG_PU12_WIN2_CHOICE_0_TEXT";
                 newWinPU12.GeoscapeEventData.Choices[0].Outcome.Diplomacy[0] = new OutcomeDiplomacyChange()
-               
+
                 {
                     PartyFaction = Synedrion,
                     TargetFaction = PhoenixPoint,
                     Value = 6,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,   
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                 };
-                
+
                 //Event if HD Failure
                 GeoscapeEventDef newFailPU12 = Helper.CreateDefFromClone(sourceLoseGeoEvent, "D77EB7A7-FE26-49EF-BB7A-449A51D4D519", "PROG_PU12_FAIL2_GeoscapeEventDef");
                 newFailPU12.GeoscapeEventData.EventID = "PROG_PU12FAIL2";
@@ -760,19 +773,20 @@ namespace PhoenixRising.BetterGeoscape
                 newFailPU12.GeoscapeEventData.Choices[0].Text.LocalizationKey = "PROG_PU12_FAIL2_CHOICE_0_TEXT";
                 newFailPU12.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters.Add(pu12miss);
                 newFailPU12.GeoscapeEventData.Choices[0].Outcome.RemoveTimers.Add(pu12miss);
-                
+
                 //New event for outcome if selling info about lab or research after stealing it by completing original mission                
                 GeoscapeEventDef newPU12NJOption = Helper.CreateDefFromClone(sourceLoseGeoEvent, "D556A16F-41D8-4852-8DC4-5FB945652C50", "PROG_PU12_NewNJOption_GeoscapeEventDef");
                 newPU12NJOption.GeoscapeEventData.EventID = "PROG_PU12NewNJOption";
                 newPU12NJOption.GeoscapeEventData.Leader = "NJ_Abongameli";
                 newPU12NJOption.GeoscapeEventData.Title.LocalizationKey = "PROG_PU12_NEWNJOPT_TITLE";
                 newPU12NJOption.GeoscapeEventData.Description[0].General.LocalizationKey = "PROG_PU12_NEWNJOPT_GENERAL";
-                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.Resources.Add (new ResourceUnit () 
+                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.Resources.Add(new ResourceUnit()
                 {
-                    Type = ResourceType.Materials, Value = 750
+                    Type = ResourceType.Materials,
+                    Value = 750
                 });
 
-                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add (new OutcomeDiplomacyChange()
+                newPU12NJOption.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
@@ -784,7 +798,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 //Adding options to the original event, fetching it first
                 GeoscapeEventDef guidedByWhispers = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_MISS_GeoscapeEventDef"));
-                 
+
                 //Fetching Syn HD vs Pure with protect civillians type, to use as alternative mission
                 CustomMissionTypeDef havenDefPureSY_CustomMissionTypeDef = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("HavenDefPureSY_Civ_CustomMissionTypeDef"));
 
@@ -799,10 +813,10 @@ namespace PhoenixRising.BetterGeoscape
                             General = new LocalizedTextBind("PROG_PU12_MISS_CHOICE_2_OUTCOME_GENERAL")
                         },
                         StartMission = new OutcomeStartMission()
-                        { 
-                        MissionTypeDef = havenDefPureSY_CustomMissionTypeDef,
-                        WonEventID = "PROG_PU12WIN2",
-                        LostEventID = "PROG_PU12_FAIL2"
+                        {
+                            MissionTypeDef = havenDefPureSY_CustomMissionTypeDef,
+                            WonEventID = "PROG_PU12WIN2",
+                            LostEventID = "PROG_PU12_FAIL2"
                         }
                     },
                     Requirments = new GeoEventChoiceRequirements()
@@ -820,27 +834,27 @@ namespace PhoenixRising.BetterGeoscape
                     },
                 });
 
-               //Adding sell info to NJ option to original event
-               guidedByWhispers.GeoscapeEventData.Choices.Add(new GeoEventChoice()
-               {
-                  Text = (new LocalizedTextBind("PROG_PU12_MISS_CHOICE_3_TEXT")),
-                  Outcome = new GeoEventChoiceOutcome()
-                  {
-                      TriggerEncounterID = "PROG_PU12NewNJOption",
-                  }   
-               });
+                //Adding sell info to NJ option to original event
+                guidedByWhispers.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                {
+                    Text = (new LocalizedTextBind("PROG_PU12_MISS_CHOICE_3_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        TriggerEncounterID = "PROG_PU12NewNJOption",
+                    }
+                });
 
                 //Add option after winning original mission to sell research to NJ
                 sourceWinGeoEvent.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
-                  Text = (new LocalizedTextBind("PROG_PU12_WIN_CHOICE_1_TEXT")),
-                  Outcome = new GeoEventChoiceOutcome()
-                  {
-                      TriggerEncounterID = "PROG_PU12NewNJOption",
-                  },
-                        
-                 });
-                
+                    Text = (new LocalizedTextBind("PROG_PU12_WIN_CHOICE_1_TEXT")),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        TriggerEncounterID = "PROG_PU12NewNJOption",
+                    },
+
+                });
+
                 //Changing ambush missions so that all of them have crates
                 CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
                 CustomMissionTypeDef SourceScavCratesALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("ScavCratesALN_CustomMissionTypeDef"));
@@ -852,7 +866,7 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushALN.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
                 AmbushALN.CratesDeploymentPointsRange.Min = 30;
                 AmbushALN.CratesDeploymentPointsRange.Max = 50;
-                AmbushALN.CustomObjectives[2]=pickResourceCratesObjective;
+                AmbushALN.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushAN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAN_CustomMissionTypeDef"));
                 AmbushAN.ParticipantsData[0].ReinforcementsTurns.Max = 1;
@@ -917,21 +931,21 @@ namespace PhoenixRising.BetterGeoscape
                 //Reduce XP for Ambush mission
                 SurviveTurnsFactionObjectiveDef surviveAmbush_CustomMissionObjective = Repo.GetAllDefs<SurviveTurnsFactionObjectiveDef>().FirstOrDefault(ged => ged.name.Equals("SurviveAmbush_CustomMissionObjective"));
                 surviveAmbush_CustomMissionObjective.MissionObjectiveData.ExperienceReward = 100;
-                
+
                 //Allow equipment before The Hatching
                 CustomMissionTypeDef storyFS1_CustomMissionTypeDef = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("StoryFS1_CustomMissionTypeDef"));
                 storyFS1_CustomMissionTypeDef.SkipDeploymentSelection = false;
 
                 //Experiment new HD
-               // var survive3turnsobjective = AmbushALN.CustomObjectives[0];
-               // CustomMissionTypeDef ALNvsANUHD = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("HavenDefAlienAN_CustomMissionTypeDef"));
+                // var survive3turnsobjective = AmbushALN.CustomObjectives[0];
+                // CustomMissionTypeDef ALNvsANUHD = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("HavenDefAlienAN_CustomMissionTypeDef"));
                 //CustomMissionTypeDef NewALNvsANUHD = Helper.CreateDefFromClone(AmbushALN, "C5BD29BE-2A61-4C5E-A578-F58FCB40BE14", "NewHavenDefAlienAN_CustomMissionTypeDef");
-               // ALNvsANUHD.ParticipantsData[0].InfiniteReinforcements = true;
-               // ALNvsANUHD.ParticipantsData[0].ReinforcementsDeploymentPart.Max = 0.3f;
-               // ALNvsANUHD.ParticipantsData[0].ReinforcementsDeploymentPart.Min = 0.3f;
-               // ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-               // ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Min = 1;
-               // ALNvsANUHD.CustomObjectives[0]=survive3turnsobjective;
+                // ALNvsANUHD.ParticipantsData[0].InfiniteReinforcements = true;
+                // ALNvsANUHD.ParticipantsData[0].ReinforcementsDeploymentPart.Max = 0.3f;
+                // ALNvsANUHD.ParticipantsData[0].ReinforcementsDeploymentPart.Min = 0.3f;
+                // ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Max = 1;
+                // ALNvsANUHD.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                // ALNvsANUHD.CustomObjectives[0]=survive3turnsobjective;
 
                 //Change medbay
                 //PhoenixFacilityDef medicalBay_PhoenixFacilityDef = Repo.GetAllDefs<PhoenixFacilityDef>().FirstOrDefault(ged => ged.name.Equals("MedicalBay_PhoenixFacilityDef"));
@@ -941,7 +955,6 @@ namespace PhoenixRising.BetterGeoscape
                 //Bonus damage from corruption reduce to 0%
                 CorruptionStatusDef corruption_StatusDef = Repo.GetAllDefs<CorruptionStatusDef>().FirstOrDefault(ged => ged.name.Equals("Corruption_StatusDef"));
                 corruption_StatusDef.Multiplier = 0.0f;
-
             }
 
             catch (Exception e)
@@ -949,6 +962,36 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
         }
+
+        [HarmonyPatch(typeof(GeoFaction), "DailyUpdateDiplomacy")]
+        internal static class GeoFaction_DailyUpdateDiplomacy_GiveMutationBonusPerks_Patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(GeoLevelController __level)
+            {
+ 
+                try
+                {
+                    if (__level.EventSystem.IsEventTriggered("SDI_02"))
+                    { 
+                        foreach (GeoCharacter geoCharacter in __level.PhoenixFaction.HumanSoldiers)
+                        if (geoCharacter.CharacterStats.Corruption >= 3)
+                        {
+                            TacticalAbilityDef someperk = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ged => ged.name.Equals("coolPerk"));
+                            geoCharacter.GetTacticalAbilities().Add(someperk);
+
+                        }
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+
 
 
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
@@ -1008,7 +1051,9 @@ namespace PhoenixRising.BetterGeoscape
     "SDI_19",
     "SDI_20"
         };
+
         
+
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
         {
@@ -1018,8 +1063,8 @@ namespace PhoenixRising.BetterGeoscape
                 Calculate_ODI_Level(__instance, ____evolutionProgress);
             }
         }
+
         
-       
 
         internal static void Calculate_ODI_Level(GeoAlienFaction geoAlienFaction, int evolutionProgress)
         {
@@ -1048,16 +1093,13 @@ namespace PhoenixRising.BetterGeoscape
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
                     geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
                 }
-                }
+            }
 
             catch (Exception e)
             {
                 Logger.Error(e);
             }
         }
-
-       
-
 
         // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
         // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
@@ -1083,6 +1125,18 @@ namespace PhoenixRising.BetterGeoscape
                     // With Harmony patches we cannot directly access base.TacticalActor, Harmony's AccessTools uses Reflection to get it through the backdoor
                     TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
 
+                    //Check for bionics
+                    int numberOfBionics = 0;
+                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
+
+                    foreach (TacticalItem armourItem in base_TacticalActor.BodyState.GetArmourItems())
+                    {
+                        if (armourItem.GameTags.Contains(bionicalTag))
+                        {
+                            numberOfBionics++;
+                        }
+                    }
+
                     // Calculate the percentage of current ODI level, these two variables are globally set by our ODI event patches
                     int odiPerc = CurrentODI_Level * 100 / ODI_EventIDs.Length;
 
@@ -1091,24 +1145,54 @@ namespace PhoenixRising.BetterGeoscape
                     if (odiPerc < 25)
                     {
                         maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax / 3;
+
+                        if (numberOfBionics==1)
+                        {
+                            maxCorruption -= (int)(maxCorruption * 0.33);
+                        }
+
+                        if (numberOfBionics==2)
+                        {
+                            maxCorruption -= (int)(maxCorruption * 0.66);
+                        }
+
                     }
                     else
                     {
                         if (odiPerc < 75)
                         {
                             maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax * 1 / 2;
+
+                            if (numberOfBionics == 1)
+                            {
+                                maxCorruption -= (int)(maxCorruption * 0.33);
+                            }
+
+                            if (numberOfBionics == 2)
+                            {
+                                maxCorruption -= (int)(maxCorruption * 0.66);
+                            }
                         }
                         else // > 75%
                         {
                             maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax;
+
+                            if (numberOfBionics == 1)
+                            {
+                                maxCorruption -= (int)(maxCorruption * 0.33);
+                            }
+
+                            if (numberOfBionics == 2)
+                            {
+                                maxCorruption -= (int)(maxCorruption * 0.66);
+                            }
+
                         }
                     }
-
+                   
                     // Like the original calculation, but adapted with 'maxCorruption'
                     // Also '__result' for 'return', '__instance' for 'this' and 'base_TacticalActor' for 'base.TacticalActor'
                     __result = Mathf.Min(__instance.CorruptionStatusDef.ValueIncrement, maxCorruption - base_TacticalActor.CharacterStats.Corruption.IntValue);
-                   
-                   
 
                 }
                 catch (Exception e)
@@ -1117,14 +1201,14 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-        
+
 
         // Dictionary to transfer the characters geoscape stamina to tactical level by actor ID
         public static Dictionary<GeoTacUnitId, int> StaminaMap = new Dictionary<GeoTacUnitId, int>();
 
         // Harmony patch to save the characters geoscape stamina by acor ID, this mehtod is called in the deployment phase before switching to tactical mode
         [HarmonyPatch(typeof(CharacterFatigue), "ApplyToTacticalInstance")]
-        
+
         internal static class BC_CharacterFatigue_ApplyToTacticalInstance_Patch
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
@@ -1141,6 +1225,7 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         StaminaMap.Add(data.Id, __instance.Stamina.IntValue);
                     }
+
                 }
                 catch (Exception e)
                 {
@@ -1149,27 +1234,27 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-       
-                   
-  
+
+
+
         //Harmony patch to increase ambush chance/remove ambush protection
         [HarmonyPatch(typeof(GeoscapeEventSystem), "OnLevelStart")]
-        
-          
+
+
         public static class GeoscapeEventSystem_PhoenixFaction_OnLevelStart_Patch
         {
 
-           
+
             public static void Prefix(GeoscapeEventSystem __instance)
             {
-                              
+
                 try
                 {
                     Logger.Debug($"[GeoscapeEventSystem_PhoenixFaction_OnLevelStart_PREFIX] Increasing ambush chance.");
                     __instance.ExplorationAmbushChance = 35;
                     __instance.AmbushExploredSitesProtection = 0;
                     __instance.StartingAmbushProtection = 0;
-      
+
                 }
                 catch (Exception e)
                 {
@@ -1177,7 +1262,7 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-        
+
         // Harmony patch to change the result of CorruptionStatus.GetStatModification() to take Stamina into account
         // Corruption application get reduced by 100% when Stamina is between 35-40, by 75% between 30-35, by 50% between 25-30.
         [HarmonyPatch(typeof(CorruptionStatus), "GetStatModification")]
@@ -1226,22 +1311,24 @@ namespace PhoenixRising.BetterGeoscape
                                                     StatModificationTarget.Willpower.ToString(),
                                                     -wpReduction,
                                                     __instance.CorruptionStatusDef,
-                                                    -wpReduction);                  
+                                                    -wpReduction);
 
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e);
                 }
-                
+
             }
-          
+
         }
-            
+
+
+
         [HarmonyPatch(typeof(GeoscapeEventSystem), "PhoenixFaction_OnSiteFirstTimeVisited")]
         public static class GeoscapeEventSystem_PhoenixFaction_OnSiteFirstTimeVisited_Patch
         {
-            public static void Postfix(GeoscapeEventSystem __instance, GeoSite site, GeoLevelController ____level)
+            public static void Postfix(GeoSite site, GeoLevelController ____level)
             {
                 try
                 {
@@ -1258,8 +1345,139 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-    }
 
+        public static void SetStaminaToZero(GeoCharacter __instance)
+        {
+            try
+            {
+                __instance.Fatigue.Stamina.SetToMin();
+            }
+
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+        }
+
+        [HarmonyPatch(typeof(GeoCharacter), "CureCorruption")]
+
+        public static class GeoCharacter_CureCorruption_SetStaminaTo0_patch
+        {
+            public static void Postfix(GeoCharacter __instance)
+            {
+                try
+                {
+                    int num = UnityEngine.Random.Range(0, 100);
+                    if (num >= 50)
+                    {
+                        SetStaminaToZero(__instance);
+                    }
+                }
+
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+
+                }
+            }
+        }
+
+        
+
+        [HarmonyPatch(typeof(UIModuleMutationSection), "ApplyMutation")]
+        public static class UIModuleMutationSection_ApplyMutation_SetStaminaTo0_patch
+        {
+            public static void Postfix(IAugmentationUIModule ____parentModule)
+            {
+                try
+                {
+                   ____parentModule.CurrentCharacter.Fatigue.Stamina.SetToMin(); 
+                }
+                    catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        
+        //When getting an augment, the character's Stamina is set to 0 and each augment reduces corruption by a 1/3
+        [HarmonyPatch(typeof(UIModuleBionics), "OnAugmentApplied")]
+        public static class UIModuleBionics_OnAugmentApplied_SetStaminaTo0_patch
+        {
+            public static void Postfix(UIModuleBionics __instance)
+            {
+                try
+                {
+                    //set Stamina to zero after installing a bionic
+                    __instance.CurrentCharacter.Fatigue.Stamina.SetToMin();
+
+                    //check number of augments the character has
+                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
+                    int numberOfBionics = AugmentScreenUtilities.GetNumberOfBionicsAugmentations(__instance.CurrentCharacter);
+                    for (int i = 0; i < numberOfBionics; i++)
+                    { 
+                        float corruption = (float)(__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Corruption * 0.33);
+                        __instance.CurrentCharacter.CharacterStats.Corruption.Set(corruption);
+                    }
+
+                }
+
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        // Setting Stamina to zero if character suffered a disabled limb during tactical
+        
+        //A list of operatives that get disabled limbs. This list is cleared when the game is exited, so saving a game in tactical, exiting the game and reloading will probably make the game "forget" the character was ever injured.
+        public static List<int> charactersWithBrokenLimbs = new List<int>();
+
+        // This first patch is to "register" the injury in the above list
+        [HarmonyPatch(typeof(BodyPartAspect), "OnSetToDisabled")]
+        internal static class BodyPartAspect_OnSetToDisabled_patch
+        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(BodyPartAspect __instance)
+            {
+                // The way to get access to base.OwnerItem
+                // 'base' it the class this object is derived from and with Harmony we can't directly access these base classes
+                // looking in dnSpy we can see, that 'base' is of type 'TacticalItemAspectBase' and we want to access it's property 'OwnerItem' that is of type 'TacticalItem'
+                // 'AccessTools.Property' are tools from Harmony to make such an access easier, the usual way through Reflections is a bit more complicated.
+                TacticalItem base_OwnerItem = (TacticalItem)AccessTools.Property(typeof(TacticalItemAspectBase), "OwnerItem").GetValue(__instance, null);
+
+                if (!charactersWithBrokenLimbs.Contains(base_OwnerItem.TacticalActorBase.GeoUnitId))
+                {
+                    charactersWithBrokenLimbs.Add(base_OwnerItem.TacticalActorBase.GeoUnitId);
+                }
+            }
+        }
+
+       // This second patch reads from the list and drains Stamina from everyone who is in it. 
+        [HarmonyPatch(typeof(GeoCharacter), "Init")]
+        internal static class GeoCharacter_Init_StaminaToZeroIfBodyPartDisabled_patch
+        {
+            public static void Postfix(GeoCharacter __instance)
+            {
+                try
+                {
+                  
+                        if (charactersWithBrokenLimbs.Contains(__instance.Id))
+                        {
+                            SetStaminaToZero(__instance);
+                            charactersWithBrokenLimbs.Remove(__instance.Id);
+                        }     
+
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }       
+        }
+    }
 
 }
 

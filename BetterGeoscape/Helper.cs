@@ -156,7 +156,28 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
                 return null;
             }
+
         }
+
+        public static Sprite CreateSpriteFromImageFile(string imageFileName, int width = 128, int height = 128, TextureFormat textureFormat = TextureFormat.RGBA32, bool mipChain = true)
+        {
+            try
+            {
+                string filePath = Path.Combine(BetterGeoscapeMain.TexturesDirectory, imageFileName);
+                byte[] data = File.Exists(filePath) ? File.ReadAllBytes(filePath) : throw new FileNotFoundException("File not found: " + filePath);
+                Texture2D texture = new Texture2D(width, height, textureFormat, mipChain);
+                return ImageConversion.LoadImage(texture, data)
+                    ? Sprite.Create(texture, new Rect(0.0f, 0.0f, texture.width, texture.height), new Vector2(0.0f, 0.0f))
+                    : null;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+                return null;
+            }
+        }
+
     }
+
 }
 
