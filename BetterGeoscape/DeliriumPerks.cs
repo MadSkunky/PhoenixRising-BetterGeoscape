@@ -40,6 +40,7 @@ namespace PhoenixRising.BetterGeoscape
             Create_Nails();
             Create_Immortality();
             Create_Feral();
+            Create_Solipsism();
         }
 
         public static void Create_ShutEye()
@@ -430,6 +431,34 @@ namespace PhoenixRising.BetterGeoscape
             feral.ViewElementDef.LargeIcon = icon;
             feral.ViewElementDef.SmallIcon = icon;
         }
+        public static void Create_Solipsism()
+        {
+            string skillName = "Solipsism_AbilityDef";
+            PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Thief_AbilityDef"));
+            PassiveModifierAbilityDef solipsism = Helper.CreateDefFromClone(
+                source,
+                "ccd66e53-6258-4fa6-a185-66ba0f5bc4b7",
+                skillName);
+            solipsism.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "1aef5152-c6d6-435f-959e-0ac368dcf248",
+                skillName);
+            solipsism.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "ff72f143-8f3e-4988-a5fd-566faa5cb281",
+                skillName);
+
+
+            solipsism.StatModifications = new ItemStatModification[0];
+            solipsism.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+
+            solipsism.ViewElementDef.DisplayName1 = new LocalizedTextBind("SOLIPSISM", doNotLocalize);
+            solipsism.ViewElementDef.Description = new LocalizedTextBind("<b>You no longer suffer WP loss when allies die, but you lose 1 WP each time you take damage</b>\n<i>Subject exibits delusions of grandeur and self-obsession," +
+                " causing insubordination and disregard for human life</i>", doNotLocalize);
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Privileged_1-2.png");
+            solipsism.ViewElementDef.LargeIcon = icon;
+            solipsism.ViewElementDef.SmallIcon = icon;
+        }
     }
 
     [HarmonyPatch(typeof(TacticalLevelController), "OnLevelStart")]
@@ -482,6 +511,56 @@ namespace PhoenixRising.BetterGeoscape
                             }
                         }
                     }
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(TacticalActor), "OnAnotherActorDeath")]
+    public static class TacticalActor_OnAnotherActorDeath_Patch
+    {
+        public static void Postfix(TacticalActor __instance, DeathReport death)
+        {
+            DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+            try
+            {
+                TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Solipsism_AbilityDef"));
+                TacticalAbility ability = __instance.GetAbilityWithDef<TacticalAbility>(abilityDef);
+                if (ability != null)
+                {
+                    TacticalFaction tacticalFaction = death.Actor.TacticalFaction;
+                    int num = (int)__instance.RelationTo(tacticalFaction);
+                    int willPointWorth = death.Actor.TacticalActorBaseDef.WillPointWorth;
+                    if (death.Actor.TacticalFaction == __instance.TacticalFaction)
+                    {
+                        __instance.CharacterStats.WillPoints.Add(willPointWorth);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+             Logger.Error(e);
+            }
+        }
+    }
+
+    [HarmonyPatch(typeof(TacticalActor), "TriggerHurt")]
+    public static class TacticalActor_TriggerHurt_Patch
+    {
+        public static void Postfix(TacticalActor __instance, DeathReport death)
+        {
+            DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+            try
+            {
+                TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Solipsism_AbilityDef"));
+                TacticalAbility ability = __instance.GetAbilityWithDef<TacticalAbility>(abilityDef);
+                if (ability != null)
+                {
+                    __instance.CharacterStats.WillPoints.Subtract(1);
                 }
             }
             catch (Exception e)

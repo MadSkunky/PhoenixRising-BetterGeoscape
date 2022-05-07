@@ -41,6 +41,8 @@ namespace PhoenixRising.BetterGeoscape
             
             // Call FS rework
             FesteringSkiesRework.ApplyChanges();
+
+            DeliriumPerks.Main();
            
             // Apply story rework changes (Voland)
             if (Config.ActivateCHRework)
