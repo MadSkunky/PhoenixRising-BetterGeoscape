@@ -63,17 +63,15 @@ namespace PhoenixRising.BetterGeoscape
             if (Config.DisableStaminaRecuperatonModule)
             {
                 DisableHibernationPodStamina.Apply_Changes();
-            }
-
-         
+            }    
         }
         public static void GeoscapeOnHide()
         {
-            DeliriumPerks.Main();
+           DeliriumPerks.Main();
         }
         public static void TacticalOnHide()
         {
-            DeliriumPerks.Main();
+           DeliriumPerks.Main();
         }
 
         public static void InitBetterGeoscape(Func<string, object, object> api)

@@ -1354,15 +1354,15 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             __instance.AddPassiveModifier(shutEye_Ability);
                         }
-                        if (num >= 30 && num <= 45)
+                        if (num >= 30 && num <= 40)
                         {
                             __instance.AddPassiveModifier(hallucinating_AbilityDef);
                         }
-                    //    if (num >= 40 && num <= 50)
-                    //    {
-                      //      __instance.AddPassiveModifier(solipsism_AbilityDef);
-                      //  }
-                        if (num >= 45 && num <= 60)
+                        if (num >= 40 && num <= 50)
+                        {
+                           __instance.AddPassiveModifier(solipsism_AbilityDef);
+                        }
+                        if (num >= 50 && num <= 60)
                         {
                             __instance.AddPassiveModifier(angerIssues_AbilityDef);
                         }
@@ -1370,15 +1370,15 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             __instance.AddPassiveModifier(photophobia_AbilityDef);
                         }
-                //        if (num >= 70 && num <= 85)
-                  //      {
-                    //        __instance.AddPassiveModifier(nails_AbilityDef);
-                    //    }
-                    //    if (num >= 80 && num <= 90)
-                    //    {
-                    //        __instance.AddPassiveModifier(immortality_AbilityDef);
-                    //    }
-                        if (num >= 70 && num <= 100)
+                        if (num >= 70 && num <= 80)
+                        {
+                            __instance.AddPassiveModifier(nails_AbilityDef);
+                        }
+                        if (num >= 80 && num <= 90)
+                        {
+                            __instance.AddPassiveModifier(immortality_AbilityDef);
+                        }
+                        if (num >= 90 && num <= 100)
                         {
                             __instance.AddPassiveModifier(feral_AbilityDef);
                         }
@@ -1550,20 +1550,21 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        [HarmonyPatch(typeof(TacticalLevelController), "OnLevelStart")]
+        [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnTacticalLevelStart")]
         public static class TacticalLevelController_OnLevelStart_Patch
         {
-            public static void Postfix(TacticalLevelController __instance)
+            public static void Postfix(TacticalLevelController level)
             {
-                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+                
                 try
                 {
-                    foreach (TacticalFaction faction in __instance.Factions)
+                    foreach (TacticalFaction faction in level.Factions)
                     {
                         if (faction.IsViewerFaction)
                         {
                             foreach (TacticalActor actor in faction.TacticalActors)
                             {
+
                                 TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
                                 {
@@ -1573,13 +1574,13 @@ namespace PhoenixRising.BetterGeoscape
                                 TacticalAbilityDef abilityDef1 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
                                 {
-                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("E_Status [NeuralDisruption_AbilityDef]")));
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
                                 }
 
                                 TacticalAbilityDef abilityDef2 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
                                 {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_PrimalInstinct_AbilityDef")), actor);
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
                                 }
 
                                 TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
@@ -1593,15 +1594,28 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef")), actor);
                                 }
+
                                 TacticalAbilityDef abilityDef6 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
                                 {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);
                                 }
+                                /*
+                                TacticalAbilityDef abilityDef7 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef7) != null)
+                                {
+                                    actor.GetArmor().Add(50);
+                                    actor.CharacterStats.Armour.Add(100);
+                                    //actor.UpdateStats();
+                                }
+                                */
                             }
                         }
                     }
                 }
+                     
+                               
                 catch (Exception e)
                 {
                     Logger.Error(e);
