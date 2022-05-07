@@ -69,11 +69,11 @@ namespace PhoenixRising.BetterGeoscape
         }
         public static void GeoscapeOnHide()
         {
-
+            DeliriumPerks.Main();
         }
         public static void TacticalOnHide()
         {
-
+            DeliriumPerks.Main();
         }
 
         public static void InitBetterGeoscape(Func<string, object, object> api)

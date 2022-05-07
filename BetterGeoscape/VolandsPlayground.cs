@@ -1,5 +1,6 @@
 ﻿using Base.Core;
 using Base.Defs;
+using Base.Entities.Abilities;
 using Base.Entities.Statuses;
 using Base.UI;
 using Harmony;
@@ -29,6 +30,7 @@ using PhoenixPoint.Tactical.Entities.ActorsInstance;
 using PhoenixPoint.Tactical.Entities.Effects;
 using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Levels;
 using PhoenixPoint.Tactical.Levels.FactionObjectives;
 using PhoenixPoint.Tactical.View.ViewControllers;
 using PhoenixPoint.Tactical.View.ViewStates;
@@ -963,35 +965,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        [HarmonyPatch(typeof(GeoFaction), "DailyUpdateDiplomacy")]
-        internal static class GeoFaction_DailyUpdateDiplomacy_GiveMutationBonusPerks_Patch
-        {
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            private static void Postfix(GeoLevelController __level)
-            {
- 
-                try
-                {
-                    if (__level.EventSystem.IsEventTriggered("SDI_02"))
-                    { 
-                        foreach (GeoCharacter geoCharacter in __level.PhoenixFaction.HumanSoldiers)
-                        if (geoCharacter.CharacterStats.Corruption >= 3)
-                        {
-                            TacticalAbilityDef someperk = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ged => ged.name.Equals("coolPerk"));
-                            geoCharacter.GetTacticalAbilities().Add(someperk);
-
-                        }
-                    }
-
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
-
-
+       
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
         [HarmonyPatch(typeof(GeoAlienFaction), "TryRevealAlienBase")]
         internal static class BC_GeoAlienFaction_TryRevealAlienBase_patch
@@ -1233,16 +1207,11 @@ namespace PhoenixRising.BetterGeoscape
         }
 
 
-
-
         //Harmony patch to increase ambush chance/remove ambush protection
         [HarmonyPatch(typeof(GeoscapeEventSystem), "OnLevelStart")]
 
-
         public static class GeoscapeEventSystem_PhoenixFaction_OnLevelStart_Patch
         {
-
-
             public static void Prefix(GeoscapeEventSystem __instance)
             {
 
@@ -1252,7 +1221,6 @@ namespace PhoenixRising.BetterGeoscape
                     __instance.ExplorationAmbushChance = 35;
                     __instance.AmbushExploredSitesProtection = 0;
                     __instance.StartingAmbushProtection = 0;
-
                 }
                 catch (Exception e)
                 {
@@ -1334,8 +1302,6 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         ____level.AlienFaction.AddEvolutionProgress(10);
                     }
-
-
                 }
                 catch (Exception e)
                 {
@@ -1364,13 +1330,70 @@ namespace PhoenixRising.BetterGeoscape
         {
             public static void Postfix(GeoCharacter __instance)
             {
+
                 try
                 {
-                    int num = UnityEngine.Random.Range(0, 100);
-                    if (num >= 50)
-                    {
-                        SetStaminaToZero(__instance);
-                    }
+                    PassiveModifierAbilityDef shutEye_Ability = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("ShutEye_AbilityDef"));
+                    PassiveModifierAbilityDef hallucinating_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Hallucinating_AbilityDef"));
+                    PassiveModifierAbilityDef solipsism_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Solipsism_AbilityDef"));
+                    PassiveModifierAbilityDef angerIssues_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("AngerIssues_AbilityDef"));
+                    PassiveModifierAbilityDef photophobia_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Photophobia_AbilityDef"));
+                    PassiveModifierAbilityDef nails_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Nails_AbilityDef"));
+                    PassiveModifierAbilityDef immortality_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Immortality_AbilityDef"));
+                    PassiveModifierAbilityDef feral_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Feral_AbilityDef"));
+                    DamageMultiplierAbilityDef oneOfUs_AbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("OneOfUs_AbilityDef"));
+                    ApplyStatusAbilityDef fleshEater_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("FleshEater_AbilityDef"));
+
+                   
+                        int num = UnityEngine.Random.Range(20, 100);
+                        if (num <= 20)
+                        {
+                            SetStaminaToZero(__instance);
+                        }
+                        if (num >= 20 && num <= 30)
+                        {
+                            __instance.AddPassiveModifier(shutEye_Ability);
+                        }
+                        if (num >= 30 && num <= 45)
+                        {
+                            __instance.AddPassiveModifier(hallucinating_AbilityDef);
+                        }
+                    //    if (num >= 40 && num <= 50)
+                    //    {
+                      //      __instance.AddPassiveModifier(solipsism_AbilityDef);
+                      //  }
+                        if (num >= 45 && num <= 60)
+                        {
+                            __instance.AddPassiveModifier(angerIssues_AbilityDef);
+                        }
+                        if (num >= 60 && num <= 70)
+                        {
+                            __instance.AddPassiveModifier(photophobia_AbilityDef);
+                        }
+                //        if (num >= 70 && num <= 85)
+                  //      {
+                    //        __instance.AddPassiveModifier(nails_AbilityDef);
+                    //    }
+                    //    if (num >= 80 && num <= 90)
+                    //    {
+                    //        __instance.AddPassiveModifier(immortality_AbilityDef);
+                    //    }
+                        if (num >= 70 && num <= 100)
+                        {
+                            __instance.AddPassiveModifier(feral_AbilityDef);
+                        }
+                       
+                     //   if (num >= 100 && num <= 110)
+                     //  {
+
+                     //   __instance.AddPassiveModifier(oneOfUs_AbilityDef);
+                        
+                     // }
+                     //   if (num >= 120 && num <= 130)
+                     //  {
+                     //      __instance.AddPassiveModifier(fleshEater_AbilityDef);
+                    //  }                 
+                  
                 }
 
                 catch (Exception e)
@@ -1475,6 +1498,118 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }       
         }
+
+
+        [HarmonyPatch(typeof(TacticalActor), "OnAnotherActorDeath")]
+        public static class TacticalActor_OnAnotherActorDeath_Patch
+        {
+            public static void Postfix(TacticalActor __instance, DeathReport death)
+            {
+                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+                try
+                {
+                    TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Solipsism_AbilityDef"));
+                    TacticalAbility ability = __instance.GetAbilityWithDef<TacticalAbility>(abilityDef);
+                    if (ability != null)
+                    {
+                        TacticalFaction tacticalFaction = death.Actor.TacticalFaction;
+                        int num = (int)__instance.RelationTo(tacticalFaction);
+                        int willPointWorth = death.Actor.TacticalActorBaseDef.WillPointWorth;
+                        if (death.Actor.TacticalFaction == __instance.TacticalFaction)
+                        {
+                            __instance.CharacterStats.WillPoints.Add(willPointWorth);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(TacticalActor), "TriggerHurt")]
+        public static class TacticalActor_TriggerHurt_Patch
+        {
+            public static void Postfix(TacticalActor __instance)
+            {
+                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+                try
+                {
+                    TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Solipsism_AbilityDef"));
+                    TacticalAbility ability = __instance.GetAbilityWithDef<TacticalAbility>(abilityDef);
+                    if (ability != null)
+                    {
+                        __instance.CharacterStats.WillPoints.Subtract(1);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(TacticalLevelController), "OnLevelStart")]
+        public static class TacticalLevelController_OnLevelStart_Patch
+        {
+            public static void Postfix(TacticalLevelController __instance)
+            {
+                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+                try
+                {
+                    foreach (TacticalFaction faction in __instance.Factions)
+                    {
+                        if (faction.IsViewerFaction)
+                        {
+                            foreach (TacticalActor actor in faction.TacticalActors)
+                            {
+                                TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
+                                {
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
+                                }
+
+                                TacticalAbilityDef abilityDef1 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
+                                {
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("E_Status [NeuralDisruption_AbilityDef]")));
+                                }
+
+                                TacticalAbilityDef abilityDef2 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_PrimalInstinct_AbilityDef")), actor);
+                                }
+
+                                TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUsPassive_AbilityDef")), actor);
+                                }
+
+                                TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef")), actor);
+                                }
+                                TacticalAbilityDef abilityDef6 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);
+                                }
+                            }
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+
     }
 
 }
