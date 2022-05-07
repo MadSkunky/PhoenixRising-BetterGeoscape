@@ -992,8 +992,6 @@ namespace PhoenixRising.BetterGeoscape
         }
 
 
-
-
         // Harmony patch to change the reveal of alien bases when in scanner range, so increases the reveal chance instead of revealing it right away
         [HarmonyPatch(typeof(GeoAlienFaction), "TryRevealAlienBase")]
         internal static class BC_GeoAlienFaction_TryRevealAlienBase_patch

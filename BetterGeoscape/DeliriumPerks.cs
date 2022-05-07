@@ -35,6 +35,7 @@ namespace PhoenixRising.BetterGeoscape
             Create_AngerIssues();
             Create_Hallucinating();
             Create_OneOfUs();
+            Create_OneOfUsPassive();
             Create_FleshEater();
             Create_Nails();
             Create_Immortality();
@@ -293,6 +294,47 @@ namespace PhoenixRising.BetterGeoscape
             oneOfUs.ViewElementDef.LargeIcon = icon;
             oneOfUs.ViewElementDef.SmallIcon = icon;
         }
+        public static void Create_OneOfUsPassive()
+        {
+            string skillName = "OneOfUsPassive_AbilityDef";
+            PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Thief_AbilityDef"));
+            PassiveModifierAbilityDef ofuPassive = Helper.CreateDefFromClone(
+                source,
+                "ff35f9ef-ad67-42ff-9dcd-0288dba4d636",
+                skillName);
+            ofuPassive.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "61e44215-fc05-4383-b9e4-17f384e3d003",
+                skillName);
+            ofuPassive.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "aaead24e-9dba-4ef7-ba2d-8df142cb9105",
+                skillName);
+
+            ofuPassive.StatModifications = new ItemStatModification[]
+              {
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.Willpower,
+                    Modification = StatModificationType.Add,
+                    Value = -2
+                },
+                new ItemStatModification()
+                {
+                    TargetStat = StatModificationTarget.Willpower,
+                    Modification = StatModificationType.AddMax,
+                    Value = -2
+                },
+              };
+
+            ofuPassive.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            ofuPassive.ViewElementDef.DisplayName1 = new LocalizedTextBind("ONE OF US", doNotLocalize);
+            ofuPassive.ViewElementDef.Description = new LocalizedTextBind("<b>Willpower reduced -2, Mist affects you as if you were a Pandoran</b>\n<i>Often the last to leave the mission, wandering ruined landscapes the subject claims the mist " +
+                "calls out to him</i>", doNotLocalize);
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Sower_Of_Change_1-2.png");
+            ofuPassive.ViewElementDef.LargeIcon = icon;
+            ofuPassive.ViewElementDef.SmallIcon = icon;
+        }
         public static void Create_Immortality()
         {
             string skillName = "Immortality_AbilityDef";
@@ -421,13 +463,13 @@ namespace PhoenixRising.BetterGeoscape
                             {
                                 actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_PrimalInstinct_AbilityDef")), actor);
                             }
-                            /*
-                             TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
-                             if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
-                             {
-                                 actor.CharacterStats.WillPoints.Add(-2);
-                             }                           
-                            */
+
+                            TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
+                            if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
+                            {
+                                actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUsPassive_AbilityDef")), actor);
+                            }
+
                             TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
                             if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
                             {
