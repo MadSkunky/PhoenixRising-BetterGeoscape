@@ -1499,57 +1499,6 @@ namespace PhoenixRising.BetterGeoscape
             }       
         }
 
-
-        [HarmonyPatch(typeof(TacticalActor), "OnAnotherActorDeath")]
-        public static class TacticalActor_OnAnotherActorDeath_Patch
-        {
-            public static void Postfix(TacticalActor __instance, DeathReport death)
-            {
-                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-                try
-                {
-                    TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Solipsism_AbilityDef"));
-                    TacticalAbility ability = __instance.GetAbilityWithDef<TacticalAbility>(abilityDef);
-                    if (ability != null)
-                    {
-                        TacticalFaction tacticalFaction = death.Actor.TacticalFaction;
-                        int num = (int)__instance.RelationTo(tacticalFaction);
-                        int willPointWorth = death.Actor.TacticalActorBaseDef.WillPointWorth;
-                        if (death.Actor.TacticalFaction == __instance.TacticalFaction)
-                        {
-                            __instance.CharacterStats.WillPoints.Add(willPointWorth);
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
-
-        [HarmonyPatch(typeof(TacticalActor), "TriggerHurt")]
-        public static class TacticalActor_TriggerHurt_Patch
-        {
-            public static void Postfix(TacticalActor __instance)
-            {
-                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-                try
-                {
-                    TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Solipsism_AbilityDef"));
-                    TacticalAbility ability = __instance.GetAbilityWithDef<TacticalAbility>(abilityDef);
-                    if (ability != null)
-                    {
-                        __instance.CharacterStats.WillPoints.Subtract(1);
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
-
         [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnTacticalLevelStart")]
         public static class TacticalLevelController_OnLevelStart_Patch
         {
