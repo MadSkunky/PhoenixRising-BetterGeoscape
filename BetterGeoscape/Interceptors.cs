@@ -83,6 +83,19 @@ namespace PhoenixRising.BetterGeoscape
                 mantiVehicle.ManufactureMaterials = 600;
                 mantiVehicle.ManufactureTech = 75;
                 mantiVehicle.ManufacturePointsCost = 505;
+                //Change cost of Helios to Vanilla minus cost of passenger module
+                VehicleItemDef heliosVehicle = Repo.GetAllDefs<VehicleItemDef>().FirstOrDefault(ged => ged.name.Equals("SYN_Helios_VehicleItemDef"));
+                heliosVehicle.ManufactureMaterials = 555;
+                heliosVehicle.ManufactureTech = 173;
+                heliosVehicle.ManufacturePointsCost = 510;
+                //Change cost of Thunderbird to Vanilla minus cost of passenger module
+                VehicleItemDef thunderbirdVehicle = Repo.GetAllDefs<VehicleItemDef>().FirstOrDefault(ged => ged.name.Equals("NJ_Thunderbird_VehicleItemDef"));
+                thunderbirdVehicle.ManufactureMaterials = 900;
+                thunderbirdVehicle.ManufactureTech = 113;
+                thunderbirdVehicle.ManufacturePointsCost = 660;
+
+
+
                 //Make HM research for PX, available after completing Phoenix Archives
                 ResearchDef hibernationModuleResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("SYN_Aircraft_HybernationPods_ResearchDef"));
                 ResearchDef sourcePX_SDI_ResearchDef = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("PX_SDI_ResearchDef"));

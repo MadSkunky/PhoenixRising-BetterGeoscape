@@ -31,22 +31,38 @@ namespace PhoenixRising.BetterGeoscape
             Config = api("config", null) as ModConfig ?? new ModConfig();
 
             // Only needed if Harmony patches are used
-            HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
+           // HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
 
             // Modnix logging
             api("log verbose", "Mod Initialised.");
 
             // call Volands playground method
             VolandsPlayground.Apply_Changes();
-            
-            // Call FS rework
-            FesteringSkiesRework.ApplyChanges();
 
-            DeliriumPerks.Main();
+            if (Config.ActivateReverseEngineeringResearch) 
+            { 
+            ReverseEgineeringResearch.Apply_Changes();
+            }
 
+            if (Config.MoreAmbushes)
+            {
+                ChangesToAmbushes.Apply_Changes();
+                HarmonyInstance.Create("PhoenixRising.ChangesToAmbushes").PatchAll();
+            }
+
+            if (Config.ActivateChangesToDLC1andDLC2) 
+            {
+                ChangesToEvents.Apply_Changes();
+            }
+
+            if (Config.ActivateFSRework) 
+            {
+                FesteringSkiesRework.ApplyChanges();
+            }
+           
             Resources.Apply_Changes();
 
-            if (Config.ActivateKERework) ;
+            if (Config.ActivateKERework)
             {
                 KERework.Apply_Changes();
             }
@@ -60,6 +76,8 @@ namespace PhoenixRising.BetterGeoscape
             if (Config.ActivateCHRework)
             {
                 CHReworkMain.Apply_Changes();
+                HarmonyInstance.Create("PhoenixRising.CHReworkMain").PatchAll();
+                DeliriumPerks.Main();
             }
 
             if (Config.ActivateReverseEngineeringResearch)
@@ -70,12 +88,29 @@ namespace PhoenixRising.BetterGeoscape
             if (Config.ActivateInterceptors)
             {
                 Interceptors.Apply_Changes();
+                HarmonyInstance.Create("PhoenixRising.Interceptors").PatchAll();
             }
 
             if (Config.DisableStaminaRecuperatonModule)
             {
                 DisableHibernationPodStamina.Apply_Changes();
             }    
+
+            if (Config.StaminaPenaltyFromInjury) 
+            {
+                HarmonyInstance.Create("PhoenixRising.InjuryStamina").PatchAll(); 
+            }
+
+            if (Config.StaminaPenaltyFromBionics)
+            {
+                HarmonyInstance.Create("PhoenixRising.AugmentationWOCH").PatchAll();
+            }
+
+            if (Config.StaminaPenaltyFromMutation) 
+            {
+                HarmonyInstance.Create("PhoenixRising.MutationStamina").PatchAll();
+            }
+
         }
         public static void GeoscapeOnHide()
         {

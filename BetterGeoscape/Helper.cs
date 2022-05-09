@@ -34,11 +34,11 @@ namespace PhoenixRising.BetterGeoscape
             {
                 ModDirectory = BetterGeoscapeMain.ModDirectory;
                 LocalizationDirectory = BetterGeoscapeMain.LocalizationDirectory;
-                if (File.Exists(Path.Combine(LocalizationDirectory, GeoscapeLocalizationFileName)))
+                if (File.Exists(Path.Combine(LocalizationDirectory, GeoscapeLocalizationFileName)) && BetterGeoscapeMain.Config.ActivateChangesToDLC1andDLC2)
                 {
                     AddLocalizationFromCSV(GeoscapeLocalizationFileName, null);
                 }
-                if (File.Exists(Path.Combine(LocalizationDirectory, FsStoryLocalizationFileName)))
+                if (File.Exists(Path.Combine(LocalizationDirectory, FsStoryLocalizationFileName)) && BetterGeoscapeMain.Config.ActivateFSRework)
                 {
                     AddLocalizationFromCSV(FsStoryLocalizationFileName, null);
                 }

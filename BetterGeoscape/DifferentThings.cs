@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace PhoenixRising.BetterGeoscape
 {
-    internal class Class1
+    internal class DifferentThings
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 

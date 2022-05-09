@@ -86,7 +86,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CHReworkMain.cs" />
-    <Compile Include="Class1.cs" />
+    <Compile Include="ChangesToEvents.cs" />
+    <Compile Include="ChangesToAmbushes.cs" />
+    <Compile Include="AugmentationWOCH.cs" />
+    <Compile Include="MutationStamina.cs" />
+    <Compile Include="CommonMethods.cs" />
+    <Compile Include="InjuryStamina.cs" />
+    <Compile Include="DifferentThings.cs" />
+    <Compile Include="PandoranProgress.cs" />
     <Compile Include="KERework.cs" />
     <Compile Include="DiplomacyPenalties.cs" />
     <Compile Include="Resources.cs" />

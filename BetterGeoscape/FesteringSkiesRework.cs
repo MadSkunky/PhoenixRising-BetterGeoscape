@@ -1,6 +1,7 @@
 ﻿
 using AK.Wwise;
 using Base.Defs;
+using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Events.Eventus.Filters;
 using System;
@@ -53,16 +54,21 @@ namespace PhoenixRising.BetterGeoscape
                     // Destroy Haven after mission
                     GeoscapeEventDef geoEventFS1WIN = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS1_WIN_GeoscapeEventDef"));
                     geoEventFS1WIN.GeoscapeEventData.Choices[0].Outcome.HavenPopulationChange = -20000;
+                    //Allow equipment before The Hatching
+                    CustomMissionTypeDef storyFS1_CustomMissionTypeDef = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("StoryFS1_CustomMissionTypeDef"));
+                    storyFS1_CustomMissionTypeDef.SkipDeploymentSelection = false;
 
-                    // set event timer for the former The Gift mission reveal, now The Hatching
-                    // currently this is unchanged from Vanilla, but here is the code to make the change if desired
-                    // GeoTimePassedEventFilterDef timePassedFS1 = RepoGeoscapeEvent.GetAllDefs<GeoTimePassedEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_FS1_TimePassed"));
-                    // timePassedFS1.TimePassedRaw = "8d0h";
-                    // timePassedFS1.TimePassedHours = 192;
+                // set event timer for the former The Gift mission reveal, now The Hatching
+                // currently this is unchanged from Vanilla, but here is the code to make the change if desired
+                // GeoTimePassedEventFilterDef timePassedFS1 = RepoGeoscapeEvent.GetAllDefs<GeoTimePassedEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_FS1_TimePassed"));
+                // timePassedFS1.TimePassedRaw = "8d0h";
+                // timePassedFS1.TimePassedHours = 192;
 
-                    //GeoInitialWorldSetup geoInitialWorldSetup = Repo.GetAllDefs<GeoInitialWorldSetup>().FirstOrDefault(g => g.name.Equals("GeoInitialWorldSetup"));
 
-                }
+
+                
+
+            }
                 catch (Exception e)
                 {
                     Logger.Error(e);
