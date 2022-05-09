@@ -456,6 +456,7 @@ namespace PhoenixRising.BetterGeoscape
             solipsism.ViewElementDef.SmallIcon = icon;
         }
     }
+
 }
 
 

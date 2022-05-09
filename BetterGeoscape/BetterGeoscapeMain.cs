@@ -43,7 +43,19 @@ namespace PhoenixRising.BetterGeoscape
             FesteringSkiesRework.ApplyChanges();
 
             DeliriumPerks.Main();
-           
+
+            Resources.Apply_Changes();
+
+            if (Config.ActivateKERework) ;
+            {
+                KERework.Apply_Changes();
+            }
+
+            if (Config.DiplomaticPenalties)
+            {
+                DiplomacyPenalties.Apply_Changes();
+            }
+            
             // Apply story rework changes (Voland)
             if (Config.ActivateCHRework)
             {

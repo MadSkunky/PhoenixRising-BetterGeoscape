@@ -49,6 +49,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -62,6 +63,9 @@
     <Reference Include="Unity.ResourceManager">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Phoenix Point\PhoenixPointWin64_Data\Managed\Unity.ResourceManager.dll</HintPath>
       <Private>False</Private>
+    </Reference>
+    <Reference Include="UnityEngine">
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Phoenix Point\PhoenixPointWin64_Data\Managed\UnityEngine.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.CoreModule">
       <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Steam\steamapps\common\Phoenix Point\PhoenixPointWin64_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
@@ -83,6 +87,9 @@
   <ItemGroup>
     <Compile Include="CHReworkMain.cs" />
     <Compile Include="Class1.cs" />
+    <Compile Include="KERework.cs" />
+    <Compile Include="DiplomacyPenalties.cs" />
+    <Compile Include="Resources.cs" />
     <Compile Include="DeliriumPerks.cs" />
     <Compile Include="DisableHibernationPodStamina.cs" />
     <Compile Include="FesteringSkiesRework.cs" />

@@ -1,4 +1,5 @@
-﻿using Base.Core;
+﻿using Base;
+using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Statuses;
@@ -43,17 +44,8 @@ namespace PhoenixRising.BetterGeoscape
 {
     class VolandsPlayground
     {
-
-
-
-        // Get config, definition repository and shared data
-
+        
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
-
-
-        private static bool ApplyChangeReduceResources = true;
-
-        private static bool ApplyChangeDiplomacy = true;
 
         public static void Apply_Changes()
         {
@@ -66,311 +58,10 @@ namespace PhoenixRising.BetterGeoscape
                 GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
                 GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
 
-
-
                 //Source for creating new events
                 GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
 
-                //Testing MadSkunky reduce rewards by 25%
-                if (ApplyChangeReduceResources)
-                {
-
-                    foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
-                    {
-                        foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
-                        {
-                            if (choice.Outcome.Resources != null && !choice.Outcome.Resources.IsEmpty)
-                            {
-                                choice.Outcome.Resources *= 0.8f;
-                            }
-                        }
-                    }
-                    ApplyChangeReduceResources = false;
-                }
-                //Testing increasing diplomacy penalties 
-                GeoPhoenixFactionDef geoPhoenixFaction = Repo.GetAllDefs<GeoPhoenixFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
-
-                if (ApplyChangeDiplomacy)
-                {
-                    foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
-                    {
-
-                        if (geoEvent.GeoscapeEventData.EventID != "PROG_PU4_WIN"
-                            && geoEvent.GeoscapeEventData.EventID != "PROG_SY7"
-                            && geoEvent.GeoscapeEventData.EventID != "PROG_SY8"
-                            && geoEvent.GeoscapeEventData.EventID != "PROG_AN3"
-                            && geoEvent.GeoscapeEventData.EventID != "PROG_AN5"
-                            && geoEvent.GeoscapeEventData.EventID != "PROG_NJ7"
-                            && geoEvent.GeoscapeEventData.EventID != "PROG_NJ8")
-                        {
-                            foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
-                            {
-                                for (int i = 0; i < choice.Outcome.Diplomacy.Count; i++)
-                                {
-                                    if (choice.Outcome.Diplomacy[i].TargetFaction == geoPhoenixFaction && choice.Outcome.Diplomacy[i].Value <= 0)
-                                    {
-                                        OutcomeDiplomacyChange diplomacyChange = choice.Outcome.Diplomacy[i];
-                                        diplomacyChange.Value *= 2;
-                                        choice.Outcome.Diplomacy[i] = diplomacyChange;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                    ApplyChangeDiplomacy = false;
-                }
-
-                //Increase diplo penalties in 25, 50 and 75 diplo missions
-                GeoscapeEventDef ProgAnuSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN2_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgNJSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynSupportivePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY1_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynSupportiveTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY1_WIN2_GeoscapeEventDef"));
-                GeoscapeEventDef ProgAnuPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN4_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgNJPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ2__WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgAnuAlliance1 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgAnuAlliance2 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_WIN2_GeoscapeEventDef"));
-                GeoscapeEventDef ProgNJAlliance = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynAlliancePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynAllianceTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN2_GeoscapeEventDef"));
-
-
-                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgAnuAlliance1.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Polyphonic",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Terraformers",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Terraformers",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                }); ;
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Polyphonic",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -18
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -18
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynAlliancePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                ProgSynAllianceTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                OutcomeDiplomacyChange outcomeDiplomacyChange = ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
-                outcomeDiplomacyChange.Value = -20;
-
-                //Change Reward introductory mission Synedrion
-                GeoscapeEventDef ProgSynIntroWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY0_WIN_GeoscapeEventDef"));
-                ProgSynIntroWin.GeoscapeEventData.Choices[1].Outcome.Diplomacy[0] = new OutcomeDiplomacyChange
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = 0
-                };
-
+              
                 //Testing Less Pandoran Colonies
                 GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
                 veryhard.NestLimitations.MaxNumber = 3;
@@ -379,160 +70,7 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.LairLimitations.MaxConcurrent = 3;
                 veryhard.LairLimitations.HoursBuildTime = 100;
                 veryhard.CitadelLimitations.HoursBuildTime = 180;
-                veryhard.EvolutionProgressPerDay = 50;
-
-                // KE Story rework - remove missions + Maker
-                GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
-                GeoscapeEventDef KE1MissWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef KE2MissWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE2_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef KE3MissWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef KE4MissWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE4_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef KE1Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE1_GeoscapeEventDef"));
-                GeoscapeEventDef KE2Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE2_GeoscapeEventDef"));
-                GeoscapeEventDef KE3Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE3_GeoscapeEventDef"));
-                GeoscapeEventDef KE4Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE4_GeoscapeEventDef"));
-
-
-                KE1Miss.GeoscapeEventData.Choices[0] = KE1MissWin.GeoscapeEventData.Choices[0];
-                KE1MissWin.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters.Add("PROG_KE1");
-                KE1Miss.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_KE1_TEXT_OUTCOME_0";
-                KE1Miss.GeoscapeEventData.Choices[0].Text.LocalizationKey = "PROG_KE1_CHOICE_0_TEXT";
-                KE1Miss.GeoscapeEventData.Choices.Remove(KE1Miss.GeoscapeEventData.Choices[1]);
-                //Increase marketplace variable after completing first DLC1 mission
-                GeoscapeEventDef dlc1miss1win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU4_WIN_GeoscapeEventDef"));
-                dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "NumberOfDLC5MissionsCompletedVariable",
-                    Value = KE1MissWin.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0].Value,
-                    IsSetOperation = false,
-
-                });
-                //Increase marketplace variable after destroying Bionic Fortress
-                GeoscapeEventDef dlc1missfinalwin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU14_WIN_GeoscapeEventDef"));
-                dlc1missfinalwin.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "NumberOfDLC5MissionsCompletedVariable",
-                    Value = KE2MissWin.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0].Value,
-                    IsSetOperation = false,
-
-                });
-
-                TheMarketplaceSettingsDef theMarketplaceSettings = Repo.GetAllDefs<TheMarketplaceSettingsDef>().FirstOrDefault(ged => ged.name.Equals("TheMarketplaceSettingsDef"));
-                theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[1].PriceMultiplier = 2.5f;
-                theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[2].PriceMultiplier = 2;
-                theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[3].PriceMultiplier = 1.5f;
-                theMarketplaceSettings.Missions[1] = null; theMarketplaceSettings.Missions[2] = null; theMarketplaceSettings.Missions[3] = null;
-                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[1].MinNumberOfOffers = 10;
-                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[1].MinNumberOfOffers = 12;
-                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[2].MinNumberOfOffers = 13;
-                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[2].MinNumberOfOffers = 15;
-                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[3].MinNumberOfOffers = 16;
-                theMarketplaceSettings.TheMarketplaceItemOfferAmounts[3].MinNumberOfOffers = 20;
-
-                //Replace all LOTA Schemata missions with KE2 mission
-                GeoscapeEventDef LE1Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_MISS_GeoscapeEventDef"));
-                LE1Miss.GeoscapeEventData.Choices[0].Outcome.StartMission.MissionTypeDef = KE2Miss.GeoscapeEventData.Choices[0].Outcome.StartMission.MissionTypeDef;
-                //Don't generate next Schemata mission
-                GeoscapeEventDef LE1Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
-                //GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents;
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters;
-                //Unlock all ancient weapons research and add hidden variable to unlock final cinematic
-                GeoscapeEventDef LE2Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE2_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE3Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE4Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE4_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE5Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE5_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef LE6Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE6_WIN_GeoscapeEventDef"));
-                OutcomeVariableChange Schemata2Res = LE2Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
-                OutcomeVariableChange Schemata3Res = LE3Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
-                OutcomeVariableChange Schemata4Res = LE4Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
-                OutcomeVariableChange Schemata5Res = LE5Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
-                OutcomeVariableChange Schemata6Res = LE6Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[0];
-                OutcomeVariableChange var6LE = LE6Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange[1];
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata2Res);
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata3Res);
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata4Res);
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata5Res);
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(Schemata6Res);
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(var6LE);
-                //Remove 50 SP
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.FactionSkillPoints = 0;
-                LE1Win.GeoscapeEventData.Leader = "Jack_Harlson01";
-
-                //Require capturing ancient site for LOTA Schemata missions
-                //GeoscapeEventDef LE1Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_GeoscapeEventDef"));
-                //GeoscapeEventDef LEFinalEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE_FINAL_GeoscapeEventDef"));
-                //GeoLevelConditionDef sourceCondition = Repo.GetAllDefs<GeoLevelConditionDef>().FirstOrDefault(ged => ged.name.Equals("[PROG_LE_FINAL] Condition 1"));
-                //GeoLevelConditionDef newCondition = Helper.CreateDefFromClone(sourceCondition, "0358D502-421D-4D9A-9505-491FC80F1C56", "[PROG_LE_1] Condition 2");
-                //newCondition.VariableCompareToNumber = 1;
-                //LE1Event.GeoscapeEventData.Conditions.Add(newCondition);
-
-                //Add choices for LE1Win
-
-                LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
-                {
-                    Text = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_1_TEXT"),
-                    Outcome = new GeoEventChoiceOutcome()
-                    {
-                        UntrackEncounters = LE1Win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
-                        VariablesChange = LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
-                        OutcomeText = new EventTextVariation()
-                        {
-                            General = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_1_OUTCOME_GENERAL")
-                        },
-                        SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents,
-                        TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters,
-                        FactionSkillPoints = 0
-                    }
-                });
-                LE1Win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
-                {
-                    Text = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_2_TEXT"),
-                    Outcome = new GeoEventChoiceOutcome()
-                    {
-                        UntrackEncounters = LE1Win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
-                        VariablesChange = LE1Win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
-                        OutcomeText = new EventTextVariation()
-                        {
-                            General = new LocalizedTextBind("PROG_LE1_WIN_CHOICE_2_OUTCOME_GENERAL")
-                        },
-                        SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents,
-                        TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters,
-                        FactionSkillPoints = 0
-                    }
-                });
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_LE1_WIN_CHOICE_0_OUTCOME_GENERAL";
-                TacCharacterDef armadillo = Repo.GetAllDefs<TacCharacterDef>().FirstOrDefault(ged => ged.name.Equals("NJ_Armadillo_CharacterTemplateDef"));
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.Units.Add(armadillo);
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -8
-
-                });
-                LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = +8
-                });
-                LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -8
-                });
-                LE1Win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = Anu,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -16
-                });
+                veryhard.EvolutionProgressPerDay = 50;            
 
                 //Changes to SDI Events
                 GeoscapeEventDef sdi1 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_01_GeoscapeEventDef"));
@@ -664,11 +202,11 @@ namespace PhoenixRising.BetterGeoscape
 
                 //Anu option
                 GeoscapeEventDef an28event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("AN28_GeoscapeEventDef"));
-                dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.Units = an28event.GeoscapeEventData.Choices[0].Outcome.Units;
-                dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_PU4_WIN_CHOICE_0_OUTCOME_GENERAL";
+                DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.Units = an28event.GeoscapeEventData.Choices[0].Outcome.Units;
+                DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "PROG_PU4_WIN_CHOICE_0_OUTCOME_GENERAL";
 
                 //Syn choice
-                dlc1miss1win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                DLC1missWIN.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = (new LocalizedTextBind("PROG_PU4_WIN_CHOICE_1_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
@@ -677,33 +215,33 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             General = new LocalizedTextBind("PROG_PU4_WIN_CHOICE_1_OUTCOME_GENERAL")
                         },
-                        VariablesChange = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
-                        UntrackEncounters = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
-                        RemoveTimers = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
+                        VariablesChange = DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        UntrackEncounters = DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        RemoveTimers = DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
                     },
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = Synedrion,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = +3
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = Synedrion,
                     TargetFaction = NewJericho,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = +3
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -6
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = Synedrion,
                     TargetFaction = PhoenixPoint,
@@ -712,7 +250,7 @@ namespace PhoenixRising.BetterGeoscape
                 });
 
                 //Deny deny deny option
-                dlc1miss1win.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+                DLC1missWIN.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = (new LocalizedTextBind("PROG_PU4_WIN_CHOICE_2_TEXT")),
                     Outcome = new GeoEventChoiceOutcome()
@@ -721,26 +259,26 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             General = new LocalizedTextBind("PROG_PU4_WIN_CHOICE_2_OUTCOME_GENERAL")
                         },
-                        VariablesChange = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
-                        UntrackEncounters = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
-                        RemoveTimers = dlc1miss1win.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
+                        VariablesChange = DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.VariablesChange,
+                        UntrackEncounters = DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.UntrackEncounters,
+                        RemoveTimers = DLC1missWIN.GeoscapeEventData.Choices[0].Outcome.RemoveTimers,
                     },
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = Anu,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -3
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = Synedrion,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -3
                 });
-                dlc1miss1win.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                DLC1missWIN.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
@@ -1325,7 +863,6 @@ namespace PhoenixRising.BetterGeoscape
         }
 
         [HarmonyPatch(typeof(GeoCharacter), "CureCorruption")]
-
         public static class GeoCharacter_CureCorruption_SetStaminaTo0_patch
         {
             public static void Postfix(GeoCharacter __instance)
@@ -1333,6 +870,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 try
                 {
+                    
                     PassiveModifierAbilityDef shutEye_Ability = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("ShutEye_AbilityDef"));
                     PassiveModifierAbilityDef hallucinating_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Hallucinating_AbilityDef"));
                     PassiveModifierAbilityDef solipsism_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Solipsism_AbilityDef"));
@@ -1344,62 +882,37 @@ namespace PhoenixRising.BetterGeoscape
                     DamageMultiplierAbilityDef oneOfUs_AbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("OneOfUs_AbilityDef"));
                     ApplyStatusAbilityDef fleshEater_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("FleshEater_AbilityDef"));
 
-                   
-                        int num = UnityEngine.Random.Range(20, 100);
-                        if (num <= 20)
-                        {
-                            SetStaminaToZero(__instance);
-                        }
-                        if (num >= 20 && num <= 30)
-                        {
-                            __instance.AddPassiveModifier(shutEye_Ability);
-                        }
-                        if (num >= 30 && num <= 40)
-                        {
-                            __instance.AddPassiveModifier(hallucinating_AbilityDef);
-                        }
-                        if (num >= 40 && num <= 50)
-                        {
-                           __instance.AddPassiveModifier(solipsism_AbilityDef);
-                        }
-                        if (num >= 50 && num <= 60)
-                        {
-                            __instance.AddPassiveModifier(angerIssues_AbilityDef);
-                        }
-                        if (num >= 60 && num <= 70)
-                        {
-                            __instance.AddPassiveModifier(photophobia_AbilityDef);
-                        }
-                        if (num >= 70 && num <= 80)
-                        {
-                            __instance.AddPassiveModifier(nails_AbilityDef);
-                        }
-                        if (num >= 80 && num <= 90)
-                        {
-                            __instance.AddPassiveModifier(immortality_AbilityDef);
-                        }
-                        if (num >= 90 && num <= 100)
-                        {
-                            __instance.AddPassiveModifier(feral_AbilityDef);
-                        }
-                       
-                     //   if (num >= 100 && num <= 110)
-                     //  {
+                    List<TacticalAbilityDef> abilityList = new List<TacticalAbilityDef>
+                    { shutEye_Ability, hallucinating_AbilityDef, solipsism_AbilityDef, angerIssues_AbilityDef, photophobia_AbilityDef, nails_AbilityDef, immortality_AbilityDef, feral_AbilityDef,
+                    oneOfUs_AbilityDef, fleshEater_AbilityDef                       
+                    };
 
-                     //   __instance.AddPassiveModifier(oneOfUs_AbilityDef);
-                        
-                     // }
-                     //   if (num >= 120 && num <= 130)
-                     //  {
-                     //      __instance.AddPassiveModifier(fleshEater_AbilityDef);
-                    //  }                 
-                  
+                    int num = UnityEngine.Random.Range(0, 200);
+
+                    if (num >= 0 && num <= 100)
+                    {
+                        foreach (TacticalAbilityDef abilityDef in abilityList)
+                        {
+                            if (__instance.Progression.Abilities.Contains(abilityDef))
+                            {
+                                abilityList.Remove(abilityDef);
+                            }
+                        }
+
+                        if (abilityList.Count >= 0)
+                        {
+                            __instance.Progression.AddAbility(abilityList.GetRandomElement());
+                        }
+                    }   
+                    if (num > 100 && num <= 150)                       
+                    {
+                        SetStaminaToZero(__instance);
+                    }
                 }
 
                 catch (Exception e)
                 {
                     Logger.Error(e);
-
                 }
             }
         }
@@ -1504,7 +1017,7 @@ namespace PhoenixRising.BetterGeoscape
         {
             public static void Postfix(TacticalLevelController level)
             {
-                
+                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
                 try
                 {
                     foreach (TacticalFaction faction in level.Factions)
@@ -1514,37 +1027,37 @@ namespace PhoenixRising.BetterGeoscape
                             foreach (TacticalActor actor in faction.TacticalActors)
                             {
 
-                                TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
+                                PassiveModifierAbilityDef abilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
                                 {
                                     actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
                                 }
 
-                                TacticalAbilityDef abilityDef1 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
+                                PassiveModifierAbilityDef abilityDef1 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
                                 {
                                     actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
                                 }
 
-                                TacticalAbilityDef abilityDef2 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
+                                PassiveModifierAbilityDef abilityDef2 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
                                 {
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
                                 }
 
-                                TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
+                                PassiveModifierAbilityDef abilityDef3 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUsPassive_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
                                 {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUsPassive_AbilityDef")), actor);
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUs_AbilityDef")), actor);
                                 }
 
-                                TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                PassiveModifierAbilityDef abilityDef5 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
                                 {
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef")), actor);
                                 }
 
-                                TacticalAbilityDef abilityDef6 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                PassiveModifierAbilityDef abilityDef6 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
                                 {
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
@@ -1563,16 +1076,12 @@ namespace PhoenixRising.BetterGeoscape
                         }
                     }
                 }
-                     
-                               
                 catch (Exception e)
                 {
                     Logger.Error(e);
                 }
             }
         }
-
-
     }
 
 }
