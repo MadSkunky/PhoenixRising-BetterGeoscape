@@ -204,8 +204,6 @@ namespace PhoenixRising.BetterGeoscape
     "SDI_20"
         };
 
-
-
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
         {
@@ -243,6 +241,9 @@ namespace PhoenixRising.BetterGeoscape
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
                     geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
                 }
+
+
+
             }
 
             catch (Exception e)
@@ -251,10 +252,47 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
-        // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
-        // Tell Harmony what original method in what class should get patched, the following class after this directive will be used to perform own code by injection
-        [HarmonyPatch(typeof(CorruptionStatus), "CalculateValueIncrement")]
+        [HarmonyPatch(typeof(CorruptionStatus), "GetMultiplier")]
+        internal static class BG_CorruptionStatus_GetMultiplier_Mutations_patch
+        {
+            private static void Postfix(ref float __result, CorruptionStatus __instance)
+            {
+                try
+                {
+                    float numberOfMutations = 0;
+                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.AnuMutationTag;
+                    TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
+
+
+                    foreach (TacticalItem armourItem in base_TacticalActor.BodyState.GetArmourItems())
+                    {
+                        if (armourItem.GameTags.Contains(bionicalTag))
+                        {
+                            numberOfMutations++;
+                        }
+                    }                   
+                    Logger.Always(numberOfMutations.ToString());
+
+                    if (numberOfMutations > 0)
+                    {
+                        __result = 1f + (numberOfMutations*2)/100 * (float)base_TacticalActor.CharacterStats.Corruption;
+                    }
+                    Logger.Always(base_TacticalActor.CharacterStats.Corruption.ToString());
+                }
+
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }    
+
+
+
+                // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
+                // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
+                // Tell Harmony what original method in what class should get patched, the following class after this directive will be used to perform own code by injection
+                [HarmonyPatch(typeof(CorruptionStatus), "CalculateValueIncrement")]
 
         // The class that holds the code we want to inject, the name can be anything, but the more accurate the better it is for bug hunting
         internal static class BC_CorruptionStatus_CalculateValueIncrement_patch
@@ -640,14 +678,19 @@ namespace PhoenixRising.BetterGeoscape
                     //check number of augments the character has
                     GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
                     int numberOfBionics = AugmentScreenUtilities.GetNumberOfBionicsAugmentations(__instance.CurrentCharacter);
+                    
                     for (int i = 0; i < numberOfBionics; i++)
                     {
-                        float corruption = (float)(__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Corruption * 0.33);
-                        __instance.CurrentCharacter.CharacterStats.Corruption.Set(corruption);
+                        if (__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Willpower * 0.33 >= 0)
+                        {
+                        __instance.CurrentCharacter.CharacterStats.Corruption.Set((float)(__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Willpower * 0.33));
+                        }
+                        else
+                        {
+                         __instance.CurrentCharacter.CharacterStats.Corruption.Set(0);
+                        }
                     }
-
                 }
-
                 catch (Exception e)
                 {
                     Logger.Error(e);

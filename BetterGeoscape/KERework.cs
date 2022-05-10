@@ -68,7 +68,9 @@ namespace PhoenixRising.BetterGeoscape
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[1].PriceMultiplier = 2.5f;
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[2].PriceMultiplier = 2;
                 theMarketplaceSettings.TheMarketplaceItemPriceMultipliers[3].PriceMultiplier = 1.5f;
-                theMarketplaceSettings.Missions[1] = null; theMarketplaceSettings.Missions[2] = null; theMarketplaceSettings.Missions[3] = null;
+                theMarketplaceSettings.Missions[1] = null; 
+                theMarketplaceSettings.Missions[2] = null; 
+                theMarketplaceSettings.Missions[3] = null;
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[1].MinNumberOfOffers = 10;
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[1].MinNumberOfOffers = 12;
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[2].MinNumberOfOffers = 13;

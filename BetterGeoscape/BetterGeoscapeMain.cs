@@ -18,11 +18,9 @@ namespace PhoenixRising.BetterGeoscape
         internal static string LocalizationDirectory;
         internal static string TexturesDirectory;
         internal static readonly DefRepository Repo = GameUtl.GameComponent<DefRepository>();
-        internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>();
-       
+        internal static readonly SharedData Shared = GameUtl.GameComponent<SharedData>(); 
         
         internal static bool doNotLocalize = false;
-
 
         public static void HomeMod(Func<string, object, object> api)
         {
@@ -38,6 +36,8 @@ namespace PhoenixRising.BetterGeoscape
 
             // call Volands playground method
             VolandsPlayground.Apply_Changes();
+
+            PandoranProgress.Apply_Changes();
 
             if (Config.ActivateReverseEngineeringResearch) 
             { 
@@ -137,10 +137,6 @@ namespace PhoenixRising.BetterGeoscape
 
             // Initialize Helper
             Helper.Initialize();
-
-
         }
-
-
     }
 }

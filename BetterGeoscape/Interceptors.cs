@@ -94,8 +94,6 @@ namespace PhoenixRising.BetterGeoscape
                 thunderbirdVehicle.ManufactureTech = 113;
                 thunderbirdVehicle.ManufacturePointsCost = 660;
 
-
-
                 //Make HM research for PX, available after completing Phoenix Archives
                 ResearchDef hibernationModuleResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("SYN_Aircraft_HybernationPods_ResearchDef"));
                 ResearchDef sourcePX_SDI_ResearchDef = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("PX_SDI_ResearchDef"));
@@ -103,6 +101,8 @@ namespace PhoenixRising.BetterGeoscape
                 hibernationModuleResearch.RevealRequirements = sourcePX_SDI_ResearchDef.RevealRequirements;
                 hibernationModuleResearch.ResearchCost = 100;
                 hibernationmodule.GeoVehicleModuleBonusValue = 0.35f;
+                
+                
 
             }
             catch (Exception e)
@@ -133,33 +133,37 @@ namespace PhoenixRising.BetterGeoscape
 
         private static void EmptyAircraft(GeoVehicle aircraft)
         {
-            if (aircraft.CurrentSite != null && aircraft.CurrentSite.Type == GeoSiteType.PhoenixBase)
+            if (aircraft.CurrentSite != null && aircraft.CurrentSite.Type == GeoSiteType.PhoenixBase && aircraft.GeoLevel.View.SelectedActor) 
             {
-                List<GeoCharacter> list = new List<GeoCharacter>(from u in aircraft.Units orderby u.OccupingSpace descending select u);
-                foreach (GeoCharacter character in list)
+                if (!aircraft.HasModuleBonusTo(GeoVehicleModuleDef.GeoVehicleModuleBonusType.Recuperation)
+                    || !aircraft.HasModuleBonusTo(GeoVehicleModuleDef.GeoVehicleModuleBonusType.Speed)
+                    || !aircraft.HasModuleBonusTo(GeoVehicleModuleDef.GeoVehicleModuleBonusType.Range))
                 {
-                    if (aircraft.FreeCharacterSpace >= 0)
+
+                    List<GeoCharacter> list = new List<GeoCharacter>(from u in aircraft.Units orderby u.OccupingSpace descending select u);
+                    foreach (GeoCharacter character in list)
                     {
-                        break;
+                        if (aircraft.FreeCharacterSpace >= 0)
+                        {
+                            break;
+                        }
+                        aircraft.RemoveCharacter(character);
+                        aircraft.CurrentSite.AddCharacter(character);
                     }
-                    aircraft.RemoveCharacter(character);
-                    aircraft.CurrentSite.AddCharacter(character);
                 }
             }
         }
 
 
-        [HarmonyPatch(typeof(GeoVehicle), "UpdateVehicleBonusCache")]
+        [HarmonyPatch(typeof(GeoVehicle), "ReplaceEquipments")]
         internal static class BG_HybernationModuleIncreaseSpaceForUnits_patch
         {
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-            
-                      
+                            
             private static void Postfix(GeoVehicle __instance)
             {
                 try
-                {
-                  
+                {                  
                     GeoVehicleEquipment hybernationPods = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Recuperation);
                     GeoVehicleEquipment fuelTank = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Range);
                     GeoVehicleEquipment cruiseControl = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Speed);
