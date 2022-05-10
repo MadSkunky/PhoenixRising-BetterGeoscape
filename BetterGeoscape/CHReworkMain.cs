@@ -402,7 +402,7 @@ namespace PhoenixRising.BetterGeoscape
                     TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
 
                     // Get characters geoscape stamina by his actor ID
-
+                    int odiPerc = CurrentODI_Level * 100 / ODI_EventIDs.Length;
                     int stamina = 40;
                     if (StaminaMap.ContainsKey(base_TacticalActor.GeoUnitId))
                     {
@@ -410,23 +410,81 @@ namespace PhoenixRising.BetterGeoscape
                     }
 
                     // Calculate WP reduction dependent on stamina
-                    float wpReduction = 0; // stamina > 35
-                    if (stamina > 30 && stamina <= 35)
+                    float wpReduction = 0; // stamina > 35 and ODI < 25
+                    
+                    if (odiPerc < 25)
                     {
-                        wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
+                        
+
+                        if (stamina > 30 && stamina <= 35)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
+                        }
+                        else if (stamina > 25 && stamina <= 30)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
+                        }
+                        else if (stamina > 20 && stamina <= 25)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+                        }
+                        else if (stamina <= 20)
+                        {
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
+                        }
                     }
-                    else if (stamina > 25 && stamina <= 30)
+                    if (odiPerc >= 25 && odiPerc < 50)
                     {
-                        wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
+                        
+                        if (stamina > 35 && stamina <= 40)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
+                        }
+                        else if (stamina > 30 && stamina <= 35)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
+                        }
+                        else if (stamina > 25 && stamina <= 30)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+                        }
+                        else if (stamina <= 25)
+                        {
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
+                        }
                     }
-                    else if (stamina > 20 && stamina <= 25)
+
+                    if (odiPerc >= 50 && odiPerc < 75)
                     {
-                        wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+
+                        if (stamina > 35 && stamina <= 40)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
+                        }
+                        else if (stamina > 30 && stamina <= 35)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+                        }
+                        else if (stamina <= 30)
+                        {
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
+                        }
                     }
-                    else if (stamina <= 20)
+
+                    if (odiPerc >= 75)
                     {
-                        wpReduction = base_TacticalActor.CharacterStats.Corruption;
+
+                        if (stamina > 35 && stamina <= 40)
+                        {
+                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+                        }
+                        else 
+                        {
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
+                        }
                     }
+
+
 
                     // Like the original calculation, but adapted with 'maxCorruption'
                     __result = new StatModification(StatModificationType.Add,
@@ -473,21 +531,20 @@ namespace PhoenixRising.BetterGeoscape
 
                     int num = UnityEngine.Random.Range(0, 200);
 
+                                       
                     if (num >= 0 && num <= 100)
                     {
-                        foreach (TacticalAbilityDef abilityDef in abilityList)
-                        {
-                            if (__instance.Progression.Abilities.Contains(abilityDef))
-                            {
-                                abilityList.Remove(abilityDef);
-                            }
-                        }
-
-                        if (abilityList.Count >= 0)
-                        {
-                            __instance.Progression.AddAbility(abilityList.GetRandomElement());
-                        }
+                        for (int i = 0; i < 100; i++)
+                        { 
+                           TacticalAbilityDef abilityToAdd=abilityList.GetRandomElement();
+                           if (!__instance.Progression.Abilities.Contains(abilityToAdd)) 
+                           {
+                                __instance.Progression.AddAbility(abilityToAdd);
+                                i = 100;
+                           }                            
+                        }                                           
                     }
+
                     if (num > 100 && num <= 150)
                     {
                         CommonMethods.SetStaminaToZero(__instance);

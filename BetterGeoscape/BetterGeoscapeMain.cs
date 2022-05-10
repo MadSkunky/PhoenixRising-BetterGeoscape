@@ -31,7 +31,7 @@ namespace PhoenixRising.BetterGeoscape
             Config = api("config", null) as ModConfig ?? new ModConfig();
 
             // Only needed if Harmony patches are used
-           // HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
+           HarmonyInstance.Create("PhoenixRising.VolandsPlayground").PatchAll();
 
             // Modnix logging
             api("log verbose", "Mod Initialised.");
@@ -47,7 +47,7 @@ namespace PhoenixRising.BetterGeoscape
             if (Config.MoreAmbushes)
             {
                 ChangesToAmbushes.Apply_Changes();
-                HarmonyInstance.Create("PhoenixRising.ChangesToAmbushes").PatchAll();
+              //  HarmonyInstance.Create("PhoenixRising.ChangesToAmbushes").PatchAll();
             }
 
             if (Config.ActivateChangesToDLC1andDLC2) 
@@ -76,7 +76,7 @@ namespace PhoenixRising.BetterGeoscape
             if (Config.ActivateCHRework)
             {
                 CHReworkMain.Apply_Changes();
-                HarmonyInstance.Create("PhoenixRising.CHReworkMain").PatchAll();
+           //     HarmonyInstance.Create("PhoenixRising.CHReworkMain").PatchAll();
                 DeliriumPerks.Main();
             }
 
@@ -88,7 +88,7 @@ namespace PhoenixRising.BetterGeoscape
             if (Config.ActivateInterceptors)
             {
                 Interceptors.Apply_Changes();
-                HarmonyInstance.Create("PhoenixRising.Interceptors").PatchAll();
+              //  HarmonyInstance.Create("PhoenixRising.Interceptors").PatchAll();
             }
 
             if (Config.DisableStaminaRecuperatonModule)
@@ -98,17 +98,17 @@ namespace PhoenixRising.BetterGeoscape
 
             if (Config.StaminaPenaltyFromInjury) 
             {
-                HarmonyInstance.Create("PhoenixRising.InjuryStamina").PatchAll(); 
+           //     HarmonyInstance.Create("PhoenixRising.InjuryStamina").PatchAll(); 
             }
 
             if (Config.StaminaPenaltyFromBionics)
             {
-                HarmonyInstance.Create("PhoenixRising.AugmentationWOCH").PatchAll();
+            //    HarmonyInstance.Create("PhoenixRising.AugmentationWOCH").PatchAll();
             }
 
             if (Config.StaminaPenaltyFromMutation) 
             {
-                HarmonyInstance.Create("PhoenixRising.MutationStamina").PatchAll();
+            //    HarmonyInstance.Create("PhoenixRising.MutationStamina").PatchAll();
             }
 
         }

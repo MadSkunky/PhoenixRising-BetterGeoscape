@@ -59,8 +59,10 @@ namespace PhoenixRising.BetterGeoscape
                 GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
 
                 //Source for creating new events
-                GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));              
-                        
+                GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
+
+                
+                //PhoenixPoint.UseGlobalStorage = false;
 
                 //Experiment new HD
                 // var survive3turnsobjective = AmbushALN.CustomObjectives[0];
