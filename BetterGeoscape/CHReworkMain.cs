@@ -570,7 +570,7 @@ namespace PhoenixRising.BetterGeoscape
                     int num = UnityEngine.Random.Range(0, 200);
 
                                        
-                    if (num >= 0 && num <= 100)
+                    if (num >= 0 && num <= 50)
                     {
                         for (int i = 0; i < 100; i++)
                         { 
@@ -583,7 +583,7 @@ namespace PhoenixRising.BetterGeoscape
                         }                                           
                     }
 
-                    if (num > 100 && num <= 150)
+                    if (num > 50 && num <= 125)
                     {
                         CommonMethods.SetStaminaToZero(__instance);
                     }
