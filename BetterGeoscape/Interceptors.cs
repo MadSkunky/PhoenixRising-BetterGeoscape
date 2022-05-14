@@ -100,9 +100,7 @@ namespace PhoenixRising.BetterGeoscape
                 hibernationModuleResearch.Faction = PhoenixPoint;
                 hibernationModuleResearch.RevealRequirements = sourcePX_SDI_ResearchDef.RevealRequirements;
                 hibernationModuleResearch.ResearchCost = 100;
-                hibernationmodule.GeoVehicleModuleBonusValue = 0.35f;
-                
-                
+                hibernationmodule.GeoVehicleModuleBonusValue = 0.35f;      
 
             }
             catch (Exception e)
@@ -248,75 +246,6 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-
-
-      /*  [HarmonyPatch(typeof(GeoVehicle), "UnapplyBonusesFromEquipment")]
-        internal static class BG_GeoVehicle_RemoveEquipment_PassengerModulesDecreaseSpaceForUnits_patch
-        {
-            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-
-            private static void Postfix(GeoVehicle __instance)
-            {
-                try
-                {
-                    GeoVehicleEquipment hybernationPods = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Recuperation);
-                    GeoVehicleEquipment fuelTank = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Range);
-                    GeoVehicleEquipment cruiseControl = __instance.Modules?.FirstOrDefault(gve => gve.ModuleDef.BonusType == GeoVehicleModuleDef.GeoVehicleModuleBonusType.Speed);
-                    string geoVehicle = __instance.VehicleDef.ViewElement.Name;
-
-                    //if hybernation pods are present, take the stats of the new defs with increased capacity
-                    if (geoVehicle == "Geoscape Manticore")
-                    {
-                        if (hybernationPods == null && cruiseControl == null && fuelTank == null)
-                        {
-                            __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_Manticore_Def"));
-                            
-                        }
-                    }
-                    if (geoVehicle == "Geoscape Helios")
-                    {
-                        if (hybernationPods == null && cruiseControl == null && fuelTank == null)
-                        
-                        {
-                            __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("SYN_Helios_Def"));
-                            
-                        }
-                    }
-                    if (geoVehicle == "Geoscape Thunderbird")
-                    {
-                        if (hybernationPods == null && cruiseControl == null && fuelTank == null)
-                       
-                        {
-                            __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("NJ_Thunderbird_Def"));
-                            
-                        }
-                    }
-                    if (geoVehicle == "Geoscape Blimp")
-                    {
-                        if (hybernationPods == null && cruiseControl == null && fuelTank == null)
-                       
-                        {
-                            __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("ANU_Blimp_Def"));
-                            
-                        }
-                    }
-                    if (geoVehicle == "Geoscape Masked Manticore")
-                    {
-                        if (hybernationPods == null && cruiseControl == null && fuelTank == null)
-                        
-                        {
-                            __instance.BaseDef = Repo.GetAllDefs<GeoVehicleDef>().FirstOrDefault(ged => ged.name.Equals("PP_ManticoreMasked_Def"));
-                           
-                        }
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
-      */
 
         [HarmonyPatch(typeof(GeoLevelController), "RunInterceptionTutorial")]
         public static class GeoLevelController_DontDestroyAircraft_Gift
