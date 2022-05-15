@@ -98,20 +98,20 @@ namespace PhoenixRising.BetterGeoscape
                 anuPissedAtBionics.GeoscapeEventData.Choices[0].Text.LocalizationKey = "ANU_PISSED_BIONICS_CHOICE_0";
                 anuPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "ANU_PISSED_BIONICS_CHOICE_0_OUTCOME";
                 anuPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                   {
-                       PartyFaction = Anu,
-                       TargetFaction = phoenixPoint,
-                       Value = -8,
-                       PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,  
-                   });
+                {
+                    PartyFaction = Anu,
+                    TargetFaction = phoenixPoint,
+                    Value = -8,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                });
 
-                   anuPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                   {
-                       PartyFaction = Synedrion,
-                       TargetFaction = phoenixPoint,
-                       Value = +2,
-                       PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,      
-                   });
+                anuPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
+                {
+                    PartyFaction = Synedrion,
+                    TargetFaction = phoenixPoint,
+                    Value = +2,
+                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                });
                 anuPissedAtBionics.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = new LocalizedTextBind("ANU_PISSED_BIONICS_CHOICE_1"),
@@ -121,7 +121,7 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             General = new LocalizedTextBind("ANU_PISSED_BIONICS_CHOICE_1_OUTCOME")
                         },
-                    }   
+                    }
                 });
                 anuPissedAtBionics.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
@@ -157,7 +157,7 @@ namespace PhoenixRising.BetterGeoscape
                         }
                     }
                 });
-                
+
                 //Anu really pissed at player for doing Bionics
                 GeoscapeEventDef anuReallyPissedAtBionics = Helper.CreateDefFromClone(sourceLoseGeoEvent, "ED58D3D6-BCFC-4288-9BD8-2A7DD1910FA9", "Anu_Really_Pissed_Over_Bionics");
                 anuReallyPissedAtBionics.GeoscapeEventData.EventID = "Anu_Pissed2";
@@ -166,6 +166,7 @@ namespace PhoenixRising.BetterGeoscape
                 anuReallyPissedAtBionics.GeoscapeEventData.Title.LocalizationKey = "ANU_REALLY_PISSED_BIONICS_TITLE";
                 anuReallyPissedAtBionics.GeoscapeEventData.Choices[0].Text.LocalizationKey = "ANU_REALLY_PISSED_BIONICS_CHOICE_0";
                 //anuReallyPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "ANU_REALLY_PISSED_BIONICS_CHOICE_0_OUTCOME";
+               // GenerateGeoEventChoice(anuReallyPissedAtBionics, "blah", "blah");
                 anuReallyPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = Anu,
@@ -173,18 +174,18 @@ namespace PhoenixRising.BetterGeoscape
                     Value = -10,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                 });
-                
-                   /* 
-                    VariablesChange = new List<OutcomeVariableChange>
-                        { new OutcomeVariableChange
-                            {
-                                VariableName = "BG_NJ_Pissed_Made_Promise",
-                                Value = { Min = 1, Max = 1 },
-                                IsSetOperation = true,
-                             }
-                        },
-                   */
-                
+
+                /* 
+                 VariablesChange = new List<OutcomeVariableChange>
+                     { new OutcomeVariableChange
+                         {
+                             VariableName = "BG_NJ_Pissed_Made_Promise",
+                             Value = { Min = 1, Max = 1 },
+                             IsSetOperation = true,
+                          }
+                     },
+                */
+
                 //NJ pissed at player for doing Mutations
                 GeoscapeEventDef nJPissedAtMutations = Helper.CreateDefFromClone(sourceLoseGeoEvent, "7FEFAE2A-1544-488D-A5CE-54E57C62ED2C", "NJ_Pissed_Over_Mutations");
                 nJPissedAtMutations.GeoscapeEventData.EventID = "NJ_Pissed1";
@@ -204,7 +205,7 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Text = new LocalizedTextBind("NJ_PISSED_MUTATIONS_CHOICE_1"),
                     Outcome = new GeoEventChoiceOutcome()
-                    {  
+                    {
                         OutcomeText = new EventTextVariation()
                         {
                             General = new LocalizedTextBind("NJ_PISSED_MUTATIONS_CHOICE_1_OUTCOME")
@@ -224,7 +225,7 @@ namespace PhoenixRising.BetterGeoscape
                     TargetFaction = phoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = +2
-                });            
+                });
                 nJPissedAtMutations.GeoscapeEventData.Choices.Add(new GeoEventChoice()
                 {
                     Text = new LocalizedTextBind("NJ_PISSED_MUTATIONS_CHOICE_2"),
@@ -252,6 +253,7 @@ namespace PhoenixRising.BetterGeoscape
                 nJReallyPissedAtMutations.GeoscapeEventData.Title.LocalizationKey = "NJ_REALLY_PISSED_MUTATIONS_TITLE";
                 nJReallyPissedAtMutations.GeoscapeEventData.Choices[0].Text.LocalizationKey = "NJ_REALLY_PISSED_MUTATIONS_CHOICE_0";
                 //nJReallyPissedAtMutations.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "NJ_REALLY_PISSED_MUTATIONS_CHOICE_0_OUTCOME";
+                
                 nJReallyPissedAtMutations.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
@@ -279,48 +281,155 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
-          public static class PhoenixStatisticsManager_UpdateGeoscapeStats_AnuPissedAtBionics_Patch
-          {
-              public static void Postfix(GeoAlienFaction __instance)
-              {
-                  try
-                  {
-                      int bionics = 0;
-                      GeoLevelController geoLevelController = __instance.GeoLevel;
-                      GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(__instance, geoLevelController.ViewerFaction);
-                      GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
-                      //check number of bionics player has
-                      GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
-                      foreach (GeoCharacter geoCharacter in __instance.GeoLevel.PhoenixFaction.Soldiers) 
-                      { 
-                              foreach (GeoItem bionic in geoCharacter.ArmourItems)
-                              { if(bionic.ItemDef.Tags.Contains(bionicalTag))
-                                    
-                                 bionics += 1;
-                              }                       
-                      }
-                      if (bionics > 2 && geoLevelController.EventSystem.GetVariable("BG_Anu_Pissed_Over_Bionics") == 0)  
-                      {
-                          geoLevelController.EventSystem.TriggerGeoscapeEvent("Anu_Pissed1", geoscapeEventContext);
-                          geoLevelController.EventSystem.SetVariable("BG_Anu_Pissed_Over_Bionics", 1);
-                      }
-                      
-                      if (geoLevelController.EventSystem.GetVariable("BG_Anu_Pissed_Broke_Promise") == 1 
-                         && geoLevelController.EventSystem.GetVariable("BG_Anu_Really_Pissed_Over_Bionics") == 0)
-                      {
-                          geoLevelController.EventSystem.TriggerGeoscapeEvent("Anu_Pissed2", geoscapeEventContext);
-                          geoLevelController.EventSystem.SetVariable("BG_Anu_Really_Pissed_Over_Bionics", 1);
-                      }
-                  }
-                  catch (Exception e)
-                  {
-                      Logger.Error(e);
-                  }
-              }
-          }
+      
+
+      [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
+        public static class PhoenixStatisticsManager_OnGeoscapeLevelStart_DarkEvents_Patch
+        {
+            public static void Postfix(GeoFaction __instance)
+            {
+                try
+                {
+
+
+                    if (__instance.GeoLevel.EventSystem.IsEventTriggered("SDI_02"))
+                    {
+                        __instance.GeoLevel.EventSystem.SetVariable("LessAmbushes", 1);
+                    }
+                    if (__instance.GeoLevel.EventSystem.GetVariable("LessAmbushes") == 1)
+                    {
+                        __instance.GeoLevel.CurrentDifficultyLevel.EvolutionProgressPerDay=150;
+                    }
+                    else
+                    {
+                        __instance.GeoLevel.EventSystem.StartingAmbushProtection = 0;
+                    }
+                    if (__instance.GeoLevel.EventSystem.IsEventTriggered("SDI_03"))
+                    {
+                        __instance.GeoLevel.CurrentDifficultyLevel.EvolutionProgressPerDay = 50;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+     
+
+        [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
+        public static class PhoenixStatisticsManager_UpdateGeoscapeStats_AnuPissedAtBionics_Patch
+        {
+            public static void Postfix(GeoAlienFaction __instance)
+            {
+                try
+                {
+                    int bionics = 0;
+                    GeoLevelController geoLevelController = __instance.GeoLevel;
+                    GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(__instance, geoLevelController.ViewerFaction);
+                    GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
+                    //check number of bionics player has
+                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
+                    foreach (GeoCharacter geoCharacter in __instance.GeoLevel.PhoenixFaction.Soldiers)
+                    {
+                        foreach (GeoItem bionic in geoCharacter.ArmourItems)
+                        { if (bionic.ItemDef.Tags.Contains(bionicalTag))
+
+                                bionics += 1;
+                        }
+                    }
+                    if (bionics > 2 && geoLevelController.EventSystem.GetVariable("BG_Anu_Pissed_Over_Bionics") == 0)
+                    {
+                        geoLevelController.EventSystem.TriggerGeoscapeEvent("Anu_Pissed1", geoscapeEventContext);
+                        geoLevelController.EventSystem.SetVariable("BG_Anu_Pissed_Over_Bionics", 1);
+                    }
+
+                    if (geoLevelController.EventSystem.GetVariable("BG_Anu_Pissed_Broke_Promise") == 1
+                       && geoLevelController.EventSystem.GetVariable("BG_Anu_Really_Pissed_Over_Bionics") == 0)
+                    {
+                        geoLevelController.EventSystem.TriggerGeoscapeEvent("Anu_Pissed2", geoscapeEventContext);
+                        geoLevelController.EventSystem.SetVariable("BG_Anu_Really_Pissed_Over_Bionics", 1);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        public static void GenerateGeoEventChoice(GeoscapeEventDef geoEvent, string choice, string outcome)
+        {
+            try
+            {
+                geoEvent.GeoscapeEventData.Choices.Add(new GeoEventChoice()
+
+                {
+                    Text = new LocalizedTextBind(choice),
+                    Outcome = new GeoEventChoiceOutcome()
+                    {
+                        OutcomeText = new EventTextVariation()
+                        {
+                            General = new LocalizedTextBind(outcome)
+                        }
+                    }
+                });
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
+
+        /*   public static OutcomeDiplomacyChange GenerateDiplomacyOutcome(GeoFactionDef partyFaction, GeoFactionDef targetFaction, int value)
+           {
+               try
+               {
+                   if (partyFaction == null || targetFaction == null)
+                   {
+                       GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
+                       GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
+                       return new OutcomeDiplomacyChange()
+                       { PartyFaction=NewJericho, TargetFaction=phoenixPoint, Value=1, PartyType= (OutcomeDiplomacyChange.ChangeTarget)1};
+                   }
+
+                   else
+                   { 
+                       return new OutcomeDiplomacyChange()
+                       {
+                           PartyFaction = partyFaction,
+                           TargetFaction = targetFaction,
+                           Value = value,
+                           PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
+                       };
+                   }
+               }
+               catch (Exception e)
+               {
+                   Logger.Error(e);
+               }
+           } */
+
+        /*   public static void GenerateVariableChange(string variableName, int minValue, int MaxValue, bool isSet)
+           {
+               try
+               {
+                   new OutcomeVariableChange()
+                   {
+                       VariableName = variableName,
+                       Value = { Min = minValue, Max = MaxValue},
+                       IsSetOperation = isSet,
+                   };
+
+               }
+               catch (Exception e)
+               {
+                   Logger.Error(e);
+               }
+           }*/
 
         
+
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         public static class PhoenixStatisticsManager_UpdateGeoscapeStats_NJPissedAtMutations_Patch
         {

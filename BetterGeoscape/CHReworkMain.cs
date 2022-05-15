@@ -177,6 +177,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
+        public static string darkEvents = "DarkEvent";
         // Current and last ODI level
         public static int CurrentODI_Level = 0;
         // All SDI (ODI) event IDs, levels as array, index 0 - 19
@@ -236,14 +237,38 @@ namespace PhoenixRising.BetterGeoscape
                     if (CurrentODI_Level != geoLevelController.EventSystem.GetVariable("BC_SDI", -1))
                 {
                     // Get the Event ID from array dependent on calculated level index
+                    
                     string eventID = ODI_EventIDs[CurrentODI_Level];
+
+                   
+
+
                     GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
+
+                    List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
+
+                    int roll = UnityEngine.Random.Range(0, 20);
+                    if (roll > 0 && roll < 11)
+                    {
+                        for (int i = 0; i < 100; i++)
+                        {
+                            int darkEventRoll = darkEvents.GetRandomElement();
+                            if (geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + i)!=darkEventRoll) 
+                            { 
+                                GeoscapeEventDef oDIEventToTrigger = geoLevelController.EventSystem.GetEventByID(ODI_EventIDs[CurrentODI_Level]);
+                                oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
+                                 {
+                                    VariableName = "DarkEvent",
+                                    Value = { Min = darkEventRoll, Max = darkEventRoll },
+                                    IsSetOperation = true,
+                                });
+                                geoLevelController.EventSystem.SetVariable("TriggeredDarkEvents" + CurrentODI_Level, darkEventRoll);
+                            }
+                        }
+                    }
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
-                    geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
+                    geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);                                          
                 }
-
-
-
             }
 
             catch (Exception e)
@@ -255,6 +280,7 @@ namespace PhoenixRising.BetterGeoscape
         [HarmonyPatch(typeof(CorruptionStatus), "GetMultiplier")]
         internal static class BG_CorruptionStatus_GetMultiplier_Mutations_patch
         {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(ref float __result, CorruptionStatus __instance)
             {
                 try
