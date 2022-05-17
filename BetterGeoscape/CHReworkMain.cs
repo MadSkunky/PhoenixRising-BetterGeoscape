@@ -11,6 +11,7 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Geoscape.Achievements;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Research;
 using PhoenixPoint.Geoscape.Entities.Research.Requirement;
@@ -21,6 +22,7 @@ using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Events.Eventus.Filters;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Geoscape.Levels.Objectives;
 using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
 using PhoenixPoint.Geoscape.View.ViewModules;
 using PhoenixPoint.Tactical.Entities;
@@ -177,7 +179,9 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        public static string darkEvents = "DarkEvent";
+        public static string darkEventDescription;
+        public static string darkEventTitle;
+
         // Current and last ODI level
         public static int CurrentODI_Level = 0;
         // All SDI (ODI) event IDs, levels as array, index 0 - 19
@@ -205,6 +209,23 @@ namespace PhoenixRising.BetterGeoscape
     "SDI_20"
         };
 
+        public static readonly string[] DarkEvents_Title = new string[]
+        {
+        "DARK_EVENT_TITLE_01","DARK_EVENT_TITLE_02","DARK_EVENT_TITLE_03","DARK_EVENT_TITLE_04","DARK_EVENT_TITLE_05","DARK_EVENT_TITLE_06",
+        "DARK_EVENT_TITLE_07","DARK_EVENT_TITLE_08","DARK_EVENT_TITLE_09","DARK_EVENT_TITLE_10","DARK_EVENT_TITLE_11","DARK_EVENT_TITLE_12",
+        "DARK_EVENT_TITLE_13","DARK_EVENT_TITLE_14","DARK_EVENT_TITLE_15","DARK_EVENT_TITLE_16","DARK_EVENT_TITLE_17","DARK_EVENT_TITLE_18",
+        "DARK_EVENT_TITLE_19","DARK_EVENT_TITLE_20",
+        };
+        public static readonly string[] DarkEvents_Description = new string[]
+        {
+        "DARK_EVENT_DESCRIPTION_TEXT_01","DARK_EVENT_DESCRIPTION_TEXT_02","DARK_EVENT_DESCRIPTION_TEXT_03","DARK_EVENT_DESCRIPTION_TEXT_04",
+        "DARK_EVENT_DESCRIPTION_TEXT_05","DARK_EVENT_DESCRIPTION_TEXT_06","DARK_EVENT_DESCRIPTION_TEXT_07","DARK_EVENT_DESCRIPTION_TEXT_08",
+        "DARK_EVENT_DESCRIPTION_TEXT_09","DARK_EVENT_DESCRIPTION_TEXT_10","DARK_EVENT_DESCRIPTION_TEXT_11","DARK_EVENT_DESCRIPTION_TEXT_12",
+        "DARK_EVENT_DESCRIPTION_TEXT_13","DARK_EVENT_DESCRIPTION_TEXT_14","DARK_EVENT_DESCRIPTION_TEXT_15","DARK_EVENT_DESCRIPTION_TEXT_16",
+        "DARK_EVENT_DESCRIPTION_TEXT_17","DARK_EVENT_DESCRIPTION_TEXT_18","DARK_EVENT_DESCRIPTION_TEXT_19","DARK_EVENT_DESCRIPTION_TEXT_20",
+        };
+
+
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         internal static class BC_GeoAlienFaction_UpdateFactionDaily_patch
         {
@@ -230,44 +251,187 @@ namespace PhoenixRising.BetterGeoscape
                 GeoLevelController geoLevelController = geoAlienFaction.GeoLevel;
                 // If current calculated level is different to last saved one then new ODI level is reached, show the new ODI event
                 if (geoLevelController.EventSystem.GetVariable("CorruptionActive") == 0 && geoLevelController.EventSystem.GetVariable("PandoraVirus") == 1)
-                { }
+                {
+
+                }
 
                 else
 
                     if (CurrentODI_Level != geoLevelController.EventSystem.GetVariable("BC_SDI", -1))
                 {
                     // Get the Event ID from array dependent on calculated level index
-                    
+
                     string eventID = ODI_EventIDs[CurrentODI_Level];
-
-                   
-
-
                     GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
-
-                    List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10 };
-
-                    int roll = UnityEngine.Random.Range(0, 20);
+                    GeoscapeEventDef oDIEventToTrigger = geoLevelController.EventSystem.GetEventByID(ODI_EventIDs[CurrentODI_Level]);
+                    
+                    
+                    // Dark Events roll
+                    // Before the roll, Dark Event has not been rolled
+                    bool darkEventRolled = false;
+                    int darkEventRoll = 0;
+                    // We want this in case a Dark Event is taken out of play (because replaced by another)
+                    int darkEventReplaced = 0;
+                    // Here comes the roll, for testing purposes with 1/3 chance of no DE happening    
+                    int roll = UnityEngine.Random.Range(0, 11);
                     if (roll > 0 && roll < 11)
                     {
+                        // If a Dark Event rolls
+                        // Create variable reflecting difficulty level, 1 being the easiest, and 4 the hardest
+                        // This will determine amount of possible simultaneous dark events
+                        int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
+     
+                        // Create list of dark events currently implemented
+                        List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6};
+                       
+                        // Array to track how many Dark Events have already appeared (will get filled up later)
+                        int[] alreadyRolledDarkEvents = new int[20];
+
+                        // This is the Voland loop, the loop you do when you don't know any better
+                        // The loop will try a 100 times if necessary to get a valid random dark event (one that has not been in play before)                                                 
                         for (int i = 0; i < 100; i++)
                         {
-                            int darkEventRoll = darkEvents.GetRandomElement();
-                            if (geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + i)!=darkEventRoll) 
-                            { 
-                                GeoscapeEventDef oDIEventToTrigger = geoLevelController.EventSystem.GetEventByID(ODI_EventIDs[CurrentODI_Level]);
-                                oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
-                                 {
-                                    VariableName = "DarkEvent",
-                                    Value = { Min = darkEventRoll, Max = darkEventRoll },
-                                    IsSetOperation = true,
-                                });
-                                geoLevelController.EventSystem.SetVariable("TriggeredDarkEvents" + CurrentODI_Level, darkEventRoll);
+                            // Get a random dark event from the Dark Events list
+                            darkEventRoll = darkEvents.GetRandomElement();
+                            // Check if this event has already appeared 
+                            for (int j = 0; j < 20; j++)
+                            {
+                                // There are 20 variables documenting what ODI event accompanied which Dark Event, the "TriggeredDarkEvents[0-19]"
+                                // If the dark event chosen at random has been triggered before, it will be added to the alreadyRolledDarkEvents array
+                                if (geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + j) == darkEventRoll)
+                                {
+                                    alreadyRolledDarkEvents[j] = darkEventRoll;
+                                }
                             }
-                        }
+
+                            // If the randomly chosen Dark Event has not appeared yet, make it happen!     
+                            if (!alreadyRolledDarkEvents.Contains(darkEventRoll))
+                            {
+                                // We can have as many simulateneous Dark Events in play as the mathematical expression of the difficulty level
+                                for (int t = 0; t < difficulty; t++)
+                                {
+                                    // There will be as many Dark Event variables (each storing an active Dark Event) as the ME of the difficulty level
+                                    // The first empty Dark Event variable will receive the new Dark Event
+                                    if (geoLevelController.EventSystem.GetVariable("DarkEvent" + (difficulty - t)) == 0)
+                                    {
+                                        // This is the regular code to modify a Def, in this case the ODI event to which the Dark Event will be attached,
+                                        // so that it sets the Dark Event variable
+                                        oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
+                                        {
+                                            VariableName = "DarkEvent" + (difficulty - t),
+                                            Value = { Min = darkEventRoll, Max = darkEventRoll },
+                                            IsSetOperation = true,
+                                        });
+                                        // This records which ODI event triggered which Dark Event
+                                        geoLevelController.EventSystem.SetVariable("TriggeredDarkEvents" + CurrentODI_Level, darkEventRoll);
+                                        // Raise the flag, we have a Dark Event!
+                                        darkEventRolled = true;
+                                        // Then close both loops:
+                                        t = 4;
+                                        i = 100;
+                                    }
+                                    // If that Dark Event variable is already used, we will record it in our array, by assigning 1 to the position
+                                   /* else
+                                    {
+                                        array[difficulty - 1 - t] = 1;
+                                    }
+                                    */
+                                }
+                                // If we managed to roll a Dark Event, because we found a dark event not in use and we found a variable to log it in,
+                                // the Voland loop ends here
+                                if (darkEventRolled)
+                                {
+
+                                }
+                                // But if all the Dark Event variables are already in use, we have to find the earliest TriggeredDarkEvent still in play
+                                // to replace it with the new darkevent
+                                else if(darkEventRolled==false)
+                                {
+                                    // So we create a new array and a new loop to record all the Dark Events already rolled.
+                                    int[] allTheDarkEventsAlreadyRolled = new int[20];
+                                    // And an array to record which variables hold which Dark Events
+                                    int[] allTheDarkEventsVariables = new int[difficulty];
+                                    
+                                    for (int x = 0; x < 20; x++)
+                                    {
+                                        if (geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x) != 0)
+                                        {
+                                            allTheDarkEventsAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x);
+                                            Logger.Always("Check Triggered Dark Events " + allTheDarkEventsAlreadyRolled[x]);
+                                        }
+                                    }
+
+                                    // Then we check our Dark Event variables to see which one has the earliest Dark Event already rolled                                
+                                    for (int x = 0; x < 20; x++)
+                                    {
+                                        // We will look through the DarkEvents variables in the order in which they were filled
+                                        for (int y = 0; y < difficulty; y++)
+                                        {
+                                            // And record which variable holds which Dark Event
+                                            if (geoLevelController.EventSystem.GetVariable("DarkEvent" + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
+                                            {
+                                                allTheDarkEventsVariables[difficulty - y - 1] = allTheDarkEventsAlreadyRolled[x];
+                                                Logger.Always("Check Variable " + (difficulty - y) + " holding Dark Events " + allTheDarkEventsVariables[difficulty - y - 1]);
+                                            }
+                                        }
+                                    }
+                                    // Then we try to find in the array of the Dark Variables which one appeared the earliest
+                                    for (int x = 0; x < 20; x++)
+                                    {
+                                        // We check, starting from the earliest, which Dark Event is still in play
+                                        if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x)))
+                                        {
+                                            // Then we locate in which Variable it is recorded
+                                            for (int y = 0; y < difficulty; y++)
+                                            {
+                                                // Once we find it, that's where we want to put our new Dark Event
+                                                if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x))
+                                                {
+                                                    darkEventReplaced = allTheDarkEventsVariables[difficulty - y - 1];
+                                                    oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
+                                                    {
+                                                        VariableName = "DarkEvent" + (difficulty - y),
+                                                        Value = { Min = darkEventRoll, Max = darkEventRoll },
+                                                        IsSetOperation = true,
+                                                    });
+
+                                                    geoLevelController.EventSystem.SetVariable("TriggeredDarkEvents" + CurrentODI_Level, darkEventRoll);
+                                                    // And the flag is raised here too!
+                                                    darkEventRolled = true;
+                                                    // Close the loops when you leave!
+                                                    y = 5;
+                                                    x = 20;
+                                                    i = 100;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }                              
+                            }
+                        }                            
                     }
+                    // The ODI event is triggered
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
-                    geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);                                          
+                    geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
+                    // And if a Dark Event has been rolled, a Dark Event will appear 
+                    if (darkEventRolled)
+                    {
+                        string title = (string)DarkEvents_Title.GetValue(darkEventRoll-1);
+                        string description = (string)DarkEvents_Description.GetValue(darkEventRoll-1);
+                        GeoscapeEventDef darkEvent = geoLevelController.EventSystem.GetEventByID("DarkEvent");
+                        darkEvent.GeoscapeEventData.Title.LocalizationKey = title;
+                        darkEvent.GeoscapeEventData.Description[0].General.LocalizationKey = description;
+                        geoLevelController.EventSystem.TriggerGeoscapeEvent("DarkEvent", geoscapeEventContext);
+                        CreateDarkEventObjective(title, description, geoLevelController);
+
+                        if (darkEventReplaced != 0) 
+                        {
+                            string objectiveToBeReplaced = (string)DarkEvents_Title.GetValue(darkEventReplaced - 1);                                
+                            Logger.Always(objectiveToBeReplaced);
+                            RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
+                            darkEventReplaced= 0;
+                        } 
+                    }                     
                 }
             }
 
@@ -275,6 +439,28 @@ namespace PhoenixRising.BetterGeoscape
             {
                 Logger.Error(e);
             }
+        }
+
+        public static void CreateDarkEventObjective(string title, string description, GeoLevelController level)
+        {
+            DiplomaticGeoFactionObjective darkEventObjective = new DiplomaticGeoFactionObjective(level.AlienFaction, level.PhoenixFaction)
+            {
+                Title = new Base.UI.LocalizedTextBind(title),
+                Description = new Base.UI.LocalizedTextBind(description),
+            };
+           level.PhoenixFaction.AddObjective(darkEventObjective);
+           
+        }
+        public static void RemoveDarkEventObjective(string title, GeoLevelController level)
+        {
+         
+            DiplomaticGeoFactionObjective darkEventObjective = 
+            (DiplomaticGeoFactionObjective)level.PhoenixFaction.Objectives.FirstOrDefault(ged => ged.Title.LocalizationKey.Equals(title));
+            string checktitle = darkEventObjective.GetTitle();
+            Logger.Always("the title in the RemoveDarkEventObjective method is " + title);
+           // Logger.Always("the localizedTextBind in the RemoveDarkEventObjective method is " + localizedTextBind);
+            Logger.Always("if we found the objective, there should be something here " + checktitle);
+            level.PhoenixFaction.RemoveObjective(darkEventObjective);
         }
 
         [HarmonyPatch(typeof(CorruptionStatus), "GetMultiplier")]
@@ -625,66 +811,102 @@ namespace PhoenixRising.BetterGeoscape
         [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnTacticalLevelStart")]
         public static class TacticalLevelController_OnLevelStart_Patch
         {
-            public static void Postfix(TacticalLevelController level)
+            public static void Postfix(TacticalLevelController level)//, GeoLevelController __level)
             {
                 DefRepository Repo = GameUtl.GameComponent<DefRepository>();
                 try
                 {
-                    foreach (TacticalFaction faction in level.Factions)
+
+                /*    PassiveModifierAbilityDef shutEye_Ability = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("ShutEye_AbilityDef"));
+                    PassiveModifierAbilityDef hallucinating_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Hallucinating_AbilityDef"));
+                    PassiveModifierAbilityDef solipsism_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Solipsism_AbilityDef"));
+                    PassiveModifierAbilityDef angerIssues_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("AngerIssues_AbilityDef"));
+                    PassiveModifierAbilityDef photophobia_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Photophobia_AbilityDef"));
+                    PassiveModifierAbilityDef nails_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Nails_AbilityDef"));
+                    PassiveModifierAbilityDef immortality_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Immortality_AbilityDef"));
+                    PassiveModifierAbilityDef feral_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Feral_AbilityDef"));
+                    DamageMultiplierAbilityDef oneOfUs_AbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("OneOfUs_AbilityDef"));
+                    ApplyStatusAbilityDef fleshEater_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("FleshEater_AbilityDef"));
+                       
+                    List<TacticalAbilityDef> abilityList = new List<TacticalAbilityDef>
+                    { shutEye_Ability, hallucinating_AbilityDef, solipsism_AbilityDef, angerIssues_AbilityDef, photophobia_AbilityDef, nails_AbilityDef, immortality_AbilityDef, feral_AbilityDef,
+                    oneOfUs_AbilityDef, fleshEater_AbilityDef
+                    };
+
+                    if (__level.EventSystem.GetVariable("CorruptionActive") == 0 && __level.EventSystem.GetVariable("PandoraVirus") == 1)
                     {
-                        if (faction.IsViewerFaction)
+                       foreach (TacticalFaction faction in level.Factions)
                         {
-                            foreach (TacticalActor actor in faction.TacticalActors)
+                            if (faction.IsViewerFaction)
                             {
-
-                                PassiveModifierAbilityDef abilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
-                                {
-                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
+                                foreach (TacticalActor actor in faction.TacticalActors)
+                                {                 
+                                    foreach (TacticalAbilityDef tacticalAbility in abilityList)
+                                    {
+                                        actor.RemoveAbility(tacticalAbility);
+                                    }
                                 }
-
-                                PassiveModifierAbilityDef abilityDef1 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
-                                {
-                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
-                                }
-
-                                PassiveModifierAbilityDef abilityDef2 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
-                                {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
-                                }
-
-                                PassiveModifierAbilityDef abilityDef3 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUsPassive_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
-                                {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUs_AbilityDef")), actor);
-                                }
-
-                                PassiveModifierAbilityDef abilityDef5 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
-                                {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef")), actor);
-                                }
-
-                                PassiveModifierAbilityDef abilityDef6 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
-                                {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);
-                                }
-                                /*
-                                TacticalAbilityDef abilityDef7 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
-                                if (actor.GetAbilityWithDef<Ability>(abilityDef7) != null)
-                                {
-                                    actor.GetArmor().Add(50);
-                                    actor.CharacterStats.Armour.Add(100);
-                                    //actor.UpdateStats();
-                                }
-                                */
                             }
                         }
                     }
+
+                    else
+
+                      */  foreach (TacticalFaction faction in level.Factions)
+                        {
+                            if (faction.IsViewerFaction)
+                            {
+                                foreach (TacticalActor actor in faction.TacticalActors)
+                                {
+
+                                    PassiveModifierAbilityDef abilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
+                                    {
+                                        actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
+                                    }
+
+                                    PassiveModifierAbilityDef abilityDef1 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
+                                    {
+                                        actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
+                                    }
+
+                                    PassiveModifierAbilityDef abilityDef2 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
+                                    {
+                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
+                                    }
+
+                                    PassiveModifierAbilityDef abilityDef3 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUsPassive_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
+                                    {
+                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUs_AbilityDef")), actor);
+                                    }
+
+                                    PassiveModifierAbilityDef abilityDef5 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
+                                    {
+                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef")), actor);
+                                    }
+
+                                    PassiveModifierAbilityDef abilityDef6 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
+                                    {
+                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
+                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);
+                                    }
+                                    /*
+                                    TacticalAbilityDef abilityDef7 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
+                                    if (actor.GetAbilityWithDef<Ability>(abilityDef7) != null)
+                                    {
+                                        actor.GetArmor().Add(50);
+                                        actor.CharacterStats.Armour.Add(100);
+                                        //actor.UpdateStats();
+                                    }
+                                    */
+                                }
+                            }
+                        }
                 }
                 catch (Exception e)
                 {

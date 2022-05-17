@@ -31,7 +31,7 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.CitadelLimitations.HoursBuildTime = 180; //vanilla 60
                
                 //reducing evolution per day because there other sources of evolution points now
-                veryhard.EvolutionProgressPerDay = 50; //vanilla 100
+                veryhard.EvolutionProgressPerDay = 300; //vanilla 100
 
                 //Remove faction diplo penalties for not destroying revealed PCs and increase rewards for haven leader
                 GeoAlienBaseTypeDef nestType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Nest_GeoAlienBaseTypeDef"));              
