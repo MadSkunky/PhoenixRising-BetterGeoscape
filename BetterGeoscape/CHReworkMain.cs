@@ -6,6 +6,8 @@ using Base.Entities.Abilities;
 using Base.Entities.Statuses;
 using Base.Eventus;
 using Base.Eventus.Filters;
+using Base.UI;
+using Base.UI.MessageBox;
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
@@ -23,8 +25,10 @@ using PhoenixPoint.Geoscape.Events.Eventus.Filters;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
 using PhoenixPoint.Geoscape.Levels.Objectives;
+using PhoenixPoint.Geoscape.View.ViewControllers;
 using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
 using PhoenixPoint.Geoscape.View.ViewModules;
+using PhoenixPoint.Geoscape.View.ViewStates;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.ActorsInstance;
@@ -179,8 +183,8 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        public static string darkEventDescription;
-        public static string darkEventTitle;
+      //  public static string darkEventDescription;
+      //  public static string darkEventTitle;
 
         // Current and last ODI level
         public static int CurrentODI_Level = 0;
@@ -264,156 +268,204 @@ namespace PhoenixRising.BetterGeoscape
                     string eventID = ODI_EventIDs[CurrentODI_Level];
                     GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
                     GeoscapeEventDef oDIEventToTrigger = geoLevelController.EventSystem.GetEventByID(ODI_EventIDs[CurrentODI_Level]);
-                    
-                    
+
+                    //Need to fix a broken SDI event!
+                    if(oDIEventToTrigger.GeoscapeEventData.EventID== "SDI_07") 
+                    { 
+                    oDIEventToTrigger.GeoscapeEventData.Choices= Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_06_GeoscapeEventDef")).GeoscapeEventData.Choices;
+                    }
+
                     // Dark Events roll
                     // Before the roll, Dark Event has not been rolled
                     bool darkEventRolled = false;
                     int darkEventRoll = 0;
                     // We want this in case a Dark Event is taken out of play (because replaced by another)
                     int darkEventReplaced = 0;
-                    // Here comes the roll, for testing purposes with 1/3 chance of no DE happening    
-                    int roll = UnityEngine.Random.Range(0, 11);
-                    if (roll > 0 && roll < 11)
-                    {
-                        // If a Dark Event rolls
-                        // Create variable reflecting difficulty level, 1 being the easiest, and 4 the hardest
-                        // This will determine amount of possible simultaneous dark events
-                        int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
-     
-                        // Create list of dark events currently implemented
-                        List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6};
-                       
-                        // Array to track how many Dark Events have already appeared (will get filled up later)
-                        int[] alreadyRolledDarkEvents = new int[20];
+                    // Create variable reflecting difficulty level, 1 being the easiest, and 4 the hardest
+                    // This will determine amount of possible simultaneous dark events
+                    int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
+                    string triggeredVoidOmens = "TriggeredVoidOmen_";
+                    string voidOmen = "VoidOmen_";
 
-                        // This is the Voland loop, the loop you do when you don't know any better
-                        // The loop will try a 100 times if necessary to get a valid random dark event (one that has not been in play before)                                                 
-                        for (int i = 0; i < 100; i++)
-                        {
-                            // Get a random dark event from the Dark Events list
-                            darkEventRoll = darkEvents.GetRandomElement();
-                            // Check if this event has already appeared 
-                            for (int j = 0; j < 20; j++)
+                    if (geoLevelController.EventSystem.GetVariable("BC_SDI") > 0)
+                    {              
+                        // Here comes the roll, for testing purposes with 1/3 chance of no DE happening    
+                        int roll = UnityEngine.Random.Range(0, 11);
+                        if (roll > 0 && roll < 11)
+                        { 
+                            // If a Dark Event rolls
+
+                            // Create list of dark events currently implemented
+                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6 };
+
+                            // Array to track how many Dark Events have already appeared (will get filled up later)
+                            int[] alreadyRolledDarkEvents = new int[19];
+                            int countI = 0;
+                            // This is the Voland loop, the loop you do when you don't know any better
+                            // The loop will try a 100 times if necessary to get a valid random dark event (one that has not been in play before)                                                 
+                            for (int i = 0; i < 100; i++)
                             {
-                                // There are 20 variables documenting what ODI event accompanied which Dark Event, the "TriggeredDarkEvents[0-19]"
-                                // If the dark event chosen at random has been triggered before, it will be added to the alreadyRolledDarkEvents array
-                                if (geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + j) == darkEventRoll)
+                                
+                                // Get a random dark event from the Dark Events list
+                                darkEventRoll = darkEvents.GetRandomElement();
+                                countI++;
+                                // Check if this event has already appeared 
+                                for (int j = 1; j < 19; j++)
                                 {
-                                    alreadyRolledDarkEvents[j] = darkEventRoll;
-                                }
-                            }
-
-                            // If the randomly chosen Dark Event has not appeared yet, make it happen!     
-                            if (!alreadyRolledDarkEvents.Contains(darkEventRoll))
-                            {
-                                // We can have as many simulateneous Dark Events in play as the mathematical expression of the difficulty level
-                                for (int t = 0; t < difficulty; t++)
-                                {
-                                    // There will be as many Dark Event variables (each storing an active Dark Event) as the ME of the difficulty level
-                                    // The first empty Dark Event variable will receive the new Dark Event
-                                    if (geoLevelController.EventSystem.GetVariable("DarkEvent" + (difficulty - t)) == 0)
+                                    // There are 19 variables documenting what ODI event accompanied which Dark Event, the "TriggeredVoidOmens[1-19]"
+                                    // If the dark event chosen at random has been triggered before, it will be added to the alreadyRolledDarkEvents array
+                                    if (geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + j) == darkEventRoll)
                                     {
-                                        // This is the regular code to modify a Def, in this case the ODI event to which the Dark Event will be attached,
-                                        // so that it sets the Dark Event variable
-                                        oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
-                                        {
-                                            VariableName = "DarkEvent" + (difficulty - t),
-                                            Value = { Min = darkEventRoll, Max = darkEventRoll },
-                                            IsSetOperation = true,
-                                        });
-                                        // This records which ODI event triggered which Dark Event
-                                        geoLevelController.EventSystem.SetVariable("TriggeredDarkEvents" + CurrentODI_Level, darkEventRoll);
-                                        // Raise the flag, we have a Dark Event!
-                                        darkEventRolled = true;
-                                        // Then close both loops:
-                                        t = 4;
-                                        i = 100;
+                                        alreadyRolledDarkEvents[j] = darkEventRoll;
                                     }
-                                    // If that Dark Event variable is already used, we will record it in our array, by assigning 1 to the position
-                                   /* else
-                                    {
-                                        array[difficulty - 1 - t] = 1;
-                                    }
-                                    */
                                 }
-                                // If we managed to roll a Dark Event, because we found a dark event not in use and we found a variable to log it in,
-                                // the Voland loop ends here
-                                if (darkEventRolled)
+                                Logger.Always("The Void Omen rolled is_" + darkEventRoll);
+                                // If the randomly chosen Dark Event has not appeared yet, make it happen!     
+                                if (!alreadyRolledDarkEvents.Contains(darkEventRoll))
                                 {
-
-                                }
-                                // But if all the Dark Event variables are already in use, we have to find the earliest TriggeredDarkEvent still in play
-                                // to replace it with the new darkevent
-                                else if(darkEventRolled==false)
-                                {
-                                    // So we create a new array and a new loop to record all the Dark Events already rolled.
-                                    int[] allTheDarkEventsAlreadyRolled = new int[20];
-                                    // And an array to record which variables hold which Dark Events
-                                    int[] allTheDarkEventsVariables = new int[difficulty];
-                                    
-                                    for (int x = 0; x < 20; x++)
+                                    // We can have as many simulateneous Dark Events in play as the mathematical expression of the difficulty level
+                                    for (int t = 0; t < difficulty; t++)
                                     {
-                                        if (geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x) != 0)
+                                        // There will be as many Dark Event variables (each storing an active Dark Event) as the ME of the difficulty level
+                                        // The first empty Dark Event variable will receive the new Dark Event
+                                        if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - t)) == 0)
                                         {
-                                            allTheDarkEventsAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x);
-                                            Logger.Always("Check Triggered Dark Events " + allTheDarkEventsAlreadyRolled[x]);
-                                        }
-                                    }
-
-                                    // Then we check our Dark Event variables to see which one has the earliest Dark Event already rolled                                
-                                    for (int x = 0; x < 20; x++)
-                                    {
-                                        // We will look through the DarkEvents variables in the order in which they were filled
-                                        for (int y = 0; y < difficulty; y++)
-                                        {
-                                            // And record which variable holds which Dark Event
-                                            if (geoLevelController.EventSystem.GetVariable("DarkEvent" + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
+                                            // This is the regular code to modify a Def, in this case the ODI event to which the Dark Event will be attached,
+                                            // so that it sets the Dark Event variable
+                                            oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
                                             {
-                                                allTheDarkEventsVariables[difficulty - y - 1] = allTheDarkEventsAlreadyRolled[x];
-                                                Logger.Always("Check Variable " + (difficulty - y) + " holding Dark Events " + allTheDarkEventsVariables[difficulty - y - 1]);
+                                                VariableName = voidOmen + (difficulty - t),
+                                                Value = { Min = darkEventRoll, Max = darkEventRoll },
+                                                IsSetOperation = true,
+                                            });
+                                            // This records which ODI event triggered which Dark Event
+                                            geoLevelController.EventSystem.SetVariable(triggeredVoidOmens + CurrentODI_Level, darkEventRoll);
+                                            // Raise the flag, we have a Dark Event!
+                                            darkEventRolled = true;
+                                            // Then close both loops:
+                                            t = 4;
+                                            i = 100;
+                                        }
+                                        // If that Dark Event variable is already used, we will record it in our array, by assigning 1 to the position
+                                        /* else
+                                         {
+                                             array[difficulty - 1 - t] = 1;
+                                         }
+                                         */
+                                    }
+                                    // If we managed to roll a Dark Event, because we found a dark event not in use and we found a variable to log it in,
+                                    // the Voland loop ends here
+                                    if (darkEventRolled)
+                                    {
+
+                                    }
+                                    // But if all the Dark Event variables are already in use, we have to find the earliest TriggeredDarkEvent still in play
+                                    // to replace it with the new darkevent
+                                    
+                                    else if (darkEventRolled == false)
+                                    {
+                                        Logger.Always("The i loop was done " + countI + " times");
+                                        // So we create a new array and a new loop to record all the Dark Events already rolled.
+                                        int[] allTheDarkEventsAlreadyRolled = new int[19];
+                                        // And an array to record which variables hold which Dark Events
+                                        int[] allTheDarkEventsVariables = new int[difficulty];
+
+                                        for (int x = 1; x < 20; x++)
+                                        {
+                                            if (geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) != 0)
+                                            {
+                                                allTheDarkEventsAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x);
+                                                Logger.Always("Check Triggered Void Omens " + allTheDarkEventsAlreadyRolled[x]);
                                             }
                                         }
-                                    }
-                                    // Then we try to find in the array of the Dark Variables which one appeared the earliest
-                                    for (int x = 0; x < 20; x++)
-                                    {
-                                        // We check, starting from the earliest, which Dark Event is still in play
-                                        if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x)))
+                                        int countVoidOmensY = 0;
+                                        int countVoidOmensX = 0;
+                                        int variablesUsed = 0;
+                                        // Then we check our Dark Event variables to see which one has the earliest Dark Event already rolled                                
+                                        for (int x = 1; x < 20; x++)
                                         {
-                                            // Then we locate in which Variable it is recorded
+                                            
+                                            // We will look through the DarkEvents variables in the order in which they were filled
                                             for (int y = 0; y < difficulty; y++)
                                             {
-                                                // Once we find it, that's where we want to put our new Dark Event
-                                                if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable("TriggeredDarkEvents" + x))
+                                                
+                                                // And record which variable holds which Dark Event
+                                                if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
                                                 {
-                                                    darkEventReplaced = allTheDarkEventsVariables[difficulty - y - 1];
-                                                    oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
+                                                    allTheDarkEventsVariables[difficulty - y - 1] = allTheDarkEventsAlreadyRolled[x];
+                                                    Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + allTheDarkEventsVariables[difficulty - y - 1]);
+                                                    variablesUsed++;
+                                                }
+                                                
+                                                countVoidOmensY++;
+                                            }
+                                            Logger.Always("the count of variables used is " + variablesUsed);
+                                            if (variablesUsed==difficulty)
+                                            {
+                                                x = 20;
+                                            }
+                                            countVoidOmensX++;
+                                        }
+                                        Logger.Always("The y loop was done " + countVoidOmensY);
+                                        Logger.Always("The x loop was done " + countVoidOmensX);
+                                        // Then we try to find in the array of the Dark Variables which one appeared the earliest
+                                        int xCounter = 0;
+                                        for (int x = 1; x < 20; x++)
+                                        {
+                                            xCounter++;
+                                            // We check, starting from the earliest, which Dark Event is still in play
+                                            if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
+                                            {
+                                                
+                                                // Then we locate in which Variable it is recorded
+                                                for (int y = 0; y < difficulty; y++)
+                                                {
+                                                    
+                                                    // Once we find it, that's where we want to put our new Dark Event
+                                                    if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
                                                     {
-                                                        VariableName = "DarkEvent" + (difficulty - y),
-                                                        Value = { Min = darkEventRoll, Max = darkEventRoll },
-                                                        IsSetOperation = true,
-                                                    });
-
-                                                    geoLevelController.EventSystem.SetVariable("TriggeredDarkEvents" + CurrentODI_Level, darkEventRoll);
-                                                    // And the flag is raised here too!
-                                                    darkEventRolled = true;
-                                                    // Close the loops when you leave!
-                                                    y = 5;
-                                                    x = 20;
-                                                    i = 100;
+                                                        
+                                                        darkEventReplaced = allTheDarkEventsVariables[difficulty - y - 1];
+                                                        Logger.Always("The Void Omen that will be replaced is "+ darkEventReplaced);
+                                                        oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
+                                                        {
+                                                            VariableName = voidOmen + (difficulty - y),
+                                                            Value = { Min = darkEventRoll, Max = darkEventRoll },
+                                                            IsSetOperation = true,
+                                                        });
+                                                        Logger.Always("The Void Omen Variable we are using is " + voidOmen + (difficulty-y));
+                                                        geoLevelController.EventSystem.SetVariable(triggeredVoidOmens + CurrentODI_Level, darkEventRoll);
+                                                        // And the flag is raised here too!
+                                                        darkEventRolled = true;
+                                                        Logger.Always("Void Omen rolled "+ darkEventRolled);
+                                                        // Close the loops when you leave!
+                                                        y = 5;
+                                                        x = 20;
+                                                        i = 100;
+                                                        Logger.Always("Everything working in this method");
+                                                        Logger.Always("This x loop was done " + xCounter + " times");
+                                                    }
                                                 }
                                             }
                                         }
                                     }
-                                }                              
+                                }
                             }
-                        }                            
+                        }
                     }
                     // The ODI event is triggered
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
                     geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
-                    // And if a Dark Event has been rolled, a Dark Event will appear 
+                    //UpdateODITracker(CurrentODI_Level, geoLevelController); not used currently, because clogs the UI
+                    // And if a Dark Event has been rolled, a Dark Event will appear
+                    if(darkEventRolled && geoLevelController.EventSystem.GetVariable(voidOmen + difficulty) == darkEventRoll && geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - 1)) == 0) 
+                    {
+                        GeoscapeEventDef voidOmenIntro = geoLevelController.EventSystem.GetEventByID("VoidOmen");
+                        voidOmenIntro.GeoscapeEventData.Title.LocalizationKey = "VOID_OMEN_INTRO_TITLE";
+                        voidOmenIntro.GeoscapeEventData.Description[0].General.LocalizationKey = "VOID_OMEN_INTRO";
+                        geoLevelController.EventSystem.TriggerGeoscapeEvent("VoidOmen", geoscapeEventContext);
+                    } 
+
                     if (darkEventRolled)
                     {
                         string title = (string)DarkEvents_Title.GetValue(darkEventRoll-1);
@@ -427,7 +479,7 @@ namespace PhoenixRising.BetterGeoscape
                         if (darkEventReplaced != 0) 
                         {
                             string objectiveToBeReplaced = (string)DarkEvents_Title.GetValue(darkEventReplaced - 1);                                
-                            Logger.Always(objectiveToBeReplaced);
+                            Logger.Always("The target event that will be replaced is " + objectiveToBeReplaced);
                             RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
                             darkEventReplaced= 0;
                         } 
@@ -443,26 +495,107 @@ namespace PhoenixRising.BetterGeoscape
 
         public static void CreateDarkEventObjective(string title, string description, GeoLevelController level)
         {
-            DiplomaticGeoFactionObjective darkEventObjective = new DiplomaticGeoFactionObjective(level.AlienFaction, level.PhoenixFaction)
+            try
             {
-                Title = new Base.UI.LocalizedTextBind(title),
-                Description = new Base.UI.LocalizedTextBind(description),
+
+                DiplomaticGeoFactionObjective darkEventObjective = new DiplomaticGeoFactionObjective(level.PhoenixFaction, level.PhoenixFaction)
+            {
+                Title = new LocalizedTextBind(title),
+                Description = new LocalizedTextBind(description),
             };
            level.PhoenixFaction.AddObjective(darkEventObjective);
-           
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
         }
+
+        [HarmonyPatch(typeof(GeoFactionObjective), "GetIcon")]
+        internal static class BG_GeoFactionObjective_GetIcon_patch
+        {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        private static void Postfix(ref Sprite __result, GeoFactionObjective __instance)
+        {
+                try
+                {
+                    if (__instance.Title.LocalizationKey.Contains("DARK_EVENT_TITLE_"))
+                    {
+                        __result = Helper.CreateSpriteFromImageFile("Void-04P.png");
+                    }
+
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        /*    [HarmonyPatch(typeof(GeoObjectiveElementController), "SetObjective")]
+            internal static class BG_GeoObjectiveElementController_SetObjective_patch
+            {
+                [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+                private static void Postfix(string objectiveText, Sprite icon, LocalizedTextBind tooltipText)
+                {
+                    try
+                    {
+                        if (DarkEvents_Title.Contains(objectiveText))
+                        {
+                            icon = Helper.CreateSpriteFromImageFile("Void-04P.png");
+                            tooltipText.LocalizationKey = objectiveText;
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error(e);
+                    }
+                }
+            }*/
+
+
         public static void RemoveDarkEventObjective(string title, GeoLevelController level)
         {
-         
-            DiplomaticGeoFactionObjective darkEventObjective = 
+            try
+            {
+                DiplomaticGeoFactionObjective darkEventObjective = 
             (DiplomaticGeoFactionObjective)level.PhoenixFaction.Objectives.FirstOrDefault(ged => ged.Title.LocalizationKey.Equals(title));
             string checktitle = darkEventObjective.GetTitle();
             Logger.Always("the title in the RemoveDarkEventObjective method is " + title);
            // Logger.Always("the localizedTextBind in the RemoveDarkEventObjective method is " + localizedTextBind);
             Logger.Always("if we found the objective, there should be something here " + checktitle);
             level.PhoenixFaction.RemoveObjective(darkEventObjective);
-        }
+                }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
 
+}
+
+        //ODI Tracker
+        /*
+        public static void UpdateODITracker(int odiLevel, GeoLevelController level)
+        {
+
+            if (odiLevel > 0)
+            {
+                DiplomaticGeoFactionObjective oldOdiTracker =
+               (DiplomaticGeoFactionObjective)level.PhoenixFaction.Objectives.FirstOrDefault(ged => ged.Title.LocalizationKey.Equals("SDI_TITLE_" + (odiLevel)));
+
+                level.PhoenixFaction.RemoveObjective(oldOdiTracker);
+            }
+
+            DiplomaticGeoFactionObjective newOdiTracker = new DiplomaticGeoFactionObjective(level.AlienFaction, level.PhoenixFaction)
+            {
+                Title = new LocalizedTextBind("SDI_TITLE_"+(odiLevel+1)),
+                Description = new LocalizedTextBind("test"),
+                IsCriticalPath = true,
+            };
+            level.PhoenixFaction.AddObjective(newOdiTracker);
+        }*/
+
+        // Patch to increase damage by 2% per mutated body part per Delirium point
         [HarmonyPatch(typeof(CorruptionStatus), "GetMultiplier")]
         internal static class BG_CorruptionStatus_GetMultiplier_Mutations_patch
         {
@@ -497,14 +630,215 @@ namespace PhoenixRising.BetterGeoscape
                     Logger.Error(e);
                 }
             }
-        }    
+        }
 
+        //General method to calculate max Delirium a character on geo can have taking into account ODI and bionics
+        public static float CalculateMaxCorruption(GeoCharacter character)
+            {
 
+                try
+                {
+                    float maxCorruption = 0;
+                    int bionics = 0;
+                    int currentODIlevel = character.Faction.GeoLevel.EventSystem.GetVariable("BC_SDI");
+                    int odiPerc = currentODIlevel * 100 / ODI_EventIDs.Length;
 
-                // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
-                // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
-                // Tell Harmony what original method in what class should get patched, the following class after this directive will be used to perform own code by injection
-                [HarmonyPatch(typeof(CorruptionStatus), "CalculateValueIncrement")]
+                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
+                    foreach (GeoItem bionic in character.ArmourItems)
+                    {
+                        if (bionic.ItemDef.Tags.Contains(bionicalTag))
+
+                            bionics += 1;
+                    }
+                        if (odiPerc < 25)
+                        {
+                            maxCorruption = character.CharacterStats.Willpower.IntMax / 3;
+
+                            if (bionics == 1)
+                            {
+                                return maxCorruption -= maxCorruption * 0.33f;
+                            }
+
+                            if (bionics == 2)
+                            {
+                                return maxCorruption -= maxCorruption * 0.66f;
+                            }
+                            else
+                            {
+                             return maxCorruption;
+                            }
+                        }
+                        else
+                        {
+                            if (odiPerc < 75)
+                            {
+                                maxCorruption = character.CharacterStats.Willpower.IntMax * 1 / 2;
+
+                                if (bionics == 1)
+                                {
+                                    return maxCorruption -= maxCorruption * 0.33f;
+                                }
+
+                                if (bionics == 2)
+                                {
+                                    return maxCorruption -= maxCorruption * 0.66f;
+                                }
+                                 else
+                                {
+                                    return maxCorruption;
+                                }
+                             }
+                            else // > 75%
+                            {
+                                maxCorruption = character.CharacterStats.Willpower.IntMax;
+
+                                if (bionics == 1)
+                                {
+                                    return maxCorruption -= maxCorruption * 0.33f;
+                                }
+
+                                if (bionics == 2)
+                                {
+                                    return maxCorruption -= maxCorruption * 0.66f;
+                                }
+
+                                else
+                                {
+                                return maxCorruption;
+                                }
+
+                            }
+                        }
+                }
+                catch (System.Exception e)
+                {
+                    Logger.Error(e);
+                }
+            
+            throw new InvalidOperationException();
+            }
+
+        
+        // General method to calculate Stamina effect on Delirium, where each 10 stamina reduces Delirium effects by 1
+        public static int CalculateStaminaEffectOnDelirium(GeoCharacter character)
+        {
+            {
+
+                try
+                {
+                   /* string stamina40 = "<color=#18f005>-4 to Delirium effect(WP loss)</color>";
+                    string stamina30to39 = "<color=#c1f005>-3 to Delirium effect(WP loss)</color>";
+                    string stamina20to29 = "<color=#f0e805>-2 to Delirium effect(WP loss)</color>";
+                    string stamina10to19 = "<color=##f07b05>-1 to Delirium effect(WP loss)</color>";
+                    string stamina0to9= "<color=#f00505>Delirium has full effect</color>";*/
+
+                    if (character.Fatigue.Stamina == 40) 
+                    {
+                        return 4;
+                    }
+                    else if(character.Fatigue.Stamina <40 && character.Fatigue.Stamina >=30)
+                    {
+                        return 3;
+                    }
+                    else if (character.Fatigue.Stamina < 30 && character.Fatigue.Stamina >= 20)
+                    {
+                        return 2;
+                    }
+                    else if (character.Fatigue.Stamina < 20 && character.Fatigue.Stamina >= 10)
+                    {
+                        return 1;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+      
+                }
+                catch (System.Exception e)
+                {
+                    Logger.Error(e);
+                }
+            
+            throw new InvalidOperationException();
+            }
+        }
+
+       
+        //This method changes how WP are displayed in the Edit personnel screen, to show effects of Delirium on WP
+
+        [HarmonyPatch(typeof(UIModuleCharacterProgression), "GetStarBarValuesDisplayString")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        internal static class BG_UIModuleCharacterProgression_RefreshStatPanel_patch
+        {
+            
+            private static void Postfix(GeoCharacter ____character, ref string __result, CharacterBaseAttribute attribute, int currentAttributeValue)
+            {
+                try
+                {
+                    if (____character.CharacterStats.Corruption > CalculateStaminaEffectOnDelirium(____character) && attribute.Equals(CharacterBaseAttribute.Will))
+                    {
+                        __result = $"<color=#da5be3>{currentAttributeValue - ____character.CharacterStats.Corruption.Value + CalculateStaminaEffectOnDelirium(____character)}</color>" + $"({currentAttributeValue}) / "  +
+                        $"{____character.Progression.GetMaxBaseStat(CharacterBaseAttribute.Will)}";
+                    }          
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        //
+        //This changes display of Delirium bar in personnel edit screen to show current Delirium value vs max delirium value the character can have
+        // taking into account ODI level and bionics
+        [HarmonyPatch(typeof(UIModuleCharacterProgression), "SetStatusesPanel")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+        internal static class BG_UIModuleCharacterProgression_SetStatusesPanel_patch
+        {
+            
+            private static void Postfix(UIModuleCharacterProgression __instance, GeoCharacter ____character)
+            {
+                try
+                {
+                    if (____character.CharacterStats.Corruption > 0f)
+                   
+                    {
+                        __instance.CorruptionSlider.minValue = 0f;
+                        __instance.CorruptionSlider.maxValue = CalculateMaxCorruption(____character);
+                        __instance.CorruptionSlider.value = ____character.CharacterStats.Corruption.IntValue;
+                        __instance.CorruptionStatText.text = $"{____character.CharacterStats.Corruption.IntValue}/{Mathf.RoundToInt(__instance.CorruptionSlider.maxValue)}";
+
+                        int num = (int)(float)____character.Fatigue.Stamina;
+                        int num2 = (int)(float)____character.Fatigue.Stamina.Max;
+                        __instance.StaminaSlider.minValue = 0f;
+                        __instance.StaminaSlider.maxValue = num2;
+                        __instance.StaminaSlider.value = num;
+                        if (num != num2)
+                        {
+                            string deliriumReducedStamina = "";
+                            for(int i = 0; i < CalculateStaminaEffectOnDelirium(____character); i++) 
+                            {
+                                deliriumReducedStamina += "-";
+
+                            }
+                            __instance.StaminaStatText.text = $"<color=#da5be3>{deliriumReducedStamina}</color>" + num + "/" + num2;
+                        }
+                        else
+                        {
+                            __instance.StaminaStatText.text = "<color=#da5be3> ---- </color>" + num.ToString();
+                        }  
+                    }                    
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        // Harmony patch to change the result of CorruptionStatus.CalculateValueIncrement() to be capped by ODI
+        // When ODI is <25%, max corruption is 1/3, between 25 and 50% ODI, max corruption is 2/3, and ODI >50%, corruption can be 100%
+        // Tell Harmony what original method in what class should get patched, the following class after this directive will be used to perform own code by injection
+        [HarmonyPatch(typeof(CorruptionStatus), "CalculateValueIncrement")]
 
         // The class that holds the code we want to inject, the name can be anything, but the more accurate the better it is for bug hunting
         internal static class BC_CorruptionStatus_CalculateValueIncrement_patch
@@ -652,7 +986,7 @@ namespace PhoenixRising.BetterGeoscape
                     TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
 
                     // Get characters geoscape stamina by his actor ID
-                    int odiPerc = CurrentODI_Level * 100 / ODI_EventIDs.Length;
+                  
                     int stamina = 40;
                     if (StaminaMap.ContainsKey(base_TacticalActor.GeoUnitId))
                     {
@@ -660,81 +994,33 @@ namespace PhoenixRising.BetterGeoscape
                     }
 
                     // Calculate WP reduction dependent on stamina
-                    float wpReduction = 0; // stamina > 35 and ODI < 25
-                    
-                    if (odiPerc < 25)
-                    {
-                        
+                    float wpReduction = base_TacticalActor.CharacterStats.Corruption;
 
-                        if (stamina > 30 && stamina <= 35)
+                    if (VolandsPlayground.VoidOmen3Active || VolandsPlayground.VoidOmen3Activated)
+                    {
+                        wpReduction = 0;
+                    }
+                    else
+                    {
+                        wpReduction = base_TacticalActor.CharacterStats.Corruption; // stamina between 0 and 10
+
+                        if (stamina == 40)
                         {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption - 4;
                         }
-                        else if (stamina > 25 && stamina <= 30)
+                        else if (stamina >= 30 && stamina < 40)
                         {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption - 3;
                         }
-                        else if (stamina > 20 && stamina <= 25)
+                        else if (stamina >= 20 && stamina < 30)
                         {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption - 2;
                         }
-                        else if (stamina <= 20)
+                        else if (stamina >= 10 && stamina < 20)
                         {
-                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
+                            wpReduction = base_TacticalActor.CharacterStats.Corruption - 1;
                         }
                     }
-                    if (odiPerc >= 25 && odiPerc < 50)
-                    {
-                        
-                        if (stamina > 35 && stamina <= 40)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.25f);
-                        }
-                        else if (stamina > 30 && stamina <= 35)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
-                        }
-                        else if (stamina > 25 && stamina <= 30)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
-                        }
-                        else if (stamina <= 25)
-                        {
-                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
-                        }
-                    }
-
-                    if (odiPerc >= 50 && odiPerc < 75)
-                    {
-
-                        if (stamina > 35 && stamina <= 40)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.5f);
-                        }
-                        else if (stamina > 30 && stamina <= 35)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
-                        }
-                        else if (stamina <= 30)
-                        {
-                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
-                        }
-                    }
-
-                    if (odiPerc >= 75)
-                    {
-
-                        if (stamina > 35 && stamina <= 40)
-                        {
-                            wpReduction = Mathf.Round(base_TacticalActor.CharacterStats.Corruption * 0.75f);
-                        }
-                        else 
-                        {
-                            wpReduction = base_TacticalActor.CharacterStats.Corruption;
-                        }
-                    }
-
-
 
                     // Like the original calculation, but adapted with 'maxCorruption'
                     __result = new StatModification(StatModificationType.Add,
@@ -748,12 +1034,9 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Error(e);
                 }
-
             }
-
         }
-
-
+       
         [HarmonyPatch(typeof(GeoCharacter), "CureCorruption")]
         public static class GeoCharacter_CureCorruption_SetStaminaTo0_patch
         {
@@ -780,8 +1063,12 @@ namespace PhoenixRising.BetterGeoscape
                     };
 
                     int num = UnityEngine.Random.Range(0, 200);
+                    // GeoscapeTutorialStepsDef stepTest = Repo.GetAllDefs<GeoscapeTutorialStepsDef>().FirstOrDefault(ged => ged.name.Equals("GeoscapeTutorialStepsDef"));
+                   // GeoscapeTutorialStep test = new GeoscapeTutorialStep();
+                   // test.Title.LocalizationKey = $"test";
+                   // test.Description.LocalizationKey = $"testing";
 
-                                       
+
                     if (num >= 0 && num <= 50)
                     {
                         for (int i = 0; i < 100; i++)
@@ -789,7 +1076,11 @@ namespace PhoenixRising.BetterGeoscape
                            TacticalAbilityDef abilityToAdd=abilityList.GetRandomElement();
                            if (!__instance.Progression.Abilities.Contains(abilityToAdd)) 
                            {
+                                
                                 __instance.Progression.AddAbility(abilityToAdd);
+                                //__instance.Faction.GeoLevel.View.GeoscapeModules.TutorialModule.SetTutorialStep(test, false);
+                                GameUtl.GetMessageBox().ShowSimplePrompt($"{__instance.GetName()}"+" got a nasty perk, called " + $"<b>{abilityToAdd.ViewElementDef.DisplayName1.LocalizationKey}</b>" + "\n\n"+$"<i>{ abilityToAdd.ViewElementDef.Description.LocalizationKey}</i>", MessageBoxIcon.None, MessageBoxButtons.OK, null);
+
                                 i = 100;
                            }                            
                         }                                           

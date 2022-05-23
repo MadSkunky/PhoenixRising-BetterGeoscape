@@ -22,8 +22,8 @@ namespace PhoenixRising.BetterGeoscape
                 CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
                 CustomMissionTypeDef SourceScavCratesALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("ScavCratesALN_CustomMissionTypeDef"));
                 var pickResourceCratesObjective = SourceScavCratesALN.CustomObjectives[2];
-                AmbushALN.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushALN.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushALN.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushALN.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushALN.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
@@ -32,8 +32,8 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushALN.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushAN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAN_CustomMissionTypeDef"));
-                AmbushAN.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushAN.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushAN.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushAN.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushAN.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushAN.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushAN.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
@@ -42,8 +42,8 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushAN.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushBandits = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushBandits_CustomMissionTypeDef"));
-                AmbushBandits.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushBandits.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushBandits.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushBandits.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushBandits.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushBandits.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushBandits.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
@@ -52,8 +52,8 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushBandits.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushFallen = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushFallen_CustomMissionTypeDef"));
-                AmbushFallen.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushFallen.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushFallen.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushFallen.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushFallen.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushFallen.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushFallen.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
@@ -62,8 +62,8 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushFallen.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushNJ = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushNJ_CustomMissionTypeDef"));
-                AmbushNJ.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushNJ.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushNJ.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushNJ.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushNJ.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushNJ.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushNJ.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
@@ -72,8 +72,8 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushNJ.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushPure = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushPure_CustomMissionTypeDef"));
-                AmbushPure.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushPure.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushPure.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushPure.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushPure.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushPure.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushPure.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;
@@ -82,8 +82,8 @@ namespace PhoenixRising.BetterGeoscape
                 AmbushPure.CustomObjectives[2] = pickResourceCratesObjective;
 
                 CustomMissionTypeDef AmbushSY = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushSY_CustomMissionTypeDef"));
-                AmbushSY.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                AmbushSY.ParticipantsData[0].ReinforcementsTurns.Min = 1;
+                AmbushSY.ParticipantsData[0].ReinforcementsTurns.Max = 2;
+                AmbushSY.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                 AmbushSY.CratesDeploymentPointsRange = SourceScavCratesALN.CratesDeploymentPointsRange;
                 AmbushSY.MissionSpecificCrates = SourceScavCratesALN.MissionSpecificCrates;
                 AmbushSY.FactionItemsRange = SourceScavCratesALN.FactionItemsRange;

@@ -21,6 +21,7 @@ using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.DifficultySystem;
 using PhoenixPoint.Geoscape.Entities.Interception.Equipments;
 using PhoenixPoint.Geoscape.Entities.Missions;
+using PhoenixPoint.Geoscape.Entities.Missions.Outcomes;
 using PhoenixPoint.Geoscape.Entities.Missions.ThreatLevel;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
 using PhoenixPoint.Geoscape.Entities.Sites;
@@ -280,6 +281,8 @@ namespace PhoenixRising.BetterGeoscape
                 */
                 GeoscapeEventDef darkEvent = Helper.CreateDefFromClone(sourceLoseGeoEvent, "4585B351-3403-4798-B45A-B9DAD77361ED", "DarkEventDef");
                 darkEvent.GeoscapeEventData.EventID = "DarkEvent";
+                GeoscapeEventDef voidOmen = Helper.CreateDefFromClone(sourceLoseGeoEvent, "396AE9AA-3E2F-440A-83D0-C89255DCB92D", "VoidOmenEventDef");
+                voidOmen.GeoscapeEventData.EventID = "VoidOmen";
 
             }
             catch (Exception e)
@@ -311,8 +314,8 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     level.EventSystem.ExplorationAmbushChance = 100;
                                     CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
-                                    AmbushALN.ParticipantsData[0].ReinforcementsDeploymentPart.Max = 0.5f;
-                                    AmbushALN.ParticipantsData[0].ReinforcementsDeploymentPart.Min = 0.5f;
+                                    AmbushALN.ParticipantsData[0].ReinforcementsTurns.Max = 1;
+                                    AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 1;
                                     AmbushALN.CratesDeploymentPointsRange.Min = 50;
                                     AmbushALN.CratesDeploymentPointsRange.Max = 70;
                                     Logger.Always("Exploration ambush chance is now " + level.EventSystem.ExplorationAmbushChance);
@@ -327,16 +330,20 @@ namespace PhoenixRising.BetterGeoscape
                                         {
                                             for (int t = 0; t < choice.Outcome.Diplomacy.Count; t++)
                                             {
-                                                if (choice.Outcome.Diplomacy[t].Value >= 0)
+                                                if (choice.Outcome.Diplomacy[t].Value != 0)
                                                 {
                                                     OutcomeDiplomacyChange diplomacyChange = choice.Outcome.Diplomacy[t];
-                                                    diplomacyChange.Value = Mathf.RoundToInt(diplomacyChange.Value * 0.8f);
+                                                    diplomacyChange.Value = Mathf.RoundToInt(diplomacyChange.Value * 0.5f);
                                                     choice.Outcome.Diplomacy[t] = diplomacyChange;
-
                                                 }
                                             }
                                         }
-                                    }
+                                    }                                   
+                                    foreach(DiplomacyMissionOutcomeDef diplomacyMissionOutcomeDef in Repo.GetAllDefs<DiplomacyMissionOutcomeDef>()) 
+                                    {
+                                        diplomacyMissionOutcomeDef.DiplomacyToFaction.Max = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Max * 0.5f);
+                                        diplomacyMissionOutcomeDef.DiplomacyToFaction.Min = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Min * 0.5f);
+                                    }                  
                                     darkEventsCheck[j] = true;
                                 }
                                 if (j == 3 && darkEventsCheck[j] == false)
@@ -376,7 +383,6 @@ namespace PhoenixRising.BetterGeoscape
                                     }
                                     darkEventsCheck[j] = true;
                                 }
-
                             }
                         }
                     }
