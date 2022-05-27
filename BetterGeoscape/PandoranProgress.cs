@@ -2,14 +2,11 @@
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.Entities;
-using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -36,7 +33,7 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
 
                 //reducing evolution per day because there other sources of evolution points now
-                veryhard.EvolutionProgressPerDay = 50; //vanilla 100
+                veryhard.EvolutionProgressPerDay = 70; //vanilla 100
 
                 //Hero
                 GameDifficultyLevelDef hard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Hard_GameDifficultyLevelDef"));
@@ -53,7 +50,7 @@ namespace PhoenixRising.BetterGeoscape
                 hard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
 
                 //reducing evolution per day because there other sources of evolution points now
-                hard.EvolutionProgressPerDay = 40; //vanilla 70
+                hard.EvolutionProgressPerDay = 60; //vanilla 70
 
                 //Standard
                 GameDifficultyLevelDef standard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Standard_GameDifficultyLevelDef"));
@@ -70,7 +67,7 @@ namespace PhoenixRising.BetterGeoscape
                 standard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
 
                 //reducing evolution per day because there other sources of evolution points now
-                standard.EvolutionProgressPerDay = 30; //vanilla 55
+                standard.EvolutionProgressPerDay = 40; //vanilla 55
 
                 //Easy
                 GameDifficultyLevelDef easy = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Easy_GameDifficultyLevelDef"));
@@ -81,10 +78,7 @@ namespace PhoenixRising.BetterGeoscape
                 easy.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
 
                 //reducing evolution per day because there other sources of evolution points now
-                easy.EvolutionProgressPerDay = 20; //vanilla 35
-
-
-
+                easy.EvolutionProgressPerDay = 35; //vanilla 35
 
                 //Remove faction diplo penalties for not destroying revealed PCs and increase rewards for haven leader
                 GeoAlienBaseTypeDef nestType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Nest_GeoAlienBaseTypeDef"));              
@@ -131,6 +125,7 @@ namespace PhoenixRising.BetterGeoscape
             [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
             private static void Postfix(GeoAlienFaction __instance, List<GeoAlienBase> ____bases)
             {
+
                 GeoAlienBaseTypeDef nestType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Nest_GeoAlienBaseTypeDef"));
                 GeoAlienBaseTypeDef lairType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Lair_GeoAlienBaseTypeDef"));
                 GeoAlienBaseTypeDef citadelType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Citadel_GeoAlienBaseTypeDefv"));
@@ -142,30 +137,27 @@ namespace PhoenixRising.BetterGeoscape
                 int palace = 0;
 
                 foreach (GeoAlienBase alienBase in ____bases)
-                {
-                    for (int i = 0; i < ____bases.Count; i++)
+                {                  
+                    if (alienBase.AlienBaseTypeDef.Equals(nestType))
                     {
-                        if (alienBase.AlienBaseTypeDef.Equals(nestType))
-                        {
-                            nests++;                          
-                        }
-                        else if (alienBase.AlienBaseTypeDef.Equals(lairType))
-                        {
-                            lairs++;                    
-                        }
-                        else if (alienBase.AlienBaseTypeDef.Equals(citadelType))
-                        {
-                            citadels++;
-                        }
-                        else if (alienBase.AlienBaseTypeDef.Equals(palaceType))
-                        {
-                            palace++;
-                        }
+                       nests++;                          
                     }
+                    else if (alienBase.AlienBaseTypeDef.Equals(lairType))
+                    {
+                       lairs++;                    
+                    }
+                    else if (alienBase.AlienBaseTypeDef.Equals(citadelType))
+                    {
+                       citadels++;
+                    }
+                    else if (alienBase.AlienBaseTypeDef.Equals(palaceType))
+                    {
+                      palace++;
+                    }               
                 }
                 int difficulty = __instance.GeoLevel.CurrentDifficultyLevel.Order;
-                __instance.AddEvolutionProgress(nests * difficulty + lairs * 2 * difficulty + citadels * 3 * difficulty);
-                Logger.Always("There are " + nests+ ", " + lairs+"lairs and "+citadels+" citadels on " + __instance.GeoLevel.ElaspedTime);
+                __instance.AddEvolutionProgress(nests * difficulty * 2 + lairs * 4 * difficulty + citadels * 5 * difficulty);
+                Logger.Always("There are " + nests+ " nests, " + lairs+" lairs and "+citadels+" citadels on " + __instance.GeoLevel.ElaspedTime);
             }
         }
 

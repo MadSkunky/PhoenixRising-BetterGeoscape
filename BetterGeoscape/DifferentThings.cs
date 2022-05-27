@@ -2,6 +2,8 @@
 using PhoenixPoint.Common.Entities.Items;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
+using PhoenixPoint.Tactical.Entities;
+using PhoenixPoint.Tactical.Levels.Mist;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +12,34 @@ using System.Threading.Tasks;
 
 namespace PhoenixRising.BetterGeoscape
 {
+
+    //This looks like the method for AI to evaluate how much damage it will do with an attack. May be useful for implementing attack for Umbra
+/*
+    public void CalculateDamageResultForAiTarget(TacticalActorBase targetActorBase, IDamageReceiver receiver, ref DamageResult damageResult)
+    {
+        foreach (DamageKeywordPair item in DamageKeywords.Where((DamageKeywordPair k) => k.DamageKeywordDef.UseForAiVulnerabilityCheck))
+        {
+            float keywordValue = item.Value * receiver.GetDamageMultiplierFor(item.DamageKeywordDef.DamageTypeDef, this);
+            float num = 0f;
+            TacticalActor tacticalActor;
+            if ((object)(tacticalActor = (receiver as TacticalActor)) != null)
+            {
+                foreach (ItemSlot healthSlot in tacticalActor.BodyState.GetHealthSlots())
+                {
+                    num = Mathf.Max(num, healthSlot.GetArmor());
+                }
+            }
+            else
+            {
+                num = receiver.GetArmor();
+            }
+
+            num -= GenerateArmourPiercingAmount();
+            item.DamageKeywordDef.ApplyAiEvaluationEffect(targetActorBase, keywordValue, num, ref damageResult);
+        }
+    }  */
+
+
     internal class DifferentThings
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;

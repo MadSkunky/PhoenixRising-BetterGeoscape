@@ -1,55 +1,21 @@
 ﻿using Base;
 using Base.Core;
 using Base.Defs;
-using Base.Entities.Abilities;
-using Base.Entities.Statuses;
-using Base.Eventus;
-using Base.Levels;
 using Base.UI;
 using Harmony;
 using PhoenixPoint.Common.Core;
-using PhoenixPoint.Common.Entities;
-using PhoenixPoint.Common.Entities.Addons;
-using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Common.Entities.GameTags;
-using PhoenixPoint.Common.Entities.Items;
-using PhoenixPoint.Common.Levels.Missions;
-using PhoenixPoint.Common.View.ViewControllers.Inventory;
-using PhoenixPoint.Geoscape;
-using PhoenixPoint.Geoscape.Achievements;
 using PhoenixPoint.Geoscape.Entities;
-using PhoenixPoint.Geoscape.Entities.DifficultySystem;
-using PhoenixPoint.Geoscape.Entities.Interception.Equipments;
-using PhoenixPoint.Geoscape.Entities.Missions;
-using PhoenixPoint.Geoscape.Entities.Missions.Outcomes;
-using PhoenixPoint.Geoscape.Entities.Missions.ThreatLevel;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
-using PhoenixPoint.Geoscape.Entities.Sites;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
-using PhoenixPoint.Geoscape.InterceptionPrototype.UI;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
-using PhoenixPoint.Geoscape.Levels.Objectives;
-using PhoenixPoint.Geoscape.View;
-using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
-using PhoenixPoint.Geoscape.View.ViewControllers.Inventory;
-using PhoenixPoint.Geoscape.View.ViewModules;
-using PhoenixPoint.Tactical.Entities;
-using PhoenixPoint.Tactical.Entities.Abilities;
-using PhoenixPoint.Tactical.Entities.ActorsInstance;
-using PhoenixPoint.Tactical.Entities.Effects;
-using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
-using PhoenixPoint.Tactical.Levels;
-using PhoenixPoint.Tactical.Levels.FactionObjectives;
-using PhoenixPoint.Tactical.Levels.Missions;
-using PhoenixPoint.Tactical.View.ViewControllers;
-using PhoenixPoint.Tactical.View.ViewStates;
+using PhoenixPoint.Tactical.Levels.Mist;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEngine;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -290,9 +256,7 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
         }
-        
-        public static bool[] darkEventsCheck = new bool[6];
-
+      
         [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
         public static class PhoenixStatisticsManager_OnGeoscapeLevelStart_VoidOmens_Patch
         {
@@ -301,91 +265,8 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    int difficulty = level.CurrentDifficultyLevel.Order;
-                    string darkEvent = "DarkEvent";
-
-                    for (int i = 1; i < difficulty + 1; i++)
-                    {
-                        for (int j = 1; j < 6; j++)
-                        {
-                            if (level.EventSystem.GetVariable(darkEvent + i) == j)
-                            {
-                                if (j == 1 && darkEventsCheck[j] == false)
-                                {
-                                    level.EventSystem.ExplorationAmbushChance = 100;
-                                    CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
-                                    AmbushALN.ParticipantsData[0].ReinforcementsTurns.Max = 1;
-                                    AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 1;
-                                    AmbushALN.CratesDeploymentPointsRange.Min = 50;
-                                    AmbushALN.CratesDeploymentPointsRange.Max = 70;
-                                    Logger.Always("Exploration ambush chance is now " + level.EventSystem.ExplorationAmbushChance);
-                                    Logger.Always("Alien ambushes can now have a max of  " + AmbushALN.CratesDeploymentPointsRange.Max / 10 + " crates");
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 2 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
-                                    {
-                                        foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
-                                        {
-                                            for (int t = 0; t < choice.Outcome.Diplomacy.Count; t++)
-                                            {
-                                                if (choice.Outcome.Diplomacy[t].Value != 0)
-                                                {
-                                                    OutcomeDiplomacyChange diplomacyChange = choice.Outcome.Diplomacy[t];
-                                                    diplomacyChange.Value = Mathf.RoundToInt(diplomacyChange.Value * 0.5f);
-                                                    choice.Outcome.Diplomacy[t] = diplomacyChange;
-                                                }
-                                            }
-                                        }
-                                    }                                   
-                                    foreach(DiplomacyMissionOutcomeDef diplomacyMissionOutcomeDef in Repo.GetAllDefs<DiplomacyMissionOutcomeDef>()) 
-                                    {
-                                        diplomacyMissionOutcomeDef.DiplomacyToFaction.Max = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Max * 0.5f);
-                                        diplomacyMissionOutcomeDef.DiplomacyToFaction.Min = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Min * 0.5f);
-                                    }                  
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 3 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (TacticalAbilityDef tacticalAbility in Repo.GetAllDefs<TacticalAbilityDef>())
-                                    {
-                                        if (tacticalAbility.WillPointCost > 0)
-                                        {
-                                            tacticalAbility.WillPointCost = Mathf.RoundToInt(tacticalAbility.WillPointCost * 1.5f);
-                                        }
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 4 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
-                                    {
-                                        missionTypeDef.MaxPlayerUnits = 6;
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 5 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
-                                    {
-                                        if (missionTypeDef.name.Contains("Haven") && !missionTypeDef.name.Contains("Infestation"))
-                                        {
-                                            TacCrateDataDef cratesNotResources = Repo.GetAllDefs<TacCrateDataDef>().FirstOrDefault(ged => ged.name.Equals("Default_TacCrateDataDef"));
-                                            missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Enemy;
-                                            missionTypeDef.ParticipantsData[1].PredeterminedFactionEffects = missionTypeDef.ParticipantsData[0].PredeterminedFactionEffects;
-                                            missionTypeDef.MissionSpecificCrates = cratesNotResources;
-                                            missionTypeDef.FactionItemsRange.Min = 2;
-                                            missionTypeDef.FactionItemsRange.Max = 7;
-                                            missionTypeDef.CratesDeploymentPointsRange.Min = 20;
-                                            missionTypeDef.CratesDeploymentPointsRange.Max = 30;
-                                        }
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-                            }
-                        }
-                    }
+                    VoidOmens.CreateVoidOmens(level);
+                    VoidOmens.CheckForRemovedVoidOmens(level);
                 }
                 catch (Exception e)
                 {
@@ -393,9 +274,6 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-
-        public static bool VoidOmen3Active = false;
-        public static bool VoidOmen3Activated = false; 
 
         [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelEnd")]
         public static class PhoenixStatisticsManager_OnGeoscapeLevelEnd_VoidOmens_Patch
@@ -405,16 +283,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    int difficulty = level.CurrentDifficultyLevel.Order;
-                    string darkEvent = "DarkEvent";
-
-                    for (int i = 1; i < difficulty + 1; i++)
-                    {
-                       if (level.EventSystem.GetVariable(darkEvent + i) == 3)
-                       {
-                            VoidOmen3Active = true;
-                       }           
-                    }
+                    VoidOmens.CheckForVoidOmensRequiringTacticalPatching(level);                   
                 }
                 catch (Exception e)
                 {
@@ -431,18 +300,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    if (VoidOmen3Active && VoidOmen3Activated == false) 
-                    {
-                        foreach (TacticalAbilityDef tacticalAbility in Repo.GetAllDefs<TacticalAbilityDef>())
-                        {
-                            if (tacticalAbility.WillPointCost > 0)
-                            {
-                                tacticalAbility.WillPointCost = Mathf.RoundToInt(tacticalAbility.WillPointCost * 1.5f);
-                            }
-                        }
-                        VoidOmen3Activated = true;
-                    }
-
+                    VoidOmens.ImplementVoidOmen3OnTactical();
                 }
                 catch (Exception e)
                 {
@@ -458,88 +316,8 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    int difficulty = __instance.GeoLevel.CurrentDifficultyLevel.Order;
-                    string darkEvent = "DarkEvent";                   
-
-                    for (int i = 1; i < difficulty+1; i++) 
-                    { 
-                        for (int j = 1; j < 6; j++) 
-                        {
-                            if (__instance.GeoLevel.EventSystem.GetVariable(darkEvent + i) == j)
-                            {
-                                if (j == 1 && darkEventsCheck[j] == false)
-                                {
-                                    __instance.GeoLevel.EventSystem.ExplorationAmbushChance = 100;
-                                    CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
-                                    AmbushALN.ParticipantsData[0].ReinforcementsDeploymentPart.Max = 0.5f;
-                                    AmbushALN.ParticipantsData[0].ReinforcementsDeploymentPart.Min = 0.5f;
-                                    AmbushALN.CratesDeploymentPointsRange.Min = 50;
-                                    AmbushALN.CratesDeploymentPointsRange.Max = 70;
-                                    Logger.Always("Exploration ambush chance is now " + __instance.GeoLevel.EventSystem.ExplorationAmbushChance);
-                                    Logger.Always("Alien ambushes can now have a max of  " + AmbushALN.CratesDeploymentPointsRange.Max / 10 + " crates");
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 2 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
-                                    {
-                                        foreach (GeoEventChoice choice in geoEvent.GeoscapeEventData.Choices)
-                                        {
-                                            for (int t = 0; t < choice.Outcome.Diplomacy.Count; t++)
-                                            {
-                                                if (choice.Outcome.Diplomacy[t].Value >= 0)
-                                                {
-                                                    OutcomeDiplomacyChange diplomacyChange = choice.Outcome.Diplomacy[t];
-                                                    diplomacyChange.Value = Mathf.RoundToInt(diplomacyChange.Value * 0.8f);
-                                                    choice.Outcome.Diplomacy[t] = diplomacyChange;
-                                                    
-                                                }
-                                            }
-                                        }
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 3 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (TacticalAbilityDef tacticalAbility in Repo.GetAllDefs<TacticalAbilityDef>())
-                                    {
-                                        if (tacticalAbility.WillPointCost > 0)
-                                        {
-                                            tacticalAbility.WillPointCost = Mathf.RoundToInt(tacticalAbility.WillPointCost * 1.5f);
-                                        }
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 4 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
-                                    {
-                                        missionTypeDef.MaxPlayerUnits = 6;
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-                                if (j == 5 && darkEventsCheck[j] == false)
-                                {
-                                    foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
-                                    {
-                                        if (missionTypeDef.name.Contains("Haven") && !missionTypeDef.name.Contains("Infestation"))
-                                        {
-                                            TacCrateDataDef cratesNotResources = Repo.GetAllDefs<TacCrateDataDef>().FirstOrDefault(ged => ged.name.Equals("Default_TacCrateDataDef"));
-                                            missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Enemy;
-                                            missionTypeDef.ParticipantsData[1].PredeterminedFactionEffects = missionTypeDef.ParticipantsData[0].PredeterminedFactionEffects;
-                                            missionTypeDef.MissionSpecificCrates = cratesNotResources;
-                                            missionTypeDef.FactionItemsRange.Min = 2;
-                                            missionTypeDef.FactionItemsRange.Max = 7;
-                                            missionTypeDef.CratesDeploymentPointsRange.Min = 20;
-                                            missionTypeDef.CratesDeploymentPointsRange.Max = 30;
-                                        }
-                                    }
-                                    darkEventsCheck[j] = true;
-                                }
-
-                            }
-                        }
-                    }
+                    VoidOmens.CreateVoidOmens(__instance.GeoLevel);
+                    VoidOmens.CheckForRemovedVoidOmens(__instance.GeoLevel);
                 }
                 catch (Exception e)
                 {
@@ -547,11 +325,6 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-
-
-
-
-        
    
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         public static class PhoenixStatisticsManager_UpdateGeoscapeStats_AnuPissedAtBionics_Patch
@@ -593,78 +366,26 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-    
-        public static void GenerateGeoEventChoice(GeoscapeEventDef geoEvent, string choice, string outcome)
+  
+        [HarmonyPatch(typeof(TacticalVoxelMatrix), "SpawnAndPropagateMist")]
+        public static class TacticalVoxelMatrix_SpawnAndPropagateMist_VoidOmenMoreMistOnTactical_Patch
         {
-            try
+            public static void Prefix(TacticalVoxelMatrix __instance)
             {
-                geoEvent.GeoscapeEventData.Choices.Add(new GeoEventChoice()
-
+                try
                 {
-                    Text = new LocalizedTextBind(choice),
-                    Outcome = new GeoEventChoiceOutcome()
+                    if (VoidOmens.VoidOmen7Active)
                     {
-                        OutcomeText = new EventTextVariation()
-                        {
-                            General = new LocalizedTextBind(outcome)
-                        }
+                        __instance.VoxelMatrixData.InitialMistEntitiesToSpawn.Min = 30;
+                        __instance.VoxelMatrixData.InitialMistEntitiesToSpawn.Max = 40;
                     }
-                });
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
             }
         }
-
-        /*   public static OutcomeDiplomacyChange GenerateDiplomacyOutcome(GeoFactionDef partyFaction, GeoFactionDef targetFaction, int value)
-           {
-               try
-               {
-                   if (partyFaction == null || targetFaction == null)
-                   {
-                       GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
-                       GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
-                       return new OutcomeDiplomacyChange()
-                       { PartyFaction=NewJericho, TargetFaction=phoenixPoint, Value=1, PartyType= (OutcomeDiplomacyChange.ChangeTarget)1};
-                   }
-
-                   else
-                   { 
-                       return new OutcomeDiplomacyChange()
-                       {
-                           PartyFaction = partyFaction,
-                           TargetFaction = targetFaction,
-                           Value = value,
-                           PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                       };
-                   }
-               }
-               catch (Exception e)
-               {
-                   Logger.Error(e);
-               }
-           } */
-
-        /*   public static void GenerateVariableChange(string variableName, int minValue, int MaxValue, bool isSet)
-           {
-               try
-               {
-                   new OutcomeVariableChange()
-                   {
-                       VariableName = variableName,
-                       Value = { Min = minValue, Max = MaxValue},
-                       IsSetOperation = isSet,
-                   };
-
-               }
-               catch (Exception e)
-               {
-                   Logger.Error(e);
-               }
-           }*/
-
-        
 
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         public static class PhoenixStatisticsManager_UpdateGeoscapeStats_NJPissedAtMutations_Patch

@@ -296,7 +296,7 @@ namespace PhoenixRising.BetterGeoscape
                             // If a Dark Event rolls
 
                             // Create list of dark events currently implemented
-                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6 };
+                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 
                             // Array to track how many Dark Events have already appeared (will get filled up later)
                             int[] alreadyRolledDarkEvents = new int[19];
@@ -996,7 +996,7 @@ namespace PhoenixRising.BetterGeoscape
                     // Calculate WP reduction dependent on stamina
                     float wpReduction = base_TacticalActor.CharacterStats.Corruption;
 
-                    if (VolandsPlayground.VoidOmen3Active || VolandsPlayground.VoidOmen3Activated)
+                    if (VoidOmens.VoidOmen3Active || VoidOmens.VoidOmen3Activated)
                     {
                         wpReduction = 0;
                     }
