@@ -158,6 +158,7 @@ namespace PhoenixRising.BetterGeoscape
                 int difficulty = __instance.GeoLevel.CurrentDifficultyLevel.Order;
                 __instance.AddEvolutionProgress(nests * difficulty * 2 + lairs * 4 * difficulty + citadels * 5 * difficulty);
                 Logger.Always("There are " + nests+ " nests, " + lairs+" lairs and "+citadels+" citadels on " + __instance.GeoLevel.ElaspedTime);
+                Logger.Always("The evolution points per day are " + (nests * difficulty * 2 + lairs * 4 * difficulty + citadels * 5 * difficulty));
             }
         }
 
