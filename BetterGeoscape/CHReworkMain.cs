@@ -520,7 +520,7 @@ namespace PhoenixRising.BetterGeoscape
         {
                 try
                 {
-                    if (__instance.Title.LocalizationKey.Contains("DARK_EVENT_TITLE_"))
+                    if (__instance.Title!=null && __instance.Title.LocalizationKey.Contains("DARK_EVENT_TITLE_"))
                     {
                         __result = Helper.CreateSpriteFromImageFile("Void-04P.png");
                     }
