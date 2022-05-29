@@ -291,7 +291,7 @@ namespace PhoenixRising.BetterGeoscape
                     {              
                         // Here comes the roll, for testing purposes with 1/3 chance of no DE happening    
                         int roll = UnityEngine.Random.Range(0, 11);
-                        if (roll > 0 && roll < 11)
+                        if (roll >= 0 && roll <= 11)
                         { 
                             // If a Dark Event rolls
 

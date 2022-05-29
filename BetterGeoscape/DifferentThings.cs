@@ -13,31 +13,36 @@ using System.Threading.Tasks;
 namespace PhoenixRising.BetterGeoscape
 {
 
-    //This looks like the method for AI to evaluate how much damage it will do with an attack. May be useful for implementing attack for Umbra
-/*
-    public void CalculateDamageResultForAiTarget(TacticalActorBase targetActorBase, IDamageReceiver receiver, ref DamageResult damageResult)
-    {
-        foreach (DamageKeywordPair item in DamageKeywords.Where((DamageKeywordPair k) => k.DamageKeywordDef.UseForAiVulnerabilityCheck))
-        {
-            float keywordValue = item.Value * receiver.GetDamageMultiplierFor(item.DamageKeywordDef.DamageTypeDef, this);
-            float num = 0f;
-            TacticalActor tacticalActor;
-            if ((object)(tacticalActor = (receiver as TacticalActor)) != null)
-            {
-                foreach (ItemSlot healthSlot in tacticalActor.BodyState.GetHealthSlots())
-                {
-                    num = Mathf.Max(num, healthSlot.GetArmor());
-                }
-            }
-            else
-            {
-                num = receiver.GetArmor();
-            }
+    /* {"KEY_SNIPER_QUICK_AIM_NAME", "KEY_RAPID_CLEARANCE_NAME", "AIMED BURST", "KEY_RALLY_NAME", "Dash", "AdreanlineRush", "GunKata_AbilityDef",
+         "Exertion_AbilityDef", "BC_ARTargeting_AbilityDef", "Rage Burst", "JetpackControl_AbilityDef", "KEY_HEAVY_BOOM_BLAST_NAME", "Deploy Drone Pack", "LayWaste_AbilityDef", "KEY_ARMOUR_BREAK_NAME",
+         "BC_Gunslinger_AbilityDef", "ElectricReinforcement", "AmplifyPain_AbilityDef", "KEY_SNIPER_MARK_FOR_DEATH_NAME", "KEY_INDUCE_PANIC_NAME", "KEY_PSYCHIC_BLAST_NAME", "KEY_TECHNICIAN_REMOTE_DEPLOYMENT_NAME", "KEY_TECHNICIAN_MANUAL_CONTROL_NAME", "KEY_TECHNICIAN_FIELD_MEDIC_NAME",
+         "KEY_DECOY_NAME", "KEY_VANISH_NAME"}*/
 
-            num -= GenerateArmourPiercingAmount();
-            item.DamageKeywordDef.ApplyAiEvaluationEffect(targetActorBase, keywordValue, num, ref damageResult);
-        }
-    }  */
+    //This looks like the method for AI to evaluate how much damage it will do with an attack. May be useful for implementing attack for Umbra
+    /*
+        public void CalculateDamageResultForAiTarget(TacticalActorBase targetActorBase, IDamageReceiver receiver, ref DamageResult damageResult)
+        {
+            foreach (DamageKeywordPair item in DamageKeywords.Where((DamageKeywordPair k) => k.DamageKeywordDef.UseForAiVulnerabilityCheck))
+            {
+                float keywordValue = item.Value * receiver.GetDamageMultiplierFor(item.DamageKeywordDef.DamageTypeDef, this);
+                float num = 0f;
+                TacticalActor tacticalActor;
+                if ((object)(tacticalActor = (receiver as TacticalActor)) != null)
+                {
+                    foreach (ItemSlot healthSlot in tacticalActor.BodyState.GetHealthSlots())
+                    {
+                        num = Mathf.Max(num, healthSlot.GetArmor());
+                    }
+                }
+                else
+                {
+                    num = receiver.GetArmor();
+                }
+
+                num -= GenerateArmourPiercingAmount();
+                item.DamageKeywordDef.ApplyAiEvaluationEffect(targetActorBase, keywordValue, num, ref damageResult);
+            }
+        }  */
 
 
     internal class DifferentThings

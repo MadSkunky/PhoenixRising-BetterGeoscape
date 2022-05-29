@@ -11,11 +11,17 @@ using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Tactical.AI;
+using PhoenixPoint.Tactical.Entities;
+using PhoenixPoint.Tactical.Entities.Abilities;
+using PhoenixPoint.Tactical.Entities.DamageKeywords;
 using PhoenixPoint.Tactical.Entities.Statuses;
+using PhoenixPoint.Tactical.Entities.Weapons;
 using PhoenixPoint.Tactical.Levels.Mist;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -24,11 +30,13 @@ namespace PhoenixRising.BetterGeoscape
 
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
+        
         public static void Apply_Changes()
         {
-            // @Voland: play down form here
+            // @Voland: play down from here
             try
             {
+               
                 //ID all the factions for later
                 GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
                 GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
@@ -386,6 +394,75 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
+        /*
+        [HarmonyPatch(typeof(TacticalAbility), "GetTargetActors", new Type[] { typeof(TacticalTargetData), typeof(TacticalActorBase), typeof(Vector3) })]
+        public static class TacticalAbility_GetTargetActors_Patch
+        {
+            public static void Postfix(ref IEnumerable<TacticalAbilityTarget> __result, TacticalActorBase sourceActor)
+            {
+                try
+                {
+                    if (sourceActor.ActorDef.name.Equals("Oilcrab_ActorDef") || sourceActor.ActorDef.name.Equals("Oilfish_ActorDef"))
+                    {
+                        List<TacticalAbilityTarget> list = __result.ToList();
+                        list.RemoveWhere(adilityTarget => (adilityTarget.Actor as TacticalActor)?.CharacterStats.Corruption <= 0);
+                        __result = list;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        E_ActorEffect [UmbralCrabmen_FactionEffectDef] // This lists the conditions that have to be fulfilled by actor to receive OilCrab_AddAbilityStatusDef
+        OilCrab_AddAbilityStatusDef // This is what gives the Oilcrab_Die_DeathBelcher_AbilityDef
+        Oilcrab_Die_DeathBelcher_AbilityDef // This is the ability that when character dies, it spawns Umbra
+        */
+
+        /*  [HarmonyPatch(typeof(TacticalAbility), "TargetFilterPredicate")]
+          public static class TacticalAbility_TargetFilterPredicate_UmbraAttack_Patch
+          {
+
+
+              public static void Prefix(TacticalActorBase targetActor, TacticalActorBase sourceActor)
+              {
+                  try
+                  {
+
+                  VoidOmens.UmbraAttackCheck(targetActor, sourceActor);
+                  Logger.Always("The umbra flag is " + VoidOmens.umbraAttack);
+
+                  }
+                  catch (Exception e)
+                  {
+                      Logger.Error(e);
+                  }
+              }
+          }
+
+          [HarmonyPatch(typeof(DamageKeywordDef), "ApplyAiEvaluationEffect")]
+          public static class DamageKeywordDef_ApplyAiEvaluationEffect_UmbraAttack_Patch
+          {
+              public static void Postfix(ref DamageResult res)
+              {
+                  try
+                  {
+                      if (VoidOmens.umbraAttack) 
+                      {
+                          res.HealthDamage = 0;
+                          VoidOmens.umbraAttack = false;
+                      }
+
+                  }
+                  catch (Exception e)
+                  {
+                      Logger.Error(e);
+                  }
+              }
+          }
+        */
 
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
         public static class PhoenixStatisticsManager_UpdateGeoscapeStats_NJPissedAtMutations_Patch
