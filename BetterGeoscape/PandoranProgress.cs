@@ -17,6 +17,8 @@ namespace PhoenixRising.BetterGeoscape
         {
             try
             {
+                int pandoranEvolutionLegend = BetterGeoscapeMain.Config.evolutionPointsLegend;
+
                 // All sources of evolution due to scaling removed, leaving only evolution per day
                 // Additional source of evolution will be number of surviving Pandoran colonies, modulated by difficulty level
                 GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
@@ -33,7 +35,7 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
 
                 //reducing evolution per day because there other sources of evolution points now
-                veryhard.EvolutionProgressPerDay = 70; //vanilla 100
+                veryhard.EvolutionProgressPerDay = pandoranEvolutionLegend; //vanilla 100
 
                 //Hero
                 GameDifficultyLevelDef hard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Hard_GameDifficultyLevelDef"));

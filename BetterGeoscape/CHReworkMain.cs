@@ -13,6 +13,7 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.UI;
 using PhoenixPoint.Geoscape.Achievements;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Research;
@@ -25,8 +26,10 @@ using PhoenixPoint.Geoscape.Events.Eventus.Filters;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
 using PhoenixPoint.Geoscape.Levels.Objectives;
+using PhoenixPoint.Geoscape.View.DataObjects;
 using PhoenixPoint.Geoscape.View.ViewControllers;
 using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
+using PhoenixPoint.Geoscape.View.ViewControllers.BaseRecruits;
 using PhoenixPoint.Geoscape.View.ViewModules;
 using PhoenixPoint.Geoscape.View.ViewStates;
 using PhoenixPoint.Tactical.Entities;
@@ -174,6 +177,8 @@ namespace PhoenixRising.BetterGeoscape
                 sdi16.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI16_OUTCOME";
                 GeoscapeEventDef sdi20 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_20_GeoscapeEventDef"));
                 sdi20.GeoscapeEventData.Choices[0].Outcome.GameOverVictoryFaction = null;
+                GeoscapeEventDef sdi3 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_03_GeoscapeEventDef"));
+                sdi3.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Umbra_Encounter_Variable", 1, true));
 
             }
             
@@ -296,7 +301,7 @@ namespace PhoenixRising.BetterGeoscape
                             // If a Dark Event rolls
 
                             // Create list of dark events currently implemented
-                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
 
                             // Array to track how many Dark Events have already appeared (will get filled up later)
                             int[] alreadyRolledDarkEvents = new int[19];
@@ -650,9 +655,32 @@ namespace PhoenixRising.BetterGeoscape
 
                             bionics += 1;
                     }
-                        if (odiPerc < 25)
+
+                if (!VoidOmens.VoidOmen12Active)
+                {
+                    if (odiPerc < 25)
+                    {
+                        maxCorruption = character.CharacterStats.Willpower.IntMax / 3;
+
+                        if (bionics == 1)
                         {
-                            maxCorruption = character.CharacterStats.Willpower.IntMax / 3;
+                            return maxCorruption -= maxCorruption * 0.33f;
+                        }
+
+                        if (bionics == 2)
+                        {
+                            return maxCorruption -= maxCorruption * 0.66f;
+                        }
+                        else
+                        {
+                            return maxCorruption;
+                        }
+                    }
+                    else
+                    {
+                        if (odiPerc < 75)
+                        {
+                            maxCorruption = character.CharacterStats.Willpower.IntMax * 1 / 2;
 
                             if (bionics == 1)
                             {
@@ -665,50 +693,52 @@ namespace PhoenixRising.BetterGeoscape
                             }
                             else
                             {
-                             return maxCorruption;
-                            }
-                        }
-                        else
-                        {
-                            if (odiPerc < 75)
-                            {
-                                maxCorruption = character.CharacterStats.Willpower.IntMax * 1 / 2;
-
-                                if (bionics == 1)
-                                {
-                                    return maxCorruption -= maxCorruption * 0.33f;
-                                }
-
-                                if (bionics == 2)
-                                {
-                                    return maxCorruption -= maxCorruption * 0.66f;
-                                }
-                                 else
-                                {
-                                    return maxCorruption;
-                                }
-                             }
-                            else // > 75%
-                            {
-                                maxCorruption = character.CharacterStats.Willpower.IntMax;
-
-                                if (bionics == 1)
-                                {
-                                    return maxCorruption -= maxCorruption * 0.33f;
-                                }
-
-                                if (bionics == 2)
-                                {
-                                    return maxCorruption -= maxCorruption * 0.66f;
-                                }
-
-                                else
-                                {
                                 return maxCorruption;
-                                }
-
                             }
                         }
+                        else // > 75%
+                        {
+                            maxCorruption = character.CharacterStats.Willpower.IntMax;
+
+                            if (bionics == 1)
+                            {
+                                return maxCorruption -= maxCorruption * 0.33f;
+                            }
+
+                            if (bionics == 2)
+                            {
+                                return maxCorruption -= maxCorruption * 0.66f;
+                            }
+
+                            else
+                            {
+                                return maxCorruption;
+                            }
+                        }
+                    }
+
+                }
+                if (VoidOmens.VoidOmen12Active) 
+                {
+                    maxCorruption = character.CharacterStats.Willpower.IntMax;
+
+                    if (bionics == 1)
+                    {
+                        return maxCorruption -= maxCorruption * 0.33f;
+                    }
+
+                    if (bionics == 2)
+                    {
+                        return maxCorruption -= maxCorruption * 0.66f;
+                    }
+
+                    else
+                    {
+                        return maxCorruption;
+                    }
+
+                }
+
                 }
                 catch (System.Exception e)
                 {
@@ -873,12 +903,62 @@ namespace PhoenixRising.BetterGeoscape
 
                     // Calculate the percentage of current ODI level, these two variables are globally set by our ODI event patches
                     int odiPerc = CurrentODI_Level * 100 / ODI_EventIDs.Length;
-
-                    // Get max corruption dependent on max WP of the selected actor
                     int maxCorruption = 0;
-                    if (odiPerc < 25)
+                    // Get max corruption dependent on max WP of the selected actor
+                    if (!VoidOmens.VoidOmen12Active)
                     {
-                        maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax / 3;
+                        
+                        if (odiPerc < 25)
+                        {
+                            maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax / 3;
+
+                            if (numberOfBionics == 1)
+                            {
+                                maxCorruption -= (int)(maxCorruption * 0.33);
+                            }
+
+                            if (numberOfBionics == 2)
+                            {
+                                maxCorruption -= (int)(maxCorruption * 0.66);
+                            }
+
+                        }
+                        else
+                        {
+                            if (odiPerc < 75)
+                            {
+                                maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax * 1 / 2;
+
+                                if (numberOfBionics == 1)
+                                {
+                                    maxCorruption -= (int)(maxCorruption * 0.33);
+                                }
+
+                                if (numberOfBionics == 2)
+                                {
+                                    maxCorruption -= (int)(maxCorruption * 0.66);
+                                }
+                            }
+                            else // > 75%
+                            {
+                                maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax;
+
+                                if (numberOfBionics == 1)
+                                {
+                                    maxCorruption -= (int)(maxCorruption * 0.33);
+                                }
+
+                                if (numberOfBionics == 2)
+                                {
+                                    maxCorruption -= (int)(maxCorruption * 0.66);
+                                }
+
+                            }
+                        }
+                    }
+                    if (VoidOmens.VoidOmen12Active) 
+                    {
+                        maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax;
 
                         if (numberOfBionics == 1)
                         {
@@ -889,41 +969,7 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             maxCorruption -= (int)(maxCorruption * 0.66);
                         }
-
                     }
-                    else
-                    {
-                        if (odiPerc < 75)
-                        {
-                            maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax * 1 / 2;
-
-                            if (numberOfBionics == 1)
-                            {
-                                maxCorruption -= (int)(maxCorruption * 0.33);
-                            }
-
-                            if (numberOfBionics == 2)
-                            {
-                                maxCorruption -= (int)(maxCorruption * 0.66);
-                            }
-                        }
-                        else // > 75%
-                        {
-                            maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax;
-
-                            if (numberOfBionics == 1)
-                            {
-                                maxCorruption -= (int)(maxCorruption * 0.33);
-                            }
-
-                            if (numberOfBionics == 2)
-                            {
-                                maxCorruption -= (int)(maxCorruption * 0.66);
-                            }
-
-                        }
-                    }
-
                     // Like the original calculation, but adapted with 'maxCorruption'
                     // Also '__result' for 'return', '__instance' for 'this' and 'base_TacticalActor' for 'base.TacticalActor'
                     __result = Mathf.Min(__instance.CorruptionStatusDef.ValueIncrement, maxCorruption - base_TacticalActor.CharacterStats.Corruption.IntValue);
@@ -1102,106 +1148,154 @@ namespace PhoenixRising.BetterGeoscape
         [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnTacticalLevelStart")]
         public static class TacticalLevelController_OnLevelStart_Patch
         {
-            public static void Postfix(TacticalLevelController level)//, GeoLevelController __level)
+            public static void Postfix(TacticalLevelController level)
             {
                 DefRepository Repo = GameUtl.GameComponent<DefRepository>();
                 try
                 {
-
-                /*    PassiveModifierAbilityDef shutEye_Ability = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("ShutEye_AbilityDef"));
-                    PassiveModifierAbilityDef hallucinating_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Hallucinating_AbilityDef"));
-                    PassiveModifierAbilityDef solipsism_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Solipsism_AbilityDef"));
-                    PassiveModifierAbilityDef angerIssues_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("AngerIssues_AbilityDef"));
-                    PassiveModifierAbilityDef photophobia_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Photophobia_AbilityDef"));
-                    PassiveModifierAbilityDef nails_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Nails_AbilityDef"));
-                    PassiveModifierAbilityDef immortality_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Immortality_AbilityDef"));
-                    PassiveModifierAbilityDef feral_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Feral_AbilityDef"));
-                    DamageMultiplierAbilityDef oneOfUs_AbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("OneOfUs_AbilityDef"));
-                    ApplyStatusAbilityDef fleshEater_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("FleshEater_AbilityDef"));
-                       
-                    List<TacticalAbilityDef> abilityList = new List<TacticalAbilityDef>
-                    { shutEye_Ability, hallucinating_AbilityDef, solipsism_AbilityDef, angerIssues_AbilityDef, photophobia_AbilityDef, nails_AbilityDef, immortality_AbilityDef, feral_AbilityDef,
-                    oneOfUs_AbilityDef, fleshEater_AbilityDef
-                    };
-
-                    if (__level.EventSystem.GetVariable("CorruptionActive") == 0 && __level.EventSystem.GetVariable("PandoraVirus") == 1)
+                    foreach (TacticalFaction faction in level.Factions)
                     {
-                       foreach (TacticalFaction faction in level.Factions)
+                        if (faction.IsViewerFaction)
                         {
-                            if (faction.IsViewerFaction)
+                            foreach (TacticalActor actor in faction.TacticalActors)
                             {
-                                foreach (TacticalActor actor in faction.TacticalActors)
-                                {                 
-                                    foreach (TacticalAbilityDef tacticalAbility in abilityList)
-                                    {
-                                        actor.RemoveAbility(tacticalAbility);
-                                    }
+
+                                TacticalAbilityDef abilityDef = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
+                                {
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
                                 }
+
+                                TacticalAbilityDef abilityDef1 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
+                                {
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
+                                }
+
+                                TacticalAbilityDef abilityDef2 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
+                                }
+
+                                TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUsPassive_AbilityDef")), actor);
+                                }
+
+                                TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("NailsPassive_AbilityDef")), actor);
+                                }
+
+                                TacticalAbilityDef abilityDef7 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef7) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("IgnorePain_AbilityDef")), actor);
+                                }
+                                /*
+                                TacticalAbilityDef abilityDef6 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Feral_AbilityDef"));
+                                        if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
+                                        {
+                                            actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
+                                            actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);                          
+                                        }
+
+                                        TacticalAbilityDef abilityDef8 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
+                                        if (actor.GetAbilityWithDef<Ability>(abilityDef8) != null)
+                                        {
+                                            actor.GetArmor().Add(50);
+                                            actor.CharacterStats.Armour.Add(100);
+                                            //actor.UpdateStats();
+                                        }
+                                        */
                             }
                         }
                     }
-
-                    else
-
-                      */  foreach (TacticalFaction faction in level.Factions)
-                        {
-                            if (faction.IsViewerFaction)
-                            {
-                                foreach (TacticalActor actor in faction.TacticalActors)
-                                {
-
-                                    PassiveModifierAbilityDef abilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("AngerIssues_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
-                                    {
-                                        actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
-                                    }
-
-                                    PassiveModifierAbilityDef abilityDef1 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
-                                    {
-                                        actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
-                                    }
-
-                                    PassiveModifierAbilityDef abilityDef2 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
-                                    {
-                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
-                                    }
-
-                                    PassiveModifierAbilityDef abilityDef3 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUsPassive_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
-                                    {
-                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUs_AbilityDef")), actor);
-                                    }
-
-                                    PassiveModifierAbilityDef abilityDef5 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
-                                    {
-                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef")), actor);
-                                    }
-
-                                    PassiveModifierAbilityDef abilityDef6 = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
-                                    {
-                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
-                                        actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);
-                                    }
-                                    /*
-                                    TacticalAbilityDef abilityDef7 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
-                                    if (actor.GetAbilityWithDef<Ability>(abilityDef7) != null)
-                                    {
-                                        actor.GetArmor().Add(50);
-                                        actor.CharacterStats.Armour.Add(100);
-                                        //actor.UpdateStats();
-                                    }
-                                    */
-                                }
-                            }
-                        }
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e);
+                }
+            }
+        }
+
+        [HarmonyPatch(typeof(TacticalAbility), "FumbleActionCheck")]
+        public static class TacticalAbility_FumbleActionCheck_Patch
+        {
+            public static void Postfix(TacticalAbility __instance, ref bool __result)
+            {
+                DefRepository Repo = GameUtl.GameComponent<DefRepository>();
+
+                try
+                {
+                    TacticalAbilityDef abilityDef9 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Feral_AbilityDef"));
+                    if (__instance.TacticalActor.GetAbilityWithDef<TacticalAbility>(abilityDef9) != null && __instance.Source is Equipment)
+                    {
+                        __result = UnityEngine.Random.Range(0, 100) < 10;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        //Dtony's Delirium perks patch
+        [HarmonyPatch(typeof(RecruitsListElementController), "SetRecruitElement")]
+        public static class RecruitsListElementController_SetRecruitElement_Patch
+        {
+            public static bool Prefix(RecruitsListElementController __instance, RecruitsListEntryData entryData, List<RowIconTextController> ____abilityIcons)
+            {
+                try
+                {
+                    if (____abilityIcons == null)
+                    {
+                        ____abilityIcons = new List<RowIconTextController>();
+                        if (__instance.PersonalTrackRoot.transform.childCount < entryData.PersonalTrackAbilities.Count())
+                        {
+                            RectTransform parent = __instance.PersonalTrackRoot.GetComponent<RectTransform>();
+                            RowIconTextController source = parent.GetComponentInChildren<RowIconTextController>();
+                            parent.DetachChildren();
+                            source.Icon.GetComponent<RectTransform>().sizeDelta = new Vector2(95f, 95f);
+                            for (int i = 0; i < entryData.PersonalTrackAbilities.Count(); i++)
+                            {
+                                RowIconTextController entry = UnityEngine.Object.Instantiate(source, parent, true);
+                            }
+                        }
+                        UIUtil.GetComponentsFromContainer(__instance.PersonalTrackRoot.transform, ____abilityIcons);
+                    }
+                    __instance.RecruitData = entryData;
+                    __instance.RecruitName.SetSoldierData(entryData.Recruit);
+                    BC_SetAbilityIcons(entryData.PersonalTrackAbilities.ToList(), ____abilityIcons);
+                    if (entryData.SuppliesCost != null && __instance.CostText != null && __instance.CostColorController != null)
+                    {
+                        __instance.CostText.text = entryData.SuppliesCost.ByResourceType(ResourceType.Supplies).RoundedValue.ToString();
+                        __instance.CostColorController.SetWarningActive(!entryData.IsAffordable, true);
+                    }
+                    __instance.NavHolder.RefreshNavigation();
+                    return false;
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                    return true;                   
+                }
+            }
+
+
+            private static void BC_SetAbilityIcons(List<TacticalAbilityViewElementDef> abilities, List<RowIconTextController> abilityIcons)
+            {
+                foreach (RowIconTextController rowIconTextController in abilityIcons)
+                {
+                    rowIconTextController.gameObject.SetActive(false);
+                }
+                for (int i = 0; i < abilities.Count; i++)
+                {
+                    abilityIcons[i].gameObject.SetActive(true);
+                    abilityIcons[i].SetController(abilities[i].LargeIcon, abilities[i].DisplayName1, abilities[i].Description);
                 }
             }
         }

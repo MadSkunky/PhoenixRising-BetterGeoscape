@@ -1,12 +1,17 @@
 ﻿using Base;
 using Base.Core;
 using Base.Defs;
+using Base.Entities.Effects.ApplicationConditions;
 using Base.UI;
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.Entities.Items.SkinData;
+using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
+using PhoenixPoint.Geoscape.Entities.Research;
+using PhoenixPoint.Geoscape.Entities.Research.Requirement;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Levels;
@@ -15,8 +20,12 @@ using PhoenixPoint.Tactical.AI;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.DamageKeywords;
+using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
 using PhoenixPoint.Tactical.Entities.Weapons;
+using PhoenixPoint.Tactical.Levels;
+using PhoenixPoint.Tactical.Levels.FactionEffects;
+using PhoenixPoint.Tactical.Levels.Missions;
 using PhoenixPoint.Tactical.Levels.Mist;
 using System;
 using System.Collections.Generic;
@@ -47,6 +56,12 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
                 sourceLoseGeoEvent.GeoscapeEventData.Choices[0].Outcome.ReEneableEvent = false;
                 sourceLoseGeoEvent.GeoscapeEventData.Choices[0].Outcome.ReactiveEncounters.Clear();
+
+                //Source for creating new ResearchVariableRequirement
+                EncounterVariableResearchRequirementDef sourceVarResReq = 
+                    Repo.GetAllDefs<EncounterVariableResearchRequirementDef>().
+                    FirstOrDefault(ged => ged.name.Equals("NJ_Bionics1_ResearchDef_EncounterVariableResearchRequirementDef_0"));
+                
 
                 // PhoenixPoint.UseGlobalStorage = false;
 
@@ -258,6 +273,47 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef voidOmen = Helper.CreateDefFromClone(sourceLoseGeoEvent, "396AE9AA-3E2F-440A-83D0-C89255DCB92D", "VoidOmenEventDef");
                 voidOmen.GeoscapeEventData.EventID = "VoidOmen";
 
+                //Changing Umbra Crab and Triton to appear after SDI event 3;
+                ResearchDef umbraCrabResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_CrabmanUmbra_ResearchDef"));
+                //Removing the random assignment method used in Vanilla 
+                RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                randomValueCrabUmbra.ThresholdValue = 0;
+                //Creating new Research Requirement, requiring a variable to be triggered  
+                EncounterVariableResearchRequirementDef variableResReqUmbra = Helper.CreateDefFromClone(sourceVarResReq, "0CCC30E0-4DB1-44CD-9A60-C1C8F6588C8A", "UmbraResReqDef");
+                string variableUmbraALNResReq = "Umbra_Encounter_Variable";
+                variableResReqUmbra.VariableName = variableUmbraALNResReq;
+                // This changes the Umbra reserach so that 2 conditions have to be fulfilled: 1) a) nest has to be researched, or b) exotic material has to be found
+                // (because 1)a) is fufilled at start of the game, b)) is redundant but harmless), and 2) a special variable has to be triggered, assigned to event sdi3
+                umbraCrabResearch.RevealRequirements.Operation = ResearchContainerOperation.ALL;
+                umbraCrabResearch.RevealRequirements.Container[0].Operation = ResearchContainerOperation.ANY;
+                umbraCrabResearch.RevealRequirements.Container[1].Requirements[0] = variableResReqUmbra;
+                //Now same thing for Triton Umbra, but it will use same variable because we want them to appear at the same time
+                ResearchDef umbraFishResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_FishmanUmbra_ResearchDef"));
+                RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
+                randomValueFishUmbra.ThresholdValue = 0;
+                umbraFishResearch.RevealRequirements.Operation = ResearchContainerOperation.ALL;
+                umbraFishResearch.RevealRequirements.Container[0].Operation = ResearchContainerOperation.ANY;
+                umbraFishResearch.RevealRequirements.Container[1].Requirements[0] = variableResReqUmbra;
+                //Because Triton research has 2 requirements in the second container, we set them to any
+                umbraFishResearch.RevealRequirements.Container[1].Operation = ResearchContainerOperation.ANY;
+                //We will modify the Umbra to make them a bit weaker
+                WeaponDef umbraCrab = Repo.GetAllDefs<WeaponDef>().
+                FirstOrDefault(ged => ged.name.Equals("Oilcrab_Torso_BodyPartDef"));
+                umbraCrab.HitPoints = 250;
+                umbraCrab.DamagePayload.DamageKeywords[0].Value = 60;
+                BodyPartAspectDef umbraCrabBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
+                FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilcrab_Torso_BodyPartDef]"));
+                umbraCrabBodyAspect.Endurance = 25.0f; 
+                WeaponDef umbraFish = Repo.GetAllDefs<WeaponDef>().
+                FirstOrDefault(ged => ged.name.Equals("Oilfish_Torso_BodyPartDef"));
+                umbraFish.HitPoints = 250;
+                umbraFish.DamagePayload.DamageKeywords[0].Value = 70;           
+                BodyPartAspectDef umbraFishBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
+                FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilfish_Torso_BodyPartDef]"));
+                umbraFishBodyAspect.Endurance = 25.0f;
+
             }
             catch (Exception e)
             {
@@ -300,23 +356,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnTacticalLevelStart")]
-        public static class PhoenixStatisticsManager_OnTacticalLevelStart_VoidOmens_Patch
-        {
-
-            public static void Postfix()
-            {
-                try
-                {
-                    VoidOmens.ImplementVoidOmen3OnTactical();
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
-
+       
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionHourly")]
         public static class GeoAlienFaction_UpdateFactionHourly_DarkEvents_Patch
         {
@@ -333,39 +373,17 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-   
-        [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
-        public static class PhoenixStatisticsManager_UpdateGeoscapeStats_AnuPissedAtBionics_Patch
+
+        [HarmonyPatch(typeof(TacticalAbility), "get_WillPointCost")]
+        public static class TacticalAbility_get_WillPointCost_VoidOmenExtraWPCost_Patch
         {
-            public static void Postfix(GeoAlienFaction __instance)
+            public static void Postfix(ref float __result, TacticalAbility __instance)
             {
                 try
                 {
-                    int bionics = 0;
-                    GeoLevelController geoLevelController = __instance.GeoLevel;
-                    GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(__instance, geoLevelController.ViewerFaction);
-                    GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
-                    //check number of bionics player has
-                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
-                    foreach (GeoCharacter geoCharacter in __instance.GeoLevel.PhoenixFaction.Soldiers)
+                    if (VoidOmens.VoidOmen3Active && __instance.TacticalActor.IsControlledByPlayer)
                     {
-                        foreach (GeoItem bionic in geoCharacter.ArmourItems)
-                        { if (bionic.ItemDef.Tags.Contains(bionicalTag))
-
-                                bionics += 1;
-                        }
-                    }
-                    if (bionics > 2 && geoLevelController.EventSystem.GetVariable("BG_Anu_Pissed_Over_Bionics") == 0)
-                    {
-                        geoLevelController.EventSystem.TriggerGeoscapeEvent("Anu_Pissed1", geoscapeEventContext);
-                        geoLevelController.EventSystem.SetVariable("BG_Anu_Pissed_Over_Bionics", 1);
-                    }
-
-                    if (geoLevelController.EventSystem.GetVariable("BG_Anu_Pissed_Broke_Promise") == 1
-                       && geoLevelController.EventSystem.GetVariable("BG_Anu_Really_Pissed_Over_Bionics") == 0)
-                    {
-                        geoLevelController.EventSystem.TriggerGeoscapeEvent("Anu_Pissed2", geoscapeEventContext);
-                        geoLevelController.EventSystem.SetVariable("BG_Anu_Really_Pissed_Over_Bionics", 1);
+                        __result += Mathf.RoundToInt(__result * 0.5f);
                     }
                 }
                 catch (Exception e)
@@ -374,7 +392,7 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-  
+
         [HarmonyPatch(typeof(TacticalVoxelMatrix), "SpawnAndPropagateMist")]
         public static class TacticalVoxelMatrix_SpawnAndPropagateMist_VoidOmenMoreMistOnTactical_Patch
         {
@@ -394,141 +412,37 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-        /*
-        [HarmonyPatch(typeof(TacticalAbility), "GetTargetActors", new Type[] { typeof(TacticalTargetData), typeof(TacticalActorBase), typeof(Vector3) })]
-        public static class TacticalAbility_GetTargetActors_Patch
-        {
-            public static void Postfix(ref IEnumerable<TacticalAbilityTarget> __result, TacticalActorBase sourceActor)
-            {
-                try
-                {
-                    if (sourceActor.ActorDef.name.Equals("Oilcrab_ActorDef") || sourceActor.ActorDef.name.Equals("Oilfish_ActorDef"))
-                    {
-                        List<TacticalAbilityTarget> list = __result.ToList();
-                        list.RemoveWhere(adilityTarget => (adilityTarget.Actor as TacticalActor)?.CharacterStats.Corruption <= 0);
-                        __result = list;
-                    }
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
 
-        E_ActorEffect [UmbralCrabmen_FactionEffectDef] // This lists the conditions that have to be fulfilled by actor to receive OilCrab_AddAbilityStatusDef
-        OilCrab_AddAbilityStatusDef // This is what gives the Oilcrab_Die_DeathBelcher_AbilityDef
-        Oilcrab_Die_DeathBelcher_AbilityDef // This is the ability that when character dies, it spawns Umbra
-        */
-
-        /*  [HarmonyPatch(typeof(TacticalAbility), "TargetFilterPredicate")]
-          public static class TacticalAbility_TargetFilterPredicate_UmbraAttack_Patch
-          {
-
-
-              public static void Prefix(TacticalActorBase targetActor, TacticalActorBase sourceActor)
-              {
-                  try
-                  {
-
-                  VoidOmens.UmbraAttackCheck(targetActor, sourceActor);
-                  Logger.Always("The umbra flag is " + VoidOmens.umbraAttack);
-
-                  }
-                  catch (Exception e)
-                  {
-                      Logger.Error(e);
-                  }
-              }
-          }
-
-          [HarmonyPatch(typeof(DamageKeywordDef), "ApplyAiEvaluationEffect")]
-          public static class DamageKeywordDef_ApplyAiEvaluationEffect_UmbraAttack_Patch
-          {
-              public static void Postfix(ref DamageResult res)
-              {
-                  try
-                  {
-                      if (VoidOmens.umbraAttack) 
-                      {
-                          res.HealthDamage = 0;
-                          VoidOmens.umbraAttack = false;
-                      }
-
-                  }
-                  catch (Exception e)
-                  {
-                      Logger.Error(e);
-                  }
-              }
-          }
-        */
-
-        [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionDaily")]
-        public static class PhoenixStatisticsManager_UpdateGeoscapeStats_NJPissedAtMutations_Patch
-        {
-            public static void Postfix(GeoAlienFaction __instance)
-            {
-                try
-                {
-                    int mutations = 0;
-                    GeoLevelController geoLevelController = __instance.GeoLevel;
-                    GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(__instance, geoLevelController.ViewerFaction);
-                    GeoFactionDef newJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
-                    //check number of mutations player has
-                    GameTagDef mutationTag = GameUtl.GameComponent<SharedData>().SharedGameTags.AnuMutationTag;
-                    foreach (GeoCharacter geoCharacter in __instance.GeoLevel.PhoenixFaction.Soldiers)
-                    {
-                        foreach (GeoItem mutation in geoCharacter.ArmourItems)
-                        {
-                            if (mutation.ItemDef.Tags.Contains(mutationTag))
-                                mutations += 1;
-                        }                      
-                    }
-                    if (mutations > 2 && geoLevelController.EventSystem.GetVariable("BG_NJ_Pissed_Over_Mutations") == 0)
-                    {
-                        geoLevelController.EventSystem.TriggerGeoscapeEvent("NJ_Pissed1", geoscapeEventContext);
-                        geoLevelController.EventSystem.SetVariable("BG_NJ_Pissed_Over_Mutations", 1);
-                    }
-                    if (geoLevelController.EventSystem.GetVariable("BG_NJ_Pissed_Broke_Promise") == 1
-                       && geoLevelController.EventSystem.GetVariable("BG_NJ_Really_Pissed_Over_Mutations") == 0)
-                    {
-                        geoLevelController.EventSystem.TriggerGeoscapeEvent("NJ_Pissed2", geoscapeEventContext);
-                        geoLevelController.EventSystem.SetVariable("BG_NJ_Really_Pissed_Over_Mutations", 1);
-                    }
-                    
-                }
-                catch (Exception e)
-                {
-                    Logger.Error(e);
-                }
-            }
-        }
+       
 
         [HarmonyPatch(typeof(SiteEncountersArtCollectionDef), "GetEventArt")]
         public static class SiteEncountersArtCollectionDef_GetEventArt_InjectArt_patch
         {
-         public static void Postfix(ref EncounterEventArt __result, GeoscapeEvent geoEvent)
-         {
-          try
-          {
+             public static void Postfix(ref EncounterEventArt __result, GeoscapeEvent geoEvent)
+             {
+                try
+                {
              /* if (geoEvent.EventID.Equals("Anu_Pissed1"))
               {
                   __result.EventBackground = Helper.CreateSpriteFromImageFile("combat.png");
               }
              */
-              if (geoEvent.EventID.Equals("PROG_FS0"))
-              {
+                    if(geoEvent.EventID.Equals("PROG_FS0"))
+                    {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("FesteringSkiesAfterHamerfall.png");
-              }
+                    }
+                 /*   if (geoEvent.EventID.Equals("SDI_01"))
+                    {
+                        __result.EventLeader = Helper.CreateSpriteFromImageFile("oldsb.png");
+                    }*/
 
-          }
-          catch (Exception e)
-          {
-              Logger.Error(e);
-          }
-        }
-     }  
+                }
+                catch (Exception e)
+                {
+                Logger.Error(e);
+                }
+             }
+        }  
     }
 }
 

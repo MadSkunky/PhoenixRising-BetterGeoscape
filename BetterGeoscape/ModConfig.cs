@@ -2,10 +2,11 @@
 {
     // New config class.
     internal class ModConfig
-    {  
-       
+    {
+
+        public int evolutionPointsLegend = 70;
         // These settings determine amount of resources player can acquire:
-       
+        
         // Determines amount of scavenging missions available and type of mission (crates, vehicles, or soldiers)
         // Is setup at start of new game, so game in progress will not be affected by change in settings
         public int InitialScavSites = 8; // 16 on Vanilla

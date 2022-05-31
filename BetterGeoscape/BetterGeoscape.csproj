@@ -90,6 +90,8 @@
     <Compile Include="ChangesToEvents.cs" />
     <Compile Include="ChangesToAmbushes.cs" />
     <Compile Include="AugmentationWOCH.cs" />
+    <Compile Include="MutationsAndBionicsDiplo.cs" />
+    <Compile Include="Umbra.cs" />
     <Compile Include="VoidOmens.cs" />
     <Compile Include="MutationStamina.cs" />
     <Compile Include="CommonMethods.cs" />

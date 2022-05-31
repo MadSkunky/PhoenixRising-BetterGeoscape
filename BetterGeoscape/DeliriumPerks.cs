@@ -235,23 +235,23 @@ namespace PhoenixRising.BetterGeoscape
             photophobia.ViewElementDef.LargeIcon = icon;
             photophobia.ViewElementDef.SmallIcon = icon;
         }
-        public static void Create_Nails()
+        public static void Create_NailsPassive()
         {
-            string skillName = "Nails_AbilityDef";
+            string skillName = "NailsPassive_AbilityDef";
             PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Cautious_AbilityDef"));
-            PassiveModifierAbilityDef nails = Helper.CreateDefFromClone(
+            PassiveModifierAbilityDef nailsPassive = Helper.CreateDefFromClone(
                 source,
                 "b3185867-ca87-4e59-af6d-012267a7bd25",
                 skillName);
-            nails.CharacterProgressionData = Helper.CreateDefFromClone(
+            nailsPassive.CharacterProgressionData = Helper.CreateDefFromClone(
                 source.CharacterProgressionData,
                 "3e57b19b-11e1-42b9-81f4-c9cc9fffc42d",
                 skillName);
-            nails.ViewElementDef = Helper.CreateDefFromClone(
+            nailsPassive.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
                 "3f170800-b819-4237-80a3-c9b9daa9dab4",
                 skillName);
-            nails.StatModifications = new ItemStatModification[]
+            nailsPassive.StatModifications = new ItemStatModification[]
               {
                 new ItemStatModification()
                 {
@@ -260,7 +260,31 @@ namespace PhoenixRising.BetterGeoscape
                     Value = -0.2f
                 },
               };
-            nails.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            nailsPassive.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            nailsPassive.ViewElementDef.DisplayName1 = new LocalizedTextBind("NAILS", true);
+            nailsPassive.ViewElementDef.Description = new LocalizedTextBind("<b>You gain Slashing Strike, but -20% accuracyh</b>\n<i>Demonstrating signs of schizophrenia, this subject refuse to clip his nails and sharpens them to form monster " +
+                "claws, which naturally obstructs proper handling of firearm weapons </i>", true);
+            Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutoid_SlashingStrike_AbilityDef]")).SmallIcon;
+            nailsPassive.ViewElementDef.LargeIcon = icon;
+            nailsPassive.ViewElementDef.SmallIcon = icon;
+        }
+        public static void Create_Nails()
+        {
+            string skillName = "Nails_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutoid_Adapt_RightArm_Slasher_AbilityDef"));
+            ApplyStatusAbilityDef nails = Helper.CreateDefFromClone(
+                source,
+                "bb65ab9c-94ae-4878-b999-e04946f720aa",
+                skillName);
+            nails.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "c050760d-1fb7-4b25-9295-00d98aedad19",
+                skillName);
+            nails.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "e9bd7acb-6955-414b-a2de-7544c38b7b6e",
+                skillName);
+
             nails.ViewElementDef.DisplayName1 = new LocalizedTextBind("NAILS", true);
             nails.ViewElementDef.Description = new LocalizedTextBind("<b>You gain Slashing Strike, but -20% accuracyh</b>\n<i>Demonstrating signs of schizophrenia, this subject refuse to clip his nails and sharpens them to form monster " +
                 "claws, which naturally obstructs proper handling of firearm weapons </i>", true);
@@ -359,16 +383,41 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     TargetStat = StatModificationTarget.Endurance,
                     Modification = StatModificationType.Add,
-                    Value = -4,
+                    Value = -5,
                 },
                 new ItemStatModification()
                 {
                     TargetStat = StatModificationTarget.Endurance,
                     Modification = StatModificationType.AddMax,
-                    Value = -4,
+                    Value = -5,
                 },
               };
             immortality.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            immortality.ViewElementDef.DisplayName1 = new LocalizedTextBind("IMMORTALITY", true);
+            immortality.ViewElementDef.Description = new LocalizedTextBind("<b>Strength reduced -5, Disabled limbs remain functional</b>\n<i>Self-mutilation is not uncommon to develop throughout Delirium affected subjects," +
+                " this one in particular believes he has become Immortal</i>", true);
+            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Vampire.png");
+            immortality.ViewElementDef.LargeIcon = icon;
+            immortality.ViewElementDef.SmallIcon = icon;
+        }
+        /*
+        public static void Create_Immortality2()
+        {
+            string skillName = "Immortality2_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("IgnorePain_AbilityDef"));
+            ApplyStatusAbilityDef immortality = Helper.CreateDefFromClone(
+                source,
+                "eea26659-d54f-48d8-8025-cb7ca53c1749",
+                skillName);
+            immortality.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "d99c2d2f-0cff-412c-ad99-218b39158c88",
+                skillName);
+            immortality.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "3f8b13e1-70ff-4964-923d-1e2c73f66f4f",
+                skillName);
+
             immortality.ViewElementDef.DisplayName1 = new LocalizedTextBind("IMMORTALITY", true);
             immortality.ViewElementDef.Description = new LocalizedTextBind("<b>Strength reduced -4, Gain 10 natural Armour</b>\n<i>Self-mutilation is not uncommon to develop throughout Delirium affected subjects," +
                 " this one in particular believes he has become Immortal</i>", true);
@@ -376,11 +425,12 @@ namespace PhoenixRising.BetterGeoscape
             immortality.ViewElementDef.LargeIcon = icon;
             immortality.ViewElementDef.SmallIcon = icon;
         }
+        */
         public static void Create_Feral()
         {
             string skillName = "Feral_AbilityDef";
-            PassiveModifierAbilityDef source = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(p => p.name.Equals("Thief_AbilityDef"));
-            PassiveModifierAbilityDef feral = Helper.CreateDefFromClone(
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("RapidClearance_AbilityDef"));
+            ApplyStatusAbilityDef feral = Helper.CreateDefFromClone(
                 source,
                 "34612505-8512-4eb3-8429-ef087c07c764",
                 skillName);
@@ -392,37 +442,25 @@ namespace PhoenixRising.BetterGeoscape
                 source.ViewElementDef,
                 "1135128c-a10d-4285-9d03-d93a4afd6733",
                 skillName);
-            feral.StatModifications = new ItemStatModification[]
-              {
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.Endurance,
-                    Modification = StatModificationType.Add,
-                    Value = 2
-                },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.Endurance,
-                    Modification = StatModificationType.AddMax,
-                    Value = 2
-                },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.Willpower,
-                    Modification = StatModificationType.Add,
-                    Value = -4
-                },
-                new ItemStatModification()
-                {
-                    TargetStat = StatModificationTarget.Willpower,
-                    Modification = StatModificationType.AddMax,
-                    Value = -4
-                },
-              };
-            feral.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
+            OnActorDeathEffectStatusDef feralStatusDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<OnActorDeathEffectStatusDef>().FirstOrDefault(a => a.name.Equals("E_RapidClearanceStatus [RapidClearance_AbilityDef]")),
+                "9510c7e3-bef7-4b89-b20a-3bb57a7e664b",
+                "E_FeralStatus [Feral_AbilityDef]");
+            ProcessDeathReportEffectDef feralEffectDef = Helper.CreateDefFromClone(
+                Repo.GetAllDefs<ProcessDeathReportEffectDef>().FirstOrDefault(a => a.name.Equals("E_Effect [RapidClearance_AbilityDef]")),
+                "d0f71701-4255-4b57-a387-0f3c936ed29e",
+                "E_Effect [Feral_AbilityDef]");
+
+            feral.StatusApplicationTrigger = StatusApplicationTrigger.ActorEnterPlay;
+            feral.Active = false;
+            feral.WillPointCost = 0;
+
+            feral.StatusDef = feralStatusDef;
+            feralStatusDef.EffectDef = feralEffectDef;
+            feralEffectDef.RestoreActionPointsFraction = 0.25f;
+
             feral.ViewElementDef.DisplayName1 = new LocalizedTextBind("FERAL", true);
-            feral.ViewElementDef.Description = new LocalizedTextBind("<b>Strength Increased +2, Gains Leap  (same as Mutog), Willpower Reduced -4</b>\n<i>Suffering personality disorder," +
-                " the subject degrade to animalistic behaviour and state of mind</i>", true);
+            feral.ViewElementDef.Description = new LocalizedTextBind("<b>Your attacks have 10% chance to fumble but you recover 1 AP when you kill an enemy</b>\n<i>Suffering personality disorder, the subject degrade to animalistic behaviour and state of mind</i>", true);
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutog_PrimalInstinct_AbilityDef]")).LargeIcon;
             feral.ViewElementDef.LargeIcon = icon;
             feral.ViewElementDef.SmallIcon = icon;

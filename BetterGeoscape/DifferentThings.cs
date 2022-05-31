@@ -1,25 +1,156 @@
-﻿using Base.Defs;
-using PhoenixPoint.Common.Entities.Items;
-using PhoenixPoint.Geoscape.Entities;
-using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
-using PhoenixPoint.Tactical.Entities;
-using PhoenixPoint.Tactical.Levels.Mist;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
 
-namespace PhoenixRising.BetterGeoscape
-{
+//namespace PhoenixRising.BetterGeoscape
+/*{
+   public static bool umbraAttack = false;
+        public static void UmbraAttackCheck(TacticalActorBase target, TacticalActorBase attacker)
+        {
+            try
+            {
 
-    /* {"KEY_SNIPER_QUICK_AIM_NAME", "KEY_RAPID_CLEARANCE_NAME", "AIMED BURST", "KEY_RALLY_NAME", "Dash", "AdreanlineRush", "GunKata_AbilityDef",
+               
+                
+                TacticalActor targetCharacter = (TacticalActor)target.GetActor(); 
+
+
+                if (attacker.name.Equals("Oilcrab_ActorDef") || attacker.name.Equals("Oilfish_ActorDef") && targetCharacter.CharacterStats.Corruption==0) 
+                {
+                    umbraAttack = true;         
+                }
+
+     
+                Logger.Always("The name of the attacker is " + attacker.name);
+                Logger.Always("The name of the target is " + targetCharacter.DisplayName);
+
+            }
+
+            catch (Exception e)
+            {
+                Logger.Error(e);
+
+            }
+        }
+
+[HarmonyPatch(typeof(TacticalLevelController), "ActorEnteredPlay")]
+        public static class TacticalLevelController_ActorEnteredPlay_CalculateDelirium_Patch
+        {
+            public static void Postfix()
+            {
+                try
+                {
+                  /*  TacticalActor actorTactical = actor.GetComponent<TacticalActor>();
+                    if (actorTactical != null && actorTactical.CharacterStats.Corruption.Value > 0)
+                    {
+                        if (actorTactical.IsControlledByPlayer)
+                        {                     
+                                if (actorTactical.CharacterStats.Corruption.Value > 0)
+                                {
+                                    totalCharactersWithDelirium++;
+                                    totalDeliriumOnMission += (int)actorTactical.GetComponent<TacticalActor>().CharacterStats.Corruption.Value.BaseValue;
+                                    Logger.Always("Total Delirium on mission is " + totalDeliriumOnMission);
+                                    Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
+                                }
+
+                           
+                        }
+                    }
+                    if (totalDeliriumOnMission <= 10 && totalCharactersWithDelirium <= 6)
+                    {
+                        RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                        randomValueCrabUmbra.ThresholdValue = 0;
+                        Logger.Always("The Umbra random value is " + randomValueCrabUmbra.ThresholdValue);
+                    }
+                }
+                
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+            
+
+//This is the method for applying faction effects 
+public void ApplyToFaction(TacticalFaction faction)
+  {
+      _deserializing = Applied;
+      TacticalFaction = faction;
+      OnApplyToFaction();
+      if (TacticalFactionEffectDef.OnApply && TacticalFactionEffectDef.ApplyToFactionMembers && !_deserializing)
+      {
+          TriggerForFactionActors();
+      }
+
+      if (Persistent)
+      {
+          if (TacticalFactionEffectDef.OnActorEnterPlay && TacticalFactionEffectDef.ApplyToFactionMembers)
+          {
+              TacticalFaction.TacticalLevel.ActorEnteredPlayEvent += OnActorEnteredPlay;
+          }
+
+          TacticalFaction.AddFactionEffect(this);
+          if (!_deserializing)
+          {
+              TurnApplied = TurnNumber;
+              Applied = true;
+          }
+      }
+  }
+
+
+      public static TacticalFactionEffect ApplyToFaction(DefRepository repo, TacticalFactionEffectDef def, TacticalFaction tacticalFaction)
+  {
+      TacticalFactionEffect tacticalFactionEffect = repo.Instantiate<TacticalFactionEffect>(def);
+      tacticalFactionEffect.ApplyToFaction(tacticalFaction);
+      return tacticalFactionEffect;
+  }
+
+  E_ActorEffect [UmbralCrabmen_FactionEffectDef] // This lists the conditions that have to be fulfilled by actor to receive OilCrab_AddAbilityStatusDef
+  OilCrab_AddAbilityStatusDef // This is what gives the Oilcrab_Die_DeathBelcher_AbilityDef
+  Oilcrab_Die_DeathBelcher_AbilityDef // This is the ability that when character dies, it spawns Umbra
+  
+
+    
+      [HarmonyPatch(typeof(DamageKeywordDef), "ApplyAiEvaluationEffect")]
+      public static class DamageKeywordDef_ApplyAiEvaluationEffect_UmbraAttack_Patch
+      {
+          public static void Postfix(ref DamageResult res)
+          {
+              try
+              {
+                  if (VoidOmens.umbraAttack) 
+                  {
+                      res.HealthDamage = 0;
+                      VoidOmens.umbraAttack = false;
+                  }
+
+              }
+              catch (Exception e)
+              {
+                  Logger.Error(e);
+              }
+          }
+      }
+    
+
+
+    RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                    FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                randomValueCrabUmbra.ThresholdValue = 1;
+
+                TacticalFactionEffectDef factionAbilityCrabUmbra = Repo.GetAllDefs<TacticalFactionEffectDef>().
+                    FirstOrDefault(ged => ged.name.Equals("UmbralCrabmen_FactionEffectDef"));
+                factionAbilityCrabUmbra.OnStartTurn = true;
+                factionAbilityCrabUmbra.OnEndTurn = true;
+     TacStatusEffectDef actorEffectCrabUmbra = Repo.GetAllDefs<TacStatusEffectDef>().
+                    FirstOrDefault(ged => ged.name.Equals("E_ActorEffect[UmbralCrabmen_FactionEffectDef]"));
+     {"KEY_SNIPER_QUICK_AIM_NAME", "KEY_RAPID_CLEARANCE_NAME", "AIMED BURST", "KEY_RALLY_NAME", "Dash", "AdreanlineRush", "GunKata_AbilityDef",
          "Exertion_AbilityDef", "BC_ARTargeting_AbilityDef", "Rage Burst", "JetpackControl_AbilityDef", "KEY_HEAVY_BOOM_BLAST_NAME", "Deploy Drone Pack", "LayWaste_AbilityDef", "KEY_ARMOUR_BREAK_NAME",
          "BC_Gunslinger_AbilityDef", "ElectricReinforcement", "AmplifyPain_AbilityDef", "KEY_SNIPER_MARK_FOR_DEATH_NAME", "KEY_INDUCE_PANIC_NAME", "KEY_PSYCHIC_BLAST_NAME", "KEY_TECHNICIAN_REMOTE_DEPLOYMENT_NAME", "KEY_TECHNICIAN_MANUAL_CONTROL_NAME", "KEY_TECHNICIAN_FIELD_MEDIC_NAME",
-         "KEY_DECOY_NAME", "KEY_VANISH_NAME"}*/
+         "KEY_DECOY_NAME", "KEY_VANISH_NAME"}
 
     //This looks like the method for AI to evaluate how much damage it will do with an attack. May be useful for implementing attack for Umbra
-    /*
+    
         public void CalculateDamageResultForAiTarget(TacticalActorBase targetActorBase, IDamageReceiver receiver, ref DamageResult damageResult)
         {
             foreach (DamageKeywordPair item in DamageKeywords.Where((DamageKeywordPair k) => k.DamageKeywordDef.UseForAiVulnerabilityCheck))
@@ -42,7 +173,7 @@ namespace PhoenixRising.BetterGeoscape
                 num -= GenerateArmourPiercingAmount();
                 item.DamageKeywordDef.ApplyAiEvaluationEffect(targetActorBase, keywordValue, num, ref damageResult);
             }
-        }  */
+        } 
 
 
     internal class DifferentThings
@@ -151,4 +282,4 @@ namespace PhoenixRising.BetterGeoscape
         }
 
     }
-}
+}*/

@@ -15,26 +15,20 @@ namespace PhoenixRising.BetterGeoscape
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
-        public static string[] tacticalAbilitiesDefNames = new string[26] {"BC_QuickAim_AbilityDef",
+     /*   public static string[] tacticalAbilitiesDefNames = new string[26] {"BC_QuickAim_AbilityDef",
             "RapidClearance_AbilityDef", "AimedBurst_AbilityDef", "Dash_AbilityDef", "AdrenalineRush_AbilityDef",
             "GunKata_AbilityDef", "Exertion_AbilityDef", "BC_ARTargeting_AbilityDef", "RageBurst_RageBurstInConeAbilityDef",
             "JetpackControl_AbilityDef","BigBooms_AbilityDef", "DeployDronePack_ShootAbilityDef", "LayWaste_AbilityDef",
             "ArmourBreak_AbilityDef", "BC_Gunslinger_AbilityDef", "ElectricReinforcement_AbilityDef", "AmplifyPain_AbilityDef","MarkedForDeath_AbilityDef", "InducePanic_AbilityDef",
             "MindCrush_AbilityDef", "RemoteDeployment_AbilityDef", "ManualControl_AbilityDef", "FieldMedic_AbilityDef", "Decoy_AbilityDef", "Vanish_AbilityDef", "JetJump_AbilityDef"};
         
-        
-
-        public static string[] tacticalAbilitiesDisplayName = new string[26] {"QuickAim", "Rapid Clearence", "AimedBurst_AbilityDef", "Rally", "Dash", "AdreanlineRush", "GunKata_AbilityDef",
-        "Exertion_AbilityDef", "BC_ARTargeting_AbilityDef", "Rage Burst", "JetpackControl_AbilityDef", "BigBooms", "Deploy Drone Pack", "LayWaste_AbilityDef", "ArmourBreak",
-        "BC_Gunslinger_AbilityDef", "ElectricReinforcement", "AmplifyPain_AbilityDef", "MarkedForDeath", "InducePanic", "MindCrush", "Remote Deployment", "ManualControl", "FieldMedic",
-        "Decoy", "Vanish"};
 
         public static void AdjustWPCostAbility(string abilityDef, float costChange) 
         {
             try
             {
                TacticalAbilityDef ability = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(ged => ged.name.Equals(abilityDef));
-                ability.WillPointCost += costChange;                    
+                ability.WillPointCost += costChange;
             }
             catch (Exception e)
             {
@@ -42,7 +36,7 @@ namespace PhoenixRising.BetterGeoscape
             }
 
 
-        }
+        }*/
 
         public static void SetStaminaToZero(GeoCharacter __instance)
         {

@@ -1,4 +1,5 @@
 ﻿using Base.Defs;
+using Base.Entities.Effects;
 using Base.Entities.Effects.ApplicationConditions;
 using Base.UI;
 using PhoenixPoint.Common.Core;
@@ -27,10 +28,15 @@ namespace PhoenixRising.BetterGeoscape
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
-        public static bool[] darkEventsCheck = new bool[11];
+        public static bool[] darkEventsCheck = new bool[13];
         public static bool VoidOmen3Active = false;
         public static bool VoidOmen3Activated = false;
         public static bool VoidOmen7Active = false;
+        public static bool VoidOmen9Active = false;
+        public static bool VoidOmen11Active = false;
+        public static bool VoidOmen12Active = false;
+
+
         public static void CreateVoidOmens(GeoLevelController level)
         {
             try
@@ -40,7 +46,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 for (int i = 1; i < difficulty + 1; i++)
                 {
-                    for (int j = 1; j < 10; j++)
+                    for (int j = 1; j < darkEventsCheck.Count()-1; j++)
                     {
                         if (level.EventSystem.GetVariable(voidOmen + i) == j)
                         {
@@ -82,32 +88,7 @@ namespace PhoenixRising.BetterGeoscape
 
                             }
                             if (j == 3 && darkEventsCheck[j] == false)
-                            {       
-                               foreach (string tacticalAbility in CommonMethods.tacticalAbilitiesDefNames) 
-                                {
-                                    CommonMethods.AdjustWPCostAbility(tacticalAbility, 1);                               
-                                }
-                                
-                                /* foreach (TacticalAbilityDef tacticalAbility in Repo.GetAllDefs<TacticalAbilityDef>())
-                                {
-                                    if (tacticalAbility.WillPointCost > 0 && CommonMethods.tacticalAbilitiesDefNames.Contains(tacticalAbility.name) || CommonMethods.tacticalAbilitiesDisplayName.Contains(tacticalAbility.ViewElementDef.name))
-                                    {
-     
-                                        if (tacticalAbility.WillPointCost >= 1 && tacticalAbility.WillPointCost <= 2)
-                                        {
-                                            tacticalAbility.WillPointCost += 1;
-                                        }
-                                        else if (tacticalAbility.WillPointCost >= 3 && tacticalAbility.WillPointCost <= 4)
-                                        {
-                                            tacticalAbility.WillPointCost += 2;
-                                        }
-                                        else if (tacticalAbility.WillPointCost >= 5 && tacticalAbility.WillPointCost <= 6)
-                                        {
-                                            tacticalAbility.WillPointCost += 3;
-                                        }
-                                    }
-                                }*/
-
+                            {
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 4 && darkEventsCheck[j] == false) //pending adding extra XP gain
@@ -179,14 +160,39 @@ namespace PhoenixRising.BetterGeoscape
                             }
                             if (j == 9 && darkEventsCheck[j] == false)
                             {
-                                RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
-                                randomValueCrabUmbra.ThresholdValue = 1;
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 10 && darkEventsCheck[j] == false)
                             {
                                 FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
                                 festeringSkiesSettingsDef.HavenAttackCounterModifier = 0.66f;
+                                darkEventsCheck[j] = true;
+                            }
+                            if (j == 11 && darkEventsCheck[j] == false)
+                            {
+                                if (!darkEventsCheck[9])
+                                {
+                                    RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                                    FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                                    randomValueCrabUmbra.ThresholdValue = 0.25f;
+                                    RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                                    FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
+                                    randomValueFishUmbra.ThresholdValue = 0.25f;
+                                }
+                                if (darkEventsCheck[9])
+                                {
+                                    RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                                    FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                                    randomValueCrabUmbra.ThresholdValue = 0.5f;
+                                    RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                                    FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
+                                    randomValueFishUmbra.ThresholdValue = 0.5f;
+                                }
+                                darkEventsCheck[j] = true;
+                            }
+                            if (j == 12 && darkEventsCheck[j] == false)
+                            {
+                                darkEventsCheck[j] = true;
                             }
                         }
                     }
@@ -214,7 +220,7 @@ namespace PhoenixRising.BetterGeoscape
                     }
                 }
 
-                for (int i = 0; i < darkEventsCheck.Count(); i++)
+                for (int i = 1; i < darkEventsCheck.Count()-1; i++)
                 {
                     if (!voidOmensInPlay.Contains(i) && darkEventsCheck[i])
                     {
@@ -258,29 +264,7 @@ namespace PhoenixRising.BetterGeoscape
                         }
                         if (darkEventsCheck[3])
                         {
-                            foreach (string tacticalAbility in CommonMethods.tacticalAbilitiesDefNames)
-                            {
-                                CommonMethods.AdjustWPCostAbility(tacticalAbility, 2/3);
-                            }
-
-                            /* foreach (TacticalAbilityDef tacticalAbility in Repo.GetAllDefs<TacticalAbilityDef>())
-                            {
-                                if (tacticalAbility.WillPointCost > 0 && CommonMethods.tacticalAbilities.Contains(tacticalAbility.ViewElementDef.name))
-                                {
-                                    if (tacticalAbility.WillPointCost >= 1 && tacticalAbility.WillPointCost <= 2)
-                                    {
-                                        tacticalAbility.WillPointCost -= 1;
-                                    }
-                                    else if (tacticalAbility.WillPointCost >= 3 && tacticalAbility.WillPointCost <= 4)
-                                    {
-                                        tacticalAbility.WillPointCost -= 2;
-                                    }
-                                    else if (tacticalAbility.WillPointCost >= 5 && tacticalAbility.WillPointCost <= 6)
-                                    {
-                                        tacticalAbility.WillPointCost -= 3;
-                                    }
-                                }
-                            } */
+                        
                             darkEventsCheck[3] = false;
                             Logger.Always("The check for VO#3 went ok");
                         }
@@ -303,7 +287,8 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     TacticalFactionEffectDef defendersCanBeRecruited = Repo.GetAllDefs<TacticalFactionEffectDef>().FirstOrDefault(ged => ged.name.Equals("CanBeRecruitedByPhoenix_FactionEffectDef"));                                   
                                     missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Friend;
-                                   // missionTypeDef.ParticipantsData[1].PredeterminedFactionEffects[0]=(defendersCanBeRecruited);                            
+                                    EffectDef[] predeterminedFactionEffects = new EffectDef[1] { defendersCanBeRecruited };
+                                    missionTypeDef.ParticipantsData[1].PredeterminedFactionEffects = predeterminedFactionEffects;
                                     missionTypeDef.FactionItemsRange.Min = 0;
                                     missionTypeDef.FactionItemsRange.Max = 0;
                                     missionTypeDef.CratesDeploymentPointsRange.Min = 0;
@@ -320,11 +305,15 @@ namespace PhoenixRising.BetterGeoscape
                             level.CurrentDifficultyLevel.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0;
                             level.CurrentDifficultyLevel.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0;
                             level.CurrentDifficultyLevel.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0;
-                            /*   foreach (ResourceGeneratorFacilityComponentDef lab in Repo.GetAllDefs<ResourceGeneratorFacilityComponentDef>())
-                               {
-                                   if (lab.name == "E_ResourceGenerator[ResearchLab_PhoenixFacilityDef]" || lab.name == "E_ResourceGenerator [BionicsLab_PhoenixFacilityDef]")
-                                       lab.BaseResourcesOutput.Values.Remove(lab.BaseResourcesOutput.Values[1]);
-                               }*/
+                            foreach (ResourceGeneratorFacilityComponentDef lab in Repo.GetAllDefs<ResourceGeneratorFacilityComponentDef>())
+                            {
+                                if (lab.name == "E_ResourceGenerator[ResearchLab_PhoenixFacilityDef]" 
+                                    || lab.name == "E_ResourceGenerator [BionicsLab_PhoenixFacilityDef]" 
+                                    && lab.BaseResourcesOutput.Values[1]!=null)
+                                {
+                                    lab.BaseResourcesOutput.Values.Remove(lab.BaseResourcesOutput.Values[1]);
+                                }
+                            }
                             darkEventsCheck[6] = false;
                             Logger.Always("The check for VO#6 went ok");
                         }
@@ -360,9 +349,7 @@ namespace PhoenixRising.BetterGeoscape
                         }
 
                         if (darkEventsCheck[9])
-                        {
-                            RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
-                            randomValueCrabUmbra.ThresholdValue = 0.16f;
+                        {                         
                             darkEventsCheck[9] = false;
                             Logger.Always("The check for VO#9 went ok");
                         }
@@ -374,6 +361,26 @@ namespace PhoenixRising.BetterGeoscape
                             darkEventsCheck[10] = false;
                             Logger.Always("The check for VO#10 went ok");
                         }
+
+                        if (darkEventsCheck[11])
+                        {
+                            RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                            FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                            randomValueCrabUmbra.ThresholdValue = 0;
+                            RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                            FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
+                            randomValueFishUmbra.ThresholdValue = 0;
+
+                            darkEventsCheck[11] = false;
+                            Logger.Always("The check for VO#10 went ok");
+                        }
+
+                        if (darkEventsCheck[12])
+                        {
+                            darkEventsCheck[12] = false;
+                            Logger.Always("The check for VO#3 went ok");
+                        }
+
                     }
                 }
             }
@@ -401,61 +408,26 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         VoidOmen7Active = true;
                     }
-                }
-            }
-            catch (Exception e)
-            {
-                Logger.Error(e);
-            }
-
-        }
-        public static void ImplementVoidOmen3OnTactical()
-        {
-            try
-            {
-                if (VoidOmen3Active && VoidOmen3Activated == false)
-                {
-                    foreach (string tacticalAbility in CommonMethods.tacticalAbilitiesDefNames)
+                    if (level.EventSystem.GetVariable(voidOmen + i) == 9)
                     {
-                        CommonMethods.AdjustWPCostAbility(tacticalAbility, 1.5f);
+                        VoidOmen9Active = true;
                     }
-                    VoidOmen3Activated = true;
-                }
+                    if (level.EventSystem.GetVariable(voidOmen + i) == 11)
+                    {
+                        VoidOmen11Active = true;
+                    }
+                    if (level.EventSystem.GetVariable(voidOmen + i) == 12)
+                    {
+                        VoidOmen12Active = true;
+                    }
 
+                }
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
+
         }
-     /*   public static bool umbraAttack = false;
-        public static void UmbraAttackCheck(TacticalActorBase target, TacticalActorBase attacker)
-        {
-            try
-            {
-
-               
-                
-                TacticalActor targetCharacter = (TacticalActor)target.GetActor(); 
-
-
-                if (attacker.name.Equals("Oilcrab_ActorDef") || attacker.name.Equals("Oilfish_ActorDef") && targetCharacter.CharacterStats.Corruption==0) 
-                {
-                    umbraAttack = true;         
-                }
-
-     
-                Logger.Always("The name of the attacker is " + attacker.name);
-                Logger.Always("The name of the target is " + targetCharacter.DisplayName);
-
-            }
-
-            catch (Exception e)
-            {
-                Logger.Error(e);
-
-            }
-        }*/
-   
     }
 }
