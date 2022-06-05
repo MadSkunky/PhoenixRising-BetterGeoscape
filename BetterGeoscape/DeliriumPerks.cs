@@ -353,6 +353,8 @@ namespace PhoenixRising.BetterGeoscape
                 },
               };
 
+            DamageMultiplierStatusDef mistResistance = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(a => a.name.Contains("MistResistance_StatusDef"));
+            mistResistance.Multiplier = 0.0f;
             ofuPassive.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
             ofuPassive.ViewElementDef.DisplayName1 = new LocalizedTextBind("ONE OF US", true);
             ofuPassive.ViewElementDef.Description = new LocalizedTextBind("<b>Willpower reduced -2, Mist affects you as if you were a Pandoran</b>\n<i>Often the last to leave the mission, wandering ruined landscapes the subject claims the mist " +

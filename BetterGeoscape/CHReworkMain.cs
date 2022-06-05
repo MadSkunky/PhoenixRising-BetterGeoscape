@@ -1169,7 +1169,7 @@ namespace PhoenixRising.BetterGeoscape
                                 TacticalAbilityDef abilityDef1 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef1) != null)
                                 {
-                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ActorSilenced_StatusDef")));
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Hallucinating_StatusDef")));
                                 }
 
                                 TacticalAbilityDef abilityDef2 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
@@ -1177,11 +1177,11 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
                                 }
-
-                                TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUs_AbilityDef"));
+                                TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUsPassive_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
                                 {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("OneOfUsPassive_AbilityDef")), actor);
+
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("MistResistance_StatusDef")));
                                 }
 
                                 TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
@@ -1195,6 +1195,7 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("IgnorePain_AbilityDef")), actor);
                                 }
+
                                 /*
                                 TacticalAbilityDef abilityDef6 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Feral_AbilityDef"));
                                         if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
@@ -1220,6 +1221,18 @@ namespace PhoenixRising.BetterGeoscape
                     Logger.Error(e);
                 }
             }
+        }
+
+        public static void Create_HallucinatingStatus()
+        {
+            string skillName = "Hallucinating_StatusDef";
+            SilencedStatusDef source = Repo.GetAllDefs<SilencedStatusDef>().FirstOrDefault(p => p.name.Equals("ActorSilenced_StatusDef"));
+            SilencedStatusDef hallucinatingStatus = Helper.CreateDefFromClone(
+                source,
+                "2d5ed7eb-f4f3-42bf-8589-1d50ec99fa8b",
+                skillName);
+
+            hallucinatingStatus.DurationTurns = 2;
         }
 
         [HarmonyPatch(typeof(TacticalAbility), "FumbleActionCheck")]

@@ -313,15 +313,67 @@ namespace PhoenixRising.BetterGeoscape
                 BodyPartAspectDef umbraFishBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
                 FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilfish_Torso_BodyPartDef]"));
                 umbraFishBodyAspect.Endurance = 25.0f;
-
+                TerribleScyllaRoars();
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
         }
-      
-        [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
+
+        [HarmonyPatch(typeof(PhoenixStatisticsManager),"OnResearchCompleted")]
+        public static class PhoenixStatisticsManager_OnResearchCompleted_ResearchBasedEvolutionTest_Patch
+        {
+
+            public static void Postfix(GeoFaction faction,  ResearchElement research)
+            {
+                try
+                {                   
+                    if(research.ResearchID== "SYN_LaserWeapons_ResearchDef") 
+                    {
+                        string playerCompletedLaserWResearch = "PlayerHasLw";
+                        faction.GeoLevel.EventSystem.SetVariable(playerCompletedLaserWResearch, 1);
+                        Logger.Always("The variable " + playerCompletedLaserWResearch + "is set to " + faction.GeoLevel.EventSystem.GetVariable(playerCompletedLaserWResearch));
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        public static void TerribleScyllaRoars()
+        {
+            try
+            {
+                ResearchDef terribleScyllaResearch = 
+                    Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_Acheron1_ResearchDef"));
+                terribleScyllaResearch.Priority = 100;
+                terribleScyllaResearch.SecodaryPriority = 100;
+                EncounterVariableResearchRequirementDef sourceVarResReq =
+                    Repo.GetAllDefs<EncounterVariableResearchRequirementDef>().
+                    FirstOrDefault(ged => ged.name.Equals("NJ_Bionics1_ResearchDef_EncounterVariableResearchRequirementDef_0"));
+                EncounterVariableResearchRequirementDef variableResReqTerribleScylla = 
+                    Helper.CreateDefFromClone(sourceVarResReq, "9622885E-5012-497F-8EC2-9CC690D65612", "TerribleScyllaResReqDef");
+                variableResReqTerribleScylla.VariableName = "TerribleScyllaResReqDef";
+
+                terribleScyllaResearch.RevealRequirements.Operation = ResearchContainerOperation.ANY;
+                terribleScyllaResearch.RevealRequirements.Container.Add(new ReseachRequirementDefOpContainer
+                {
+                    Requirements = new ResearchRequirementDef[] { variableResReqTerribleScylla },
+                    Operation = ResearchContainerOperation.ANY
+                });
+                Logger.Always("Terrible Scylla is ready!");
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+        }
+
+
+            [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
         public static class PhoenixStatisticsManager_OnGeoscapeLevelStart_VoidOmens_Patch
         {
            
