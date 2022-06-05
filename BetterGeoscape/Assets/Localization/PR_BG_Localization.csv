@@ -215,7 +215,7 @@ NJ_REALLY_PISSED_MUTATIONS_CHOICE_0,Text,,O-kaaay,,,,,,,,
 NJ_REALLY_PISSED_MUTATIONS_CHOICE_0_OUTCOME,Text,,,,,,,,,,
 DARK_EVENT_TITLE_01,Text,,"Ambushes more dangerous and more likely, but have more crates",,,,,,,,
 DARK_EVENT_TITLE_02,Text,,All diplomatic penalties and rewards halved,,,,,,,,
-DARK_EVENT_TITLE_03,Text,,"All abilities cost +50% WP, but Delirium has no effect",,,,,,,,
+DARK_EVENT_TITLE_03,Text,,"All abilities cost +50% WP, but Delirium has no effect on WP",,,,,,,,
 DARK_EVENT_TITLE_04,Text,,"Max 6 operatives can be deployed on any mission, but experience +25%",,,,,,,,
 DARK_EVENT_TITLE_05,Text,,"Haven defenders always hostile, but crates available for looting ",,,,,,,,
 DARK_EVENT_TITLE_06,Text,,Pandorans evolve as they lose missions and colonies,,,,,,,,
@@ -223,16 +223,20 @@ DARK_EVENT_TITLE_07,Text,,More Mist in missions,,,,,,,,
 DARK_EVENT_TITLE_08,Text,,"Diplomatic penalties among factions +50%, but double faction research",,,,,,,,
 DARK_EVENT_TITLE_09,Text,,More Umbras,,,,,,,,
 DARK_EVENT_TITLE_10,Text,,Attacks on havens twice as frequent,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_01,Text,,"Ambushes are more likely and they will be more dangerous, but there will also be more crates. ",,,,,,,,
+DARK_EVENT_TITLE_11,Text,,Umbras can appear anywhere and attack anyone,,,,,,,,
+DARK_EVENT_TITLE_12,Text,,"No limit to Delirium, regardless of ODI level",,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_01,Text,,"Ambushes more likely and more dangerous, but also be more crates. ",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_02,Text,,"<i>""We are losing our moral compass, if we ever had one""</i> ",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_03,Text,,"<i>""It's a waking nightmare. Can you get used to nightmares?""</i> ",,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_04,Text,,Can't deploy more than 6 operatives on any mission,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_04,Text,,"<i>""Have you seen the latest psych-evals? 'Trust issues' is putting it mildly: they can start shooting each other any minute. If you want my advice, keep the combat units small, at least for a while.""</i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_05,Text,,Haven defenders are hostile to Phoenix operatives during haven defense missios,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_06,Text,,Pandorans evolve as they lose missions and colonies,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_06,Text,,"<i> ""What did you expect? They too are capable of learning from their mistakes.""</i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_07,Text,,More Mist in missions,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_08,Text,,"Diplomatic penalties among factions +50%, but double faction research",,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_08,Text,,"<i> ""Them and us, we can't help but see the world that way. Odd how sometimes that peaks and we forget that we are all part of the same species. A species that is currently facing extinction.""</i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_09,Text,,More Umbras,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_10,Text,,Attacks on havens twice as frequent,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_10,Text,,"<i> ""I would say they are off the leash now, but, if so, who was holding it?""</i>",,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_11,Text,,Umbras can appear anywhere and attack anyone,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_12,Text,,"No limit to Delirium, regardless of ODI level",,,,,,,,
 VOID_OMEN_INTRO,Text,,"We believe we are observing the first effects of the Oneiric Delirium on a collective scale. The phenomenon is akin to mass hysteria. 
 
 Synedrion psycho-sociologists are rationalizing the documented instances of widespread psychosis as the result of stresses to which our communities are subjected when our species is facing the possibility of extinction. 
@@ -242,3 +246,19 @@ However, the global scale and eerie thematic homogeneity of these events suggest
 Given what we know about the Oneiric Delirium and its connection to the Mist, there is little room for doubt: our collective psyche has become another battleground in our struggle with the Pandoravirus.
 ",,,,,,,,
 VOID_OMEN_INTRO_TITLE,Text,,Omens of the Void,,,,,,,,
+ALN_CRABMANUMBRA_RESEARCHDEF_COMPLETE,Text,,"""What are they? You ask me, but I do not know; there is nothing in them to sequence. Perhaps you should talk to Martika the Priest... These 'purple shadows' our warriors speak of sound like her field of expertise.""
+
+- Kalus, a Disciple gene-smith
+
+""Our soldiers are under immense stress, not to mention the drug cocktail and direct cortical simulation administered to them on a constant basis. If one or two of them start seeing 'oil monsters', I say it's a tolerable side effect"". 
+
+- Dr. Abongameli Smith, New Jericho",,,,,,,,
+ALN_CRABMANUMBRA_RESEARCHDEF_NAME,Text,,ARTHRON UMBRA,,,,,,,,
+ALN_FISHMANUMBRA_RESEARCHDEF_COMPLETE,Text,,"""It grew from the fishman’s pool of blood in the ground... Like water from a spigot... flowing in reverse. I shot it! We all shot it, we emptied our mags into the fragging thing!... Then it just melted... There was nothing left... I don't know what got the rest of the squad, maybe there was more of... those things, maybe it was the regular crabbies. I lost it, I ran away, never looking back.""
+
+- Citizen Brackman, sole survivor of recon team Echo, Synedrion 
+
+""Oh, but the Umbra are quite real, I assure you. Why wouldn't they, when we live in the age of horrors?"" 
+
+- Prof. Alistair A. Arestovych, Phoenix Project",,,,,,,,
+ALN_FISHMANUMBRA_RESEARCHDEF_NAME,Text,,TRITON UMBRA,,,,,,,,
