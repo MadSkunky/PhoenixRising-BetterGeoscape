@@ -295,13 +295,13 @@ namespace PhoenixRising.BetterGeoscape
                     if (geoLevelController.EventSystem.GetVariable("BC_SDI") > 0)
                     {              
                         // Here comes the roll, for testing purposes with 1/3 chance of no DE happening    
-                        int roll = UnityEngine.Random.Range(0, 11);
-                        if (roll >= 0 && roll <= 11)
+                        int roll = UnityEngine.Random.Range(1, 10);
+                        if (roll >= 2 && roll <= 10)
                         { 
                             // If a Dark Event rolls
 
                             // Create list of dark events currently implemented
-                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 
                             // Array to track how many Dark Events have already appeared (will get filled up later)
                             int[] alreadyRolledDarkEvents = new int[19];
