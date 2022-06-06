@@ -213,7 +213,7 @@ namespace PhoenixRising.BetterGeoscape
                 ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
 
                 {
-                    PartyFaction = NewJericho,
+                    PartyFaction = Anu,
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -18
@@ -221,7 +221,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 ProgSynPact.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
-                    PartyFaction = Anu,
+                    PartyFaction = NewJericho,
                     TargetFaction = PhoenixPoint,
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                     Value = -18

@@ -294,15 +294,31 @@ namespace PhoenixRising.BetterGeoscape
 
                     if (geoLevelController.EventSystem.GetVariable("BC_SDI") > 0)
                     {              
-                        // Here comes the roll, for testing purposes with 1/3 chance of no DE happening    
+                        // Here comes the roll, for testing purposes with 1/10 chance of no VO happening    
                         int roll = UnityEngine.Random.Range(1, 10);
+                        Logger.Always("The roll on the 1D10 is " + roll);
+                        if (roll == 1)
+                        {
+                            VoidOmens.RemoveEarliestVoidOmen(geoLevelController);
+                        }
+                                  
                         if (roll >= 2 && roll <= 10)
-                        { 
+                        {
+                            
                             // If a Dark Event rolls
-
                             // Create list of dark events currently implemented
-                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
-
+                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14};
+                            if (geoAlienFaction.Research.HasCompleted("ALN_CrabmanUmbra_ResearchDef")) 
+                            {
+                                darkEvents.Add(16);
+                                darkEvents.Add(17);
+                                Logger.Always("The list of Void Omens is now "+darkEvents.Count+" long");
+                            }
+                            if (geoAlienFaction.GeoLevel.EventSystem.GetVariable("BehemothEggHatched") == 1) 
+                            {
+                                darkEvents.Add(11);
+                                Logger.Always("The list of Void Omens is now " + darkEvents.Count + " long");
+                            }
                             // Array to track how many Dark Events have already appeared (will get filled up later)
                             int[] alreadyRolledDarkEvents = new int[19];
                             int countI = 0;
@@ -312,7 +328,7 @@ namespace PhoenixRising.BetterGeoscape
                             {
                                 
                                 // Get a random dark event from the Dark Events list
-                                darkEventRoll = darkEvents.GetRandomElement();
+                                darkEventRoll = darkEvents.GetRandomElement();                           
                                 countI++;
                                 // Check if this event has already appeared 
                                 for (int j = 1; j < 19; j++)
@@ -350,13 +366,7 @@ namespace PhoenixRising.BetterGeoscape
                                             // Then close both loops:
                                             t = 4;
                                             i = 100;
-                                        }
-                                        // If that Dark Event variable is already used, we will record it in our array, by assigning 1 to the position
-                                        /* else
-                                         {
-                                             array[difficulty - 1 - t] = 1;
-                                         }
-                                         */
+                                        }                                      
                                     }
                                     // If we managed to roll a Dark Event, because we found a dark event not in use and we found a variable to log it in,
                                     // the Voland loop ends here
@@ -420,16 +430,13 @@ namespace PhoenixRising.BetterGeoscape
                                             xCounter++;
                                             // We check, starting from the earliest, which Dark Event is still in play
                                             if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
-                                            {
-                                                
+                                            {                            
                                                 // Then we locate in which Variable it is recorded
                                                 for (int y = 0; y < difficulty; y++)
-                                                {
-                                                    
+                                                {                                                
                                                     // Once we find it, that's where we want to put our new Dark Event
                                                     if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
-                                                    {
-                                                        
+                                                    {                                                       
                                                         darkEventReplaced = allTheDarkEventsVariables[difficulty - y - 1];
                                                         Logger.Always("The Void Omen that will be replaced is "+ darkEventReplaced);
                                                         oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange

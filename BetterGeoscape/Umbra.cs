@@ -71,7 +71,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 try
                 {
-                    if (!VoidOmens.VoidOmen11Active)
+                    if (!VoidOmens.VoidOmen16Active)
                     {
                         ClassTagDef crabTag = Repo.GetAllDefs<ClassTagDef>().FirstOrDefault
                        (ged => ged.name.Equals("Crabman_ClassTagDef"));
@@ -119,12 +119,12 @@ namespace PhoenixRising.BetterGeoscape
                                     if (actor.GameTags.Contains(crabTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilcrabDeathBelcherAbility) == null)
                                     {
                                         int roll = UnityEngine.Random.Range(0, 100);
-                                        if (VoidOmens.VoidOmen9Active && roll >= 50)
+                                        if (VoidOmens.VoidOmen15Active && roll >= 50)
                                         {
                                             Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
                                             AddArthronUmbraDeathBelcherAbility(actor);
                                         }
-                                        else if (!VoidOmens.VoidOmen9Active && roll >= 75)
+                                        else if (!VoidOmens.VoidOmen15Active && roll >= 75)
                                         {
                                             AddArthronUmbraDeathBelcherAbility(actor);
                                         }
@@ -133,11 +133,11 @@ namespace PhoenixRising.BetterGeoscape
                                     if (actor.GameTags.Contains(fishTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilfishDeathBelcherAbility) == null)
                                     {
                                         int roll = UnityEngine.Random.Range(0, 100);
-                                        if (VoidOmens.VoidOmen9Active && roll >= 50)
+                                        if (VoidOmens.VoidOmen15Active && roll >= 50)
                                         {
                                             AddTritonUmbraDeathBelcherAbility(actor);
                                         }
-                                        else if (!VoidOmens.VoidOmen9Active && roll >= 75)
+                                        else if (!VoidOmens.VoidOmen15Active && roll >= 75)
                                         {
                                             AddTritonUmbraDeathBelcherAbility(actor);
                                         }
@@ -162,7 +162,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    if (!VoidOmens.VoidOmen11Active)
+                    if (!VoidOmens.VoidOmen16Active)
                     {
                         if (sourceActor.ActorDef.name.Equals("Oilcrab_ActorDef") || sourceActor.ActorDef.name.Equals("Oilfish_ActorDef"))
                         {

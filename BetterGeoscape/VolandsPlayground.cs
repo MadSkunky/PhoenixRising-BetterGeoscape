@@ -8,7 +8,9 @@ using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.Entities.Items.SkinData;
 using PhoenixPoint.Common.Levels.Missions;
+using PhoenixPoint.Geoscape.Core;
 using PhoenixPoint.Geoscape.Entities;
+using PhoenixPoint.Geoscape.Entities.Missions;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
 using PhoenixPoint.Geoscape.Entities.Research;
 using PhoenixPoint.Geoscape.Entities.Research.Requirement;
@@ -483,6 +485,7 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("FesteringSkiesAfterHamerfall.png");
                     }
+
                  /*   if (geoEvent.EventID.Equals("SDI_01"))
                     {
                         __result.EventLeader = Helper.CreateSpriteFromImageFile("oldsb.png");
@@ -494,7 +497,55 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
                 }
              }
-        }  
+        }
+        
+        
+        [HarmonyPatch(typeof(GeoSite), "CreateHavenDefenseMission")]
+        public static class GeoSite_CreateHavenDefenseMission_IncreaseAttackHavenVoidOmen_patch
+        {
+            public static void Prefix(ref HavenAttacker attacker)
+            {
+                try
+                {
+                    if (VoidOmens.VoidOmen14Active)
+                    {
+                        SharedData sharedData = GameUtl.GameComponent<SharedData>();
+                        if (attacker.Faction.PPFactionDef == sharedData.AlienFactionDef)
+                        {
+                            Logger.Always("Alien deployment was " + attacker.Deployment);
+                            attacker.Deployment = Mathf.RoundToInt(attacker.Deployment * 1.5f);
+                            Logger.Always("Alien deployment is now " + attacker.Deployment);
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+
+            }
+        }
+
+        [HarmonyPatch(typeof(GeoAlienFaction), "AlienBaseDestroyed")]
+        public static class GeoAlienFaction_AlienBaseDestroyed_RemoveVoidOmenDestroyedPC_patch
+        {
+            public static void Prefix(GeoAlienBase alienBase, GeoAlienFaction __instance)
+            {
+                try
+                {
+                    if (alienBase.AlienBaseTypeDef.Keyword=="lair" || alienBase.AlienBaseTypeDef.Keyword == "citadel" 
+                        || (alienBase.AlienBaseTypeDef.Keyword == "nest" && __instance.GeoLevel.CurrentDifficultyLevel.Order==1))
+                    {
+                        VoidOmens.RemoveEarliestVoidOmen(__instance.GeoLevel);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+
+            }
+        }
     }
 }
 
