@@ -313,14 +313,14 @@ namespace PhoenixRising.BetterGeoscape
                 BodyPartAspectDef umbraFishBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
                 FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilfish_Torso_BodyPartDef]"));
                 umbraFishBodyAspect.Endurance = 25.0f;
-                TerribleScyllaRoars();
+               // TerribleScyllaRoars();
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
         }
-
+        /*
         [HarmonyPatch(typeof(PhoenixStatisticsManager),"OnResearchCompleted")]
         public static class PhoenixStatisticsManager_OnResearchCompleted_ResearchBasedEvolutionTest_Patch
         {
@@ -371,7 +371,7 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
         }
-
+        */
 
             [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
         public static class PhoenixStatisticsManager_OnGeoscapeLevelStart_VoidOmens_Patch
