@@ -3,9 +3,11 @@ using Base.Core;
 using Base.Defs;
 using Base.Entities.Effects.ApplicationConditions;
 using Base.UI;
+using Base.Utils.GameConsole;
 using Harmony;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Common.Entities.Items.SkinData;
 using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Core;
@@ -435,9 +437,12 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    if (VoidOmens.VoidOmen3Active && __instance.TacticalActor.IsControlledByPlayer)
+                    if (__result > 0)
                     {
-                        __result += Mathf.RoundToInt(__result * 0.5f);
+                        if (VoidOmens.VoidOmen3Active && __instance.TacticalActor.IsControlledByPlayer)
+                        {
+                            __result += Mathf.RoundToInt(__result * 0.5f);
+                        }
                     }
                 }
                 catch (Exception e)
@@ -466,8 +471,34 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
+      /* [HarmonyPatch(typeof(GeoSite), "DestroySite")]
+        public static class GeoSite_DestroySite_DestroyedHavenGenerateScav_patch
+        {
+            internal static bool flag = false;
 
-       
+            public static void Postfix(GeoSite __instance, GeoSiteType ____type)
+            {
+                try
+                {
+                    
+                    if (__instance.Type == GeoSiteType.Haven && !flag)
+                    {
+                       flag = true;
+                    }
+                    else if (flag)
+                    {
+                       __instance.ActiveMission = null;
+                        __instance.CreateScavengingMission();
+                       flag = false;
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }*/
+
 
         [HarmonyPatch(typeof(SiteEncountersArtCollectionDef), "GetEventArt")]
         public static class SiteEncountersArtCollectionDef_GetEventArt_InjectArt_patch
@@ -507,7 +538,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    if (VoidOmens.VoidOmen14Active)
+                    if (VoidOmens.VoidOmen12Active)
                     {
                         SharedData sharedData = GameUtl.GameComponent<SharedData>();
                         if (attacker.Faction.PPFactionDef == sharedData.AlienFactionDef)

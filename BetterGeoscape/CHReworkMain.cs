@@ -524,6 +524,39 @@ namespace PhoenixRising.BetterGeoscape
 
         }
 
+        /*
+        // Show additional info in objectives
+        [HarmonyPatch(typeof(UIModuleGeoObjectives), "InitObjective")]
+        public static class UIModuleGeoObjectives_InitObjective_Patch
+        {
+            
+            public static void Prefix(UIModuleGeoObjectives __instance, ref GeoFactionObjective objective)
+            {
+                try
+                {
+                    if (!(objective is MissionGeoFactionObjective missionGeoFactionObjective) || !(missionGeoFactionObjective.Mission is GeoHavenDefenseMission geoHavenDefenseMission))
+                    {
+                        return;
+                    }
+
+                    IGeoFactionMissionParticipant enemyFaction = geoHavenDefenseMission.GetEnemyFaction();
+                    Color enemyColor = enemyFaction.ParticipantViewDef.FactionColor;
+                    string enemyColorHex = $"#{ColorUtility.ToHtmlStringRGB(enemyColor)}";
+                    string enemyName = enemyFaction.ParticipantName.Localize();
+                    string enemyText = $"<color={enemyColorHex}>{enemyName}</color>";
+
+                    objective.Title = new LocalizedTextBind("Defend {0} against " + enemyText, true);
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+
+        */
+
+
         [HarmonyPatch(typeof(GeoFactionObjective), "GetIcon")]
         internal static class BG_GeoFactionObjective_GetIcon_patch
         {
@@ -628,13 +661,13 @@ namespace PhoenixRising.BetterGeoscape
                             numberOfMutations++;
                         }
                     }                   
-                    Logger.Always(numberOfMutations.ToString());
+                    
 
                     if (numberOfMutations > 0)
                     {
                         __result = 1f + (numberOfMutations*2)/100 * (float)base_TacticalActor.CharacterStats.Corruption;
                     }
-                    Logger.Always(base_TacticalActor.CharacterStats.Corruption.ToString());
+                    
                 }
 
                 catch (Exception e)
@@ -663,7 +696,7 @@ namespace PhoenixRising.BetterGeoscape
                             bionics += 1;
                     }
 
-                if (!VoidOmens.VoidOmen12Active)
+                if (!VoidOmens.VoidOmen10Active)
                 {
                     if (odiPerc < 25)
                     {
@@ -725,7 +758,7 @@ namespace PhoenixRising.BetterGeoscape
                     }
 
                 }
-                if (VoidOmens.VoidOmen12Active) 
+                if (VoidOmens.VoidOmen10Active) 
                 {
                     maxCorruption = character.CharacterStats.Willpower.IntMax;
 
@@ -912,7 +945,7 @@ namespace PhoenixRising.BetterGeoscape
                     int odiPerc = CurrentODI_Level * 100 / ODI_EventIDs.Length;
                     int maxCorruption = 0;
                     // Get max corruption dependent on max WP of the selected actor
-                    if (!VoidOmens.VoidOmen12Active)
+                    if (!VoidOmens.VoidOmen10Active)
                     {
                         
                         if (odiPerc < 25)
@@ -963,7 +996,7 @@ namespace PhoenixRising.BetterGeoscape
                             }
                         }
                     }
-                    if (VoidOmens.VoidOmen12Active) 
+                    if (VoidOmens.VoidOmen10Active) 
                     {
                         maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax;
 

@@ -89,8 +89,7 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     totalCharactersWithDelirium++;
                                     totalDeliriumOnMission += (int)actor.CharacterStats.Corruption.Value.BaseValue;
-                                    Logger.Always("Total Delirium on mission is " + totalDeliriumOnMission);
-                                    Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
+                                   
                                 }
                             }
                         }
@@ -103,42 +102,48 @@ namespace PhoenixRising.BetterGeoscape
                             Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
                             if (totalDeliriumOnMission >= 10 || totalCharactersWithDelirium >= 5)
                             {
-                                Logger.Always("The if gets past the Delirium check");
+                                
                                 DeathBelcherAbilityDef oilcrabDeathBelcherAbility =
                                Repo.GetAllDefs<DeathBelcherAbilityDef>().FirstOrDefault
                                (ged => ged.name.Equals("Oilcrab_Die_DeathBelcher_AbilityDef"));
-                                Logger.Always("The if gets past the Delirium check");
+                                
                                 DeathBelcherAbilityDef oilfishDeathBelcherAbility =
                                Repo.GetAllDefs<DeathBelcherAbilityDef>().FirstOrDefault
                                (ged => ged.name.Equals("Oilfish_Die_DeathBelcher_AbilityDef"));
-                                Logger.Always("We get past the DB repo");
+                                
                                 foreach (TacticalActor actor in nextFaction.TacticalActors)
                                 {
                                     Logger.Always("The next faction is " + nextFaction.Faction.FactionDef.name);
                                     Logger.Always("The actor is " + actor.name);
-                                    if (actor.GameTags.Contains(crabTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilcrabDeathBelcherAbility) == null)
+                                    if (actor.GameTags.Contains(crabTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilcrabDeathBelcherAbility) == null 
+                                        && !actor.name.Contains("Oilcrab"))
+                                        
                                     {
                                         int roll = UnityEngine.Random.Range(0, 100);
-                                        if (VoidOmens.VoidOmen15Active && roll >= 50)
+                                        if (VoidOmens.VoidOmen15Active && roll >= 68)
                                         {
                                             Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
                                             AddArthronUmbraDeathBelcherAbility(actor);
                                         }
-                                        else if (!VoidOmens.VoidOmen15Active && roll >= 75)
+                                        else if (!VoidOmens.VoidOmen15Active && roll >= 84)
                                         {
+                                            Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
                                             AddArthronUmbraDeathBelcherAbility(actor);
                                         }
 
                                     }
-                                    if (actor.GameTags.Contains(fishTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilfishDeathBelcherAbility) == null)
+                                    if (actor.GameTags.Contains(fishTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilfishDeathBelcherAbility) == null 
+                                        && !actor.name.Contains("Oilfish"))
                                     {
                                         int roll = UnityEngine.Random.Range(0, 100);
-                                        if (VoidOmens.VoidOmen15Active && roll >= 50)
+                                        if (VoidOmens.VoidOmen15Active && roll >= 68)
                                         {
+                                            Logger.Always("This Triton here " + actor + ", got past the crabtag and the blecher ability check!");
                                             AddTritonUmbraDeathBelcherAbility(actor);
                                         }
-                                        else if (!VoidOmens.VoidOmen15Active && roll >= 75)
+                                        else if (!VoidOmens.VoidOmen15Active && roll >= 84)
                                         {
+                                            Logger.Always("This Triton here " + actor + ", got past the crabtag and the blecher ability check!");
                                             AddTritonUmbraDeathBelcherAbility(actor);
                                         }
                                     }
@@ -166,8 +171,15 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         if (sourceActor.ActorDef.name.Equals("Oilcrab_ActorDef") || sourceActor.ActorDef.name.Equals("Oilfish_ActorDef"))
                         {
-                            List<TacticalAbilityTarget> list = __result.ToList();
-                            list.RemoveWhere(adilityTarget => (adilityTarget.Actor as TacticalActor)?.CharacterStats.Corruption <= 0);
+                            List<TacticalAbilityTarget> list = new List<TacticalAbilityTarget>(); // = __result.ToList();
+                                                                                                  //list.RemoveWhere(adilityTarget => (adilityTarget.Actor as TacticalActor)?.CharacterStats.Corruption <= 0);
+                            foreach (TacticalAbilityTarget source in __result)
+                            {
+                                if (source.Actor is TacticalActor && (source.Actor as TacticalActor).CharacterStats.Corruption > 0)
+                                {
+                                    list.Add(source);
+                                }
+                            }
                             __result = list;
                         }
                     }

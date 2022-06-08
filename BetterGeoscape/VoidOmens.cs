@@ -32,13 +32,19 @@ namespace PhoenixRising.BetterGeoscape
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
         public static bool[] darkEventsCheck = new bool[17];
+        //VO#3 is WP cost +50%
         public static bool VoidOmen3Active = false;
         public static bool VoidOmen3Activated = false;
+        //VO#7 is more mist in missions
         public static bool VoidOmen7Active = false;
-        public static bool VoidOmen15Active = false;
-        public static bool VoidOmen16Active = false;
+        //VO#10 is no limit to Delirium
+        public static bool VoidOmen10Active = false;
+        //VO#12 is +50% strength of alien attacks on Havens
         public static bool VoidOmen12Active = false;
-        public static bool VoidOmen14Active = false;
+        //VO#15 is more Umbra
+        public static bool VoidOmen15Active = false;
+        //VO#16 is Umbras can appear anywhere and attack anyone
+        public static bool VoidOmen16Active = false;
 
 
 
@@ -184,7 +190,7 @@ namespace PhoenixRising.BetterGeoscape
                             }
                             if (j == 12 && darkEventsCheck[j] == false)
                             {
-                                VoidOmen14Active = true;
+                                VoidOmen12Active = true;
                                 darkEventsCheck[j] = true;
 
                             }
@@ -215,19 +221,19 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
                                     FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
-                                    randomValueCrabUmbra.ThresholdValue = 0.25f;
+                                    randomValueCrabUmbra.ThresholdValue = 0.16f;
                                     RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
                                     FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
-                                    randomValueFishUmbra.ThresholdValue = 0.25f;
+                                    randomValueFishUmbra.ThresholdValue = 0.16f;
                                 }
                                 if (darkEventsCheck[15])
                                 {
                                     RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
                                     FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
-                                    randomValueCrabUmbra.ThresholdValue = 0.5f;
+                                    randomValueCrabUmbra.ThresholdValue = 0.32f;
                                     RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
                                     FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
-                                    randomValueFishUmbra.ThresholdValue = 0.5f;
+                                    randomValueFishUmbra.ThresholdValue = 0.32f;
                                 }
                                 darkEventsCheck[j] = true;
                             }
@@ -409,7 +415,7 @@ namespace PhoenixRising.BetterGeoscape
 
                         if (darkEventsCheck[12])
                         {
-                           VoidOmen14Active=false;
+                           VoidOmen12Active=false;
                             darkEventsCheck[12] = false;
                             Logger.Always("The check for VO#12 went ok");
                         }
@@ -438,7 +444,7 @@ namespace PhoenixRising.BetterGeoscape
                         if (darkEventsCheck[14])
                         {
                             TacticalPerceptionDef tacticalPerceptionDef = Repo.GetAllDefs<TacticalPerceptionDef>().FirstOrDefault((TacticalPerceptionDef a) => a.name.Equals("Soldier_PerceptionDef"));
-                            tacticalPerceptionDef.PerceptionRange = 35;
+                            tacticalPerceptionDef.PerceptionRange = 30;
                             darkEventsCheck[14] = false;
                             Logger.Always("The check for VO#14 went ok");
                         }
@@ -488,19 +494,18 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         VoidOmen7Active = true;
                     }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 9)
+                    if (level.EventSystem.GetVariable(voidOmen + i) == 10)
+                    {
+                        VoidOmen10Active = true;
+                    }
+                    if (level.EventSystem.GetVariable(voidOmen + i) == 15)
                     {
                         VoidOmen15Active = true;
                     }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 11)
+                    if (level.EventSystem.GetVariable(voidOmen + i) == 16)
                     {
                         VoidOmen16Active = true;
                     }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 12)
-                    {
-                        VoidOmen12Active = true;
-                    }
-
                 }
             }
             catch (Exception e)
@@ -615,7 +620,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 Logger.Error(e);
             }          
-        }
+        } 
     }
 }
 
