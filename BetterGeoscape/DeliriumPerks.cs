@@ -76,9 +76,8 @@ namespace PhoenixRising.BetterGeoscape
                 },
               };
             shutEye.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            shutEye.ViewElementDef.DisplayName1 = new LocalizedTextBind("SHUT EYE", true);
-            shutEye.ViewElementDef.Description = new LocalizedTextBind("<b>-10 Perception, +10 Hearing Range</b>\n<i>Exibiting rare form of paranoia and claustrophobia, the subject often found with his eyes closed, " +
-            "claiming to see with his inner eye </i>", true);
+            shutEye.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_INNER_SIGHT_NAME";
+            shutEye.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_INNER_SIGHT_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Volunteered_1-2.png");
             shutEye.ViewElementDef.LargeIcon = icon;
             shutEye.ViewElementDef.SmallIcon = icon;
@@ -101,9 +100,8 @@ namespace PhoenixRising.BetterGeoscape
                 skillName);
             hallucinating.StatModifications = new ItemStatModification[0];
             hallucinating.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            hallucinating.ViewElementDef.DisplayName1 = new LocalizedTextBind("HALLUCINATING", true);
-            hallucinating.ViewElementDef.Description = new LocalizedTextBind("<b>Start each mission Disoriented for 2 turns</b>\n<i>So far observation show subject mostly harmless to himself or the surrounding, " +
-                "however it is not recommended to deploy on tactical missions</i>", true);
+            hallucinating.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_ANXIETY_NAME";
+            hallucinating.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_ANXIETY_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Paranoid_2-1.png");
             hallucinating.ViewElementDef.LargeIcon = icon;
             hallucinating.ViewElementDef.SmallIcon = icon;
@@ -158,9 +156,8 @@ namespace PhoenixRising.BetterGeoscape
                 }
             };
 
-            fleshEater.ViewElementDef.DisplayName1 = new LocalizedTextBind("FLESH EATER", true);
-            fleshEater.ViewElementDef.Description = new LocalizedTextBind("<b>You gain Devour ability. Your allies lose 2 WP each time you kill an enemy.</b>\n<i>It is unclear whether this is some part of pagan ritual or pure insanity, but so far individual " +
-                "combat efficiency of the unit has grown by 46%</i>", true);
+            fleshEater.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_BLOODTHIRSTY_NAME";
+            fleshEater.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_BLOODTHIRSTY_DESCRIPTION";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutog_Devour_AbilityDef]")).LargeIcon;
             fleshEater.ViewElementDef.LargeIcon = icon;
             fleshEater.ViewElementDef.SmallIcon = icon;
@@ -191,8 +188,8 @@ namespace PhoenixRising.BetterGeoscape
                 },
               };
             angerIssues.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            angerIssues.ViewElementDef.DisplayName1 = new LocalizedTextBind("ANGER ISSUES", true);
-            angerIssues.ViewElementDef.Description = new LocalizedTextBind("<b>Start each mission Frenzied for 2 turns, -25% Stealth</b>\n<i>Subject shows signs of violent outbursts, it is recommended to keep him isolated unless deployed for combat</i>", true);
+            angerIssues.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_FASTER_SYNAPSES_NAME";
+            angerIssues.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_FASTER_SYNAPSES_DESCRIPTION";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_View [WarCry_AbilityDef]")).LargeIcon;
             angerIssues.ViewElementDef.LargeIcon = icon;
             angerIssues.ViewElementDef.SmallIcon = icon;
@@ -229,8 +226,8 @@ namespace PhoenixRising.BetterGeoscape
                 },
               };
             photophobia.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            photophobia.ViewElementDef.DisplayName1 = new LocalizedTextBind("PHOTOPHOBIA", true);
-            photophobia.ViewElementDef.Description = new LocalizedTextBind("<b>Speed reduced -2, Stealth Increased +25%</b>\n<i>Acting erratically the subject seem to always reconsider his next step, trying to stay outside of lit areas</i>", true);
+            photophobia.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_TERROR_NAME";
+            photophobia.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_TERROR_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_NightOwl.png");
             photophobia.ViewElementDef.LargeIcon = icon;
             photophobia.ViewElementDef.SmallIcon = icon;
@@ -261,9 +258,8 @@ namespace PhoenixRising.BetterGeoscape
                 },
               };
             nailsPassive.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            nailsPassive.ViewElementDef.DisplayName1 = new LocalizedTextBind("NAILS", true);
-            nailsPassive.ViewElementDef.Description = new LocalizedTextBind("<b>You gain Slashing Strike, but -20% accuracyh</b>\n<i>Demonstrating signs of schizophrenia, this subject refuse to clip his nails and sharpens them to form monster " +
-                "claws, which naturally obstructs proper handling of firearm weapons </i>", true);
+            nailsPassive.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_WOLVERINE_NAME";
+            nailsPassive.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_WOLVERINE_DESCRIPTION";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutoid_SlashingStrike_AbilityDef]")).SmallIcon;
             nailsPassive.ViewElementDef.LargeIcon = icon;
             nailsPassive.ViewElementDef.SmallIcon = icon;
@@ -285,9 +281,8 @@ namespace PhoenixRising.BetterGeoscape
                 "e9bd7acb-6955-414b-a2de-7544c38b7b6e",
                 skillName);
 
-            nails.ViewElementDef.DisplayName1 = new LocalizedTextBind("NAILS", true);
-            nails.ViewElementDef.Description = new LocalizedTextBind("<b>You gain Slashing Strike, but -20% accuracyh</b>\n<i>Demonstrating signs of schizophrenia, this subject refuse to clip his nails and sharpens them to form monster " +
-                "claws, which naturally obstructs proper handling of firearm weapons </i>", true);
+            nails.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_WOLVERINE_NAME";
+            nails.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_WOLVERINE_DESCRIPTION";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutoid_SlashingStrike_AbilityDef]")).SmallIcon;
             nails.ViewElementDef.LargeIcon = icon;
             nails.ViewElementDef.SmallIcon = icon;
@@ -313,9 +308,8 @@ namespace PhoenixRising.BetterGeoscape
             oneOfUs.DamageTypeDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Mist_SpawnVoxelDamageTypeEffectDef"));
             oneOfUs.Multiplier = 0;
 
-            oneOfUs.ViewElementDef.DisplayName1 = new LocalizedTextBind("ONE OF US", true);
-            oneOfUs.ViewElementDef.Description = new LocalizedTextBind("<b>Willpower reduced -2, Mist affects you as if you were a Pandoran</b>\n<i>Often the last to leave the mission, wandering ruined landscapes the subject claims the mist " +
-                "calls out to him</i>", true);
+            oneOfUs.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_ONE_OF_THEM_NAME";
+            oneOfUs.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_ONE_OF_THEM_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Sower_Of_Change_1-2.png");
             oneOfUs.ViewElementDef.LargeIcon = icon;
             oneOfUs.ViewElementDef.SmallIcon = icon;
@@ -356,9 +350,8 @@ namespace PhoenixRising.BetterGeoscape
             DamageMultiplierStatusDef mistResistance = Repo.GetAllDefs<DamageMultiplierStatusDef>().FirstOrDefault(a => a.name.Contains("MistResistance_StatusDef"));
             mistResistance.Multiplier = 0.0f;
             ofuPassive.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            ofuPassive.ViewElementDef.DisplayName1 = new LocalizedTextBind("ONE OF US", true);
-            ofuPassive.ViewElementDef.Description = new LocalizedTextBind("<b>Willpower reduced -2, Mist affects you as if you were a Pandoran</b>\n<i>Often the last to leave the mission, wandering ruined landscapes the subject claims the mist " +
-                "calls out to him</i>", true);
+            ofuPassive.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_ONE_OF_THEM_NAME";
+            ofuPassive.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_ONE_OF_THEM_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Sower_Of_Change_1-2.png");
             ofuPassive.ViewElementDef.LargeIcon = icon;
             ofuPassive.ViewElementDef.SmallIcon = icon;
@@ -395,9 +388,8 @@ namespace PhoenixRising.BetterGeoscape
                 },
               };
             immortality.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
-            immortality.ViewElementDef.DisplayName1 = new LocalizedTextBind("IMMORTALITY", true);
-            immortality.ViewElementDef.Description = new LocalizedTextBind("<b>Strength reduced -5, Disabled limbs remain functional</b>\n<i>Self-mutilation is not uncommon to develop throughout Delirium affected subjects," +
-                " this one in particular believes he has become Immortal</i>", true);
+            immortality.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_DEREALIZATION_NAME";
+            immortality.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_DEREALIZATION_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Vampire.png");
             immortality.ViewElementDef.LargeIcon = icon;
             immortality.ViewElementDef.SmallIcon = icon;
@@ -461,8 +453,8 @@ namespace PhoenixRising.BetterGeoscape
             feralStatusDef.EffectDef = feralEffectDef;
             feralEffectDef.RestoreActionPointsFraction = 0.25f;
 
-            feral.ViewElementDef.DisplayName1 = new LocalizedTextBind("FERAL", true);
-            feral.ViewElementDef.Description = new LocalizedTextBind("<b>Your attacks have 10% chance to fumble but you recover 1 AP when you kill an enemy</b>\n<i>Suffering personality disorder, the subject degrade to animalistic behaviour and state of mind</i>", true);
+            feral.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_FERAL_NAME";
+            feral.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_FERAL_DESCRIPTION";
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutog_PrimalInstinct_AbilityDef]")).LargeIcon;
             feral.ViewElementDef.LargeIcon = icon;
             feral.ViewElementDef.SmallIcon = icon;
@@ -488,15 +480,13 @@ namespace PhoenixRising.BetterGeoscape
             solipsism.StatModifications = new ItemStatModification[0];
             solipsism.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
 
-            solipsism.ViewElementDef.DisplayName1 = new LocalizedTextBind("SOLIPSISM", true);
-            solipsism.ViewElementDef.Description = new LocalizedTextBind("<b>You no longer suffer WP loss when allies die, but you lose 1 WP each time you take damage</b>\n<i>Subject exibits delusions of grandeur and self-obsession," +
-                " causing insubordination and disregard for human life</i>", true);
+            solipsism.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_HYPERALGESIA_NAME";
+            solipsism.ViewElementDef.Description.LocalizationKey = "DELIRIUM_PERK_HYPERALGESIA_DESCRIPTION";
             Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Privileged_1-2.png");
             solipsism.ViewElementDef.LargeIcon = icon;
             solipsism.ViewElementDef.SmallIcon = icon;
         }
     }
-
 }
 
 

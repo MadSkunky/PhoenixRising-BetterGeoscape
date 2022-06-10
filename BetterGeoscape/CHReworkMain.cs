@@ -310,8 +310,8 @@ namespace PhoenixRising.BetterGeoscape
                             List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14};
                             if (geoAlienFaction.Research.HasCompleted("ALN_CrabmanUmbra_ResearchDef")) 
                             {
+                                darkEvents.Add(15);
                                 darkEvents.Add(16);
-                                darkEvents.Add(17);
                                 Logger.Always("The list of Void Omens is now "+darkEvents.Count+" long");
                             }
                             if (geoAlienFaction.GeoLevel.EventSystem.GetVariable("BehemothEggHatched") == 1) 

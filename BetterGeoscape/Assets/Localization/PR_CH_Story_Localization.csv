@@ -91,9 +91,9 @@ KEY_CORRUPTIVE_CLOUD_DESCRIPTION,Text,,Spreads delirium to all organic enemies w
 KEY_CORRUPTIVE_CLOUD_NAME,Text,,DELIRIUM CLOUD,,,,,,,,
 KEY_CORRUPTIVE_SPRAY_DESCRIPTION,Text,,Organic targets will receive delirium in addition to the standard damage.,,,,,,,,
 KEY_CORRUPTIVE_SPRAY_NAME,Text,,DELIRIUM SPRAY,,,,,,,,
-KEY_CURE_CORRUPTION_DIALOG_BOTTOM,Text,,Warning! Treating Delirium using mutagens is an experimental procedure. Severe side effects should be expected.,,,,,,,,
-KEY_CURE_CORRUPTION_DIALOG_DESCRIPTION,Text,,Your soldier has {0}% Delirium damage.,,,,,,,,
-KEY_CURE_CORRUPTION_DIALOG_TITLE,Text,,APPLY EXPERIMENTAL MUTAGEN TREATMENT,,,,,,,,
+DLC4 Hypnos/KEY_CURE_CORRUPTION_DIALOG_BOTTOM,Text,,Warning! Treating Delirium using mutagens is an experimental procedure. Severe side effects should be expected.,,,,,,,,
+DLC4 Hypnos/KEY_CURE_CORRUPTION_DIALOG_DESCRIPTION,Text,,Your soldier has {0}% Delirium damage.,,,,,,,,
+DLC4 Hypnos/KEY_CURE_CORRUPTION_DIALOG_TITLE,Text,,APPLY EXPERIMENTAL MUTAGEN TREATMENT,,,,,,,,
 KEY_DLC4_TAC_HINT_ACHERON_ESCAPED_DESCRIPTION,Text,,The Acheron escaped!,,,,,,,,
 KEY_DLC4_TAC_HINT_ACHERON_ESCAPED_NAME,Text,,TRANSMISSION,,,,,,,,
 KEY_GEO_HINT_ACHERON_CAPTURE_DESCRIPTION,Text,need to change,"Despite our best efforts the finding a cure to the new corruption strain ended in failure. Apparently, the virus in all newer specimens has mutated to such a degree that it is useless for our needs. In order to be successful, we need to find one of the original specimens that escaped from the Lab.",,,,,,,,
@@ -199,3 +199,35 @@ PROG_CH_NEED_LAIR_TITLE,Text,,Further Research,,,,,,,,
 PROG_CH_SPECIMEN0_HINT_CHOICE_0_TEXT,Text,,OK.,,,,,,,,
 PROG_CH_SPECIMEN0_HINT_TEXT_GENERAL_0,Text,need to change,"Despite our best efforts the finding a cure to the new corruption strain ended in failure. Apparently, the virus in all newer specimens has mutated to such a degree that it is useless for our needs. In order to be successful, we need to find one of the original specimens that escaped from the Lab.",,,,,,,,
 PROG_CH_SPECIMEN0_HINT_TITLE,Text,,Corruption Cure Research Failure,,,,,,,,
+DELIRIUM_PERK_HYPERALGESIA_NAME,Text,,HYPERALGESIA,,,,,,,,
+DELIRIUM_PERK_HYPERALGESIA_DESCRIPTION,Text,,"Lose 1 WP when taking damage, no WP loss when allies die
+<i>Subject has extreme sensitivity to pain and exhibits symptoms of empathy fatigue</i>",,,,,,,,
+"DELIRIUM_PERK_FERAL_NAME
+",Text,,"FERAL",,,,,,,,
+"DELIRIUM_PERK_FERAL_DESCRIPTION
+",Text,,"Attacks have 10% chance to fumble, recover 1 AP from killing enemies
+<i>Subject engages in atavistic behavior. Alterations in adrenal glands function are also observed</i>",,,,,,,,
+DELIRIUM_PERK_DEREALIZATION_NAME,Text,,DEREALIZATION,,,,,,,,
+DELIRIUM_PERK_DEREALIZATION_DESCRIPTION,Text,,"-5 to Strength, disabled limbs remain functional
+<i>Subject reports increasing detachment from reality and own body</i>",,,,,,,,
+DELIRIUM_PERK_ONE_OF_THEM_NAME,Text,,ONE OF THEM,,,,,,,,
+DELIRIUM_PERK_ONE_OF_THEM_DESCRIPTION,Text,,"-2 to Willpower, Mist restores WP
+<i>Subject appears to have acquired tolerance to Mist, resulting in a cognitive dissonance</i>",,,,,,,,
+DELIRIUM_PERK_WOLVERINE_NAME,Text,,WOLVERINE,,,,,,,,
+DELIRIUM_PERK_WOLVERINE_DESCRIPTION,Text,,"-20% to Accuracy, gain Slashing Strike
+<i>Subject has gained a retractable claw-like appendage protruding from the right wrist. Unfortunately, discharging firearms has become moderately uncomfortable</i>",,,,,,,,
+DELIRIUM_PERK_TERROR_NAME,Text,,TERROR,,,,,,,,
+DELIRIUM_PERK_TERROR_DESCRIPTION,Text,,"-2 to Speed, +25% to Stealth
+<i>Despite enhanced treatment, subject remains fearful and acts with extreme caution in the field</i>",,,,,,,,
+DELIRIUM_PERK_FASTER_SYNAPSES_NAME,Text,,FASTER SYNAPSES,,,,,,,,
+DELIRIUM_PERK_FASTER_SYNAPSES_DESCRIPTION,Text,,"-25% Stealth, start each mission Frenzied for 2 turns
+<i>Subject shows bursts of extraordinary speed and heightened lower brain function, but also exhibits constant uncontrollable twitching</i>",,,,,,,,
+DELIRIUM_PERK_BLOODTHIRSTY_NAME,Text,,BLOODTHIRSTY,,,,,,,,
+DELIRIUM_PERK_BLOODTHIRSTY_DESCRIPTION,Text,,"Allies lose 2 WP from enemies killed, gain Devour ability
+<i>Subject exhibits symptoms of a sadistic personality disorder and altered metabolism correlated to endorphin release</i>",,,,,,,,
+DELIRIUM_PERK_ANXIETY_NAME,Text,,ANXIETY,,,,,,,,
+DELIRIUM_PERK_ANXIETY_DESCRIPTION,Text,,"Start each mission Disoriented for 2 turns
+<i>Subject exhibits symptoms of a General Anxiety Disorder; limited response to treatment</i>",,,,,,,,
+DELIRIUM_PERK_INNER_SIGHT_NAME,Text,,INNER SIGHT,,,,,,,,
+DELIRIUM_PERK_INNER_SIGHT_DESCRIPTION,Text,,"-10 Perception, +10 Hearing Range
+<i>The subject is often observed with eyes closed; claims to see with an 'inner eye'; possible schizophrenia, but heightened extrasensorial perception confirmed</i>",,,,,,,,
