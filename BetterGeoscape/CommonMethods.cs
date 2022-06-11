@@ -110,6 +110,46 @@ namespace PhoenixRising.BetterGeoscape
                }
             throw new InvalidOperationException();
         }
+
+        public static GeoscapeEventDef CreateNewEvent(string gUID, string name, string title, string description, string outcome)        
+        {
+            try
+            {
+                GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
+                sourceLoseGeoEvent.GeoscapeEventData.Choices[0].Outcome.ReEneableEvent = false;
+                sourceLoseGeoEvent.GeoscapeEventData.Choices[0].Outcome.ReactiveEncounters.Clear();
+                GeoscapeEventDef newEvent = Helper.CreateDefFromClone(sourceLoseGeoEvent, gUID, name);
+                newEvent.GeoscapeEventData.EventID = name;
+                newEvent.GeoscapeEventData.Title.LocalizationKey = title;
+                newEvent.GeoscapeEventData.Description[0].General.LocalizationKey = description;
+                if(outcome != null) 
+                { 
+                newEvent.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey=outcome;
+                }
+                return newEvent;
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+            throw new InvalidOperationException();
+        }
+
+        public static LocalizedTextBind GetStringFromKey(string key) 
+        {
+            try
+            {
+                LocalizedTextBind localizedText = new LocalizedTextBind(key, true);
+                return localizedText;
+
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+            throw new InvalidOperationException();
+        }
+
     }
 
 }

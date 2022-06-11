@@ -90,6 +90,7 @@
     <Compile Include="ChangesToEvents.cs" />
     <Compile Include="ChangesToAmbushes.cs" />
     <Compile Include="AugmentationWOCH.cs" />
+    <Compile Include="Intro.cs" />
     <Compile Include="MutationsAndBionicsDiplo.cs" />
     <Compile Include="Umbra.cs" />
     <Compile Include="VoidOmens.cs" />
@@ -124,6 +125,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Textures\BG_Intro_0.jpg" />
+    <Content Include="Assets\Textures\BG_Intro_1.jpg" />
+    <Content Include="Assets\Textures\BG_Olena.jpg" />
     <Content Include="Assets\Textures\combat.png" />
     <Content Include="Assets\Textures\FesteringSkiesAfterHamerfall.png" />
     <Content Include="Assets\Textures\UI_AbilitiesIcon_CharacterAbility_AmplifyPain01.png" />

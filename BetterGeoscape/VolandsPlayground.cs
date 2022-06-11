@@ -279,10 +279,7 @@ namespace PhoenixRising.BetterGeoscape
 
                 //Changing Umbra Crab and Triton to appear after SDI event 3;
                 ResearchDef umbraCrabResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_CrabmanUmbra_ResearchDef"));
-                //Removing the random assignment method used in Vanilla 
-                RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
-                FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
-                randomValueCrabUmbra.ThresholdValue = 0;
+                
                 //Creating new Research Requirement, requiring a variable to be triggered  
                 EncounterVariableResearchRequirementDef variableResReqUmbra = Helper.CreateDefFromClone(sourceVarResReq, "0CCC30E0-4DB1-44CD-9A60-C1C8F6588C8A", "UmbraResReqDef");
                 string variableUmbraALNResReq = "Umbra_Encounter_Variable";
@@ -293,10 +290,7 @@ namespace PhoenixRising.BetterGeoscape
                 umbraCrabResearch.RevealRequirements.Container[0].Operation = ResearchContainerOperation.ANY;
                 umbraCrabResearch.RevealRequirements.Container[1].Requirements[0] = variableResReqUmbra;
                 //Now same thing for Triton Umbra, but it will use same variable because we want them to appear at the same time
-                ResearchDef umbraFishResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_FishmanUmbra_ResearchDef"));
-                RandomValueEffectConditionDef randomValueFishUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
-                FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralFishmen_FactionEffectDef]"));
-                randomValueFishUmbra.ThresholdValue = 0;
+                ResearchDef umbraFishResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_FishmanUmbra_ResearchDef"));                
                 umbraFishResearch.RevealRequirements.Operation = ResearchContainerOperation.ALL;
                 umbraFishResearch.RevealRequirements.Container[0].Operation = ResearchContainerOperation.ANY;
                 umbraFishResearch.RevealRequirements.Container[1].Requirements[0] = variableResReqUmbra;
@@ -317,7 +311,9 @@ namespace PhoenixRising.BetterGeoscape
                 BodyPartAspectDef umbraFishBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
                 FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilfish_Torso_BodyPartDef]"));
                 umbraFishBodyAspect.Endurance = 25.0f;
-               // TerribleScyllaRoars();
+                Intro.CreateIntro();
+                VoidOmens.SetUmbraRandomValue(0);
+                
             }
             catch (Exception e)
             {
@@ -377,7 +373,7 @@ namespace PhoenixRising.BetterGeoscape
         }
         */
 
-            [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
+        [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
         public static class PhoenixStatisticsManager_OnGeoscapeLevelStart_VoidOmens_Patch
         {
            
@@ -387,6 +383,28 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     VoidOmens.CreateVoidOmens(level);
                     VoidOmens.CheckForRemovedVoidOmens(level);
+
+                    if(level.EventSystem.GetVariable("BG_Intro_Played")==0) 
+                    {
+                        GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(level.PhoenixFaction, level.ViewerFaction);
+                        level.EventSystem.TriggerGeoscapeEvent("IntroBetterGeo_0", geoscapeEventContext);
+                        level.EventSystem.SetVariable("BG_Intro_Played", 1);                   
+                    }
+                    if (level.EventSystem.GetVariable("BG_Intro_Played") == 1) 
+                    {
+                        GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(level.PhoenixFaction, level.ViewerFaction);
+                        level.EventSystem.TriggerGeoscapeEvent("IntroBetterGeo_1", geoscapeEventContext);
+                        level.EventSystem.SetVariable("BG_Intro_Played", 2);
+                    }
+                    if (level.EventSystem.GetVariable("BG_Intro_Played") == 2)
+                    {
+                        GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(level.PhoenixFaction, level.ViewerFaction);
+                        level.EventSystem.TriggerGeoscapeEvent("IntroBetterGeo_2", geoscapeEventContext);
+                        level.EventSystem.SetVariable("BG_Intro_Played", 3);
+                    }
+
+
+
                 }
                 catch (Exception e)
                 {
@@ -403,7 +421,15 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    VoidOmens.CheckForVoidOmensRequiringTacticalPatching(level);                   
+                    VoidOmens.CheckForVoidOmensRequiringTacticalPatching(level);
+                    if (VoidOmens.VoidOmen16Active && VoidOmens.VoidOmen15Active) 
+                    {
+                        VoidOmens.SetUmbraRandomValue(0.32f);
+                    }
+                    if(VoidOmens.VoidOmen16Active && !VoidOmens.VoidOmen15Active)
+                    {
+                        VoidOmens.SetUmbraRandomValue(0.16f);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -517,10 +543,25 @@ namespace PhoenixRising.BetterGeoscape
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("FesteringSkiesAfterHamerfall.png");
                     }
 
-                 /*   if (geoEvent.EventID.Equals("SDI_01"))
+                    if (geoEvent.EventID.Equals("IntroBetterGeo_2"))
                     {
-                        __result.EventLeader = Helper.CreateSpriteFromImageFile("oldsb.png");
-                    }*/
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("BG_Intro_1.jpg");
+                        __result.EventLeader = Helper.CreateSpriteFromImageFile("BG_Olena.jpg");
+                    }
+                    if (geoEvent.EventID.Equals("IntroBetterGeo_1"))
+                    {
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("BG_Intro_1.jpg");
+                    }
+                    if (geoEvent.EventID.Equals("IntroBetterGeo_0"))
+                    {
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("BG_Intro_0.jpg");
+                    }
+
+
+                    /*   if (geoEvent.EventID.Equals("SDI_01"))
+                       {
+                           __result.EventLeader = Helper.CreateSpriteFromImageFile("oldsb.png");
+                       }*/
 
                 }
                 catch (Exception e)
@@ -564,10 +605,13 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
+                    Logger.Always("Lair or Citadal destroyed");
                     if (alienBase.AlienBaseTypeDef.Keyword=="lair" || alienBase.AlienBaseTypeDef.Keyword == "citadel" 
                         || (alienBase.AlienBaseTypeDef.Keyword == "nest" && __instance.GeoLevel.CurrentDifficultyLevel.Order==1))
                     {
+                        Logger.Always("Lair or Citadal destroyed, Void Omen should be removed");
                         VoidOmens.RemoveEarliestVoidOmen(__instance.GeoLevel);
+                        
                     }
                 }
                 catch (Exception e)

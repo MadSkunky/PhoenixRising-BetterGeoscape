@@ -171,7 +171,7 @@ PROG_PU12_MISS_TEXT_GENERAL_0,Text,,"[AircraftName] is overflying [HavenName].
 
 This is where Synedrion's clandestine lab doing advanced research into bionics is located. It is well guarded. 
 
-The leader of [HavenName], [HavenLeaderForename] [HavenLeaderSurname], will not  allow our operatives anywhere near the lab grounds, unless, or until, they come under attack by the Pure. Then we can probably use the confusion to break in, but we will have to fight both the Pure and Synedrion. 
+The leader of [HavenName], [HavenLeaderForename] [HavenLeaderSurname], will not allow our operatives anywhere near the lab grounds, unless, or until, they come under attack by the Pure. Then we can probably use the confusion to break in, but we will have to fight both the Pure and Synedrion. 
 
 There might be other options as well.",,,,,,,,
 PROG_PU12_WIN2_TITLE,Text,,Just Doing Our Job,,,,,,,,
@@ -270,3 +270,21 @@ ALN_FISHMANUMBRA_RESEARCHDEF_COMPLETE,Text,,"""It grew from the fishman’s pool
 
 - Prof. Alistair A. Arestovych, Phoenix Project",,,,,,,,
 ALN_FISHMANUMBRA_RESEARCHDEF_NAME,Text,,TRITON UMBRA,,,,,,,,
+BG_INTRO_0_TITLE,Text,,A Cold Reboot,,,,,,,,
+BG_INTRO_0_DESCRIPTION,Text,,"After all these years, you finally got the call. It meant that Symes and his deputies were dead or unreachable. Phoenix Project had gone dark. 
+
+The trek to Phoenix Point was long and dangerous, but when you reached it, somebody was already home...",,,,,,,,
+BG_INTRO_1_TITLE,Text,,Homecoming,,,,,,,,
+BG_INTRO_1_DESCRIPTION,Text,,"I'm Alistair Ashby. Yes, the ""Mist Expert"". Thanks for watching me back in the day, I guess... 
+
+A few of us managed to get to this bunker and activate the emergency beacon before we were overrun by the creatures that followed us here. 
+
+We got this place mostly up and running... Thanks to Olena, she is quite the wunderkind
+",,,,,,,,
+BG_INTRO_1_OUTCOME,Text,,"We will get this place up and running. The average IQ in our group is pretty high. Of course, Olena is largely to blame for that, she is quite the wunderkind.
+
+Anyway, we will take care of the day to day operations so that you can focus on the important stuff.",,,,,,,,
+BG_INTRO_2_TITLE,Text,,Olena Kim,,,,,,,,
+BG_INTRO_2_DESCRIPTION,Text,,"<i>Oppa</i> Alistair is good with people. I'm good with machines and software. I have already restored basic research and manufacturing functionality. 
+
+Our bottleneck is processing power; we have enough people and we can always get more, or allow remote access to our facilities... it's all q-bit encrypted and compartmentalized.",,,,,,,,

@@ -42,6 +42,8 @@ namespace PhoenixRising.BetterGeoscape
             Create_Immortality();
             Create_Feral();
             Create_Solipsism();
+            Create_HallucinatingStatus();
+            Create_NailsPassive();
         }
 
         public static void Create_ShutEye()
@@ -324,11 +326,11 @@ namespace PhoenixRising.BetterGeoscape
                 skillName);
             ofuPassive.CharacterProgressionData = Helper.CreateDefFromClone(
                 source.CharacterProgressionData,
-                "61e44215-fc05-4383-b9e4-17f384e3d003",
+                "BA1CF3A2-2175-4A2D-BC1A-59439722CD81",
                 skillName);
             ofuPassive.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
-                "aaead24e-9dba-4ef7-ba2d-8df142cb9105",
+                "76E1161E-FAB9-4E7C-A039-B2945FC4D4FD",
                 skillName);
 
             ofuPassive.StatModifications = new ItemStatModification[]
@@ -486,6 +488,19 @@ namespace PhoenixRising.BetterGeoscape
             solipsism.ViewElementDef.LargeIcon = icon;
             solipsism.ViewElementDef.SmallIcon = icon;
         }
+
+        public static void Create_HallucinatingStatus()
+        {
+            string skillName = "Hallucinating_StatusDef";
+            SilencedStatusDef source = Repo.GetAllDefs<SilencedStatusDef>().FirstOrDefault(p => p.name.Equals("ActorSilenced_StatusDef"));
+            SilencedStatusDef hallucinatingStatus = Helper.CreateDefFromClone(
+                source,
+                "2d5ed7eb-f4f3-42bf-8589-1d50ec99fa8b",
+                skillName);
+
+            hallucinatingStatus.DurationTurns = 2;
+        }
+
     }
 }
 

@@ -151,6 +151,13 @@ namespace PhoenixRising.BetterGeoscape
                             }
                         }
                     }
+                    else 
+                    {
+                     RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                     FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                     Logger.Always("The randon Crab Umbra value is " + randomValueCrabUmbra.ThresholdValue);
+                    }
+
                 }
                 catch (Exception e)
                 {
