@@ -31,10 +31,11 @@ namespace PhoenixRising.BetterGeoscape
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
-        public static bool[] darkEventsCheck = new bool[17];
+        public static bool[] darkEventsCheck = new bool[18];
         //VO#3 is WP cost +50%
         public static bool VoidOmen3Active = false;
         public static bool VoidOmen3Activated = false;
+        public static bool VoidOmen4Active = false;
         //VO#7 is more mist in missions
         public static bool VoidOmen7Active = false;
         //VO#10 is no limit to Delirium
@@ -69,7 +70,7 @@ namespace PhoenixRising.BetterGeoscape
                                 AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 1;
                                 AmbushALN.CratesDeploymentPointsRange.Min = 50;
                                 AmbushALN.CratesDeploymentPointsRange.Max = 70;
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable "+voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable "+voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 2 && darkEventsCheck[j] == false)
@@ -94,22 +95,24 @@ namespace PhoenixRising.BetterGeoscape
                                     diplomacyMissionOutcomeDef.DiplomacyToFaction.Max = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Max * 0.5f);
                                     diplomacyMissionOutcomeDef.DiplomacyToFaction.Min = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Min * 0.5f);
                                 }
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
 
                             }
                             if (j == 3 && darkEventsCheck[j] == false)
                             {
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 4 && darkEventsCheck[j] == false) //pending adding extra XP gain
                             {
-                                foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
+                             VoidOmen4Active=true;
+                                
+                                /*   foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
                                 {
                                     missionTypeDef.MaxPlayerUnits = 6;
-                                }
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                }*/
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 5 && darkEventsCheck[j] == false)
@@ -128,7 +131,7 @@ namespace PhoenixRising.BetterGeoscape
                                         missionTypeDef.CratesDeploymentPointsRange.Max = 30;
                                     }
                                 }
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 6 && darkEventsCheck[j] == false)
@@ -142,13 +145,13 @@ namespace PhoenixRising.BetterGeoscape
                                     if (lab.name == "E_ResourceGenerator [ResearchLab_PhoenixFacilityDef]" || lab.name == "E_ResourceGenerator [BionicsLab_PhoenixFacilityDef]")
                                         lab.BaseResourcesOutput.Values.Add(new ResourceUnit { Type = ResourceType.Research, Value = 2 });
                                 }
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
 
                             }
                             if (j == 7 && darkEventsCheck[j] == false)
                             {
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
 
@@ -172,7 +175,7 @@ namespace PhoenixRising.BetterGeoscape
                                 }
                                 GeoHavenZoneDef havenLab = Repo.GetAllDefs<GeoHavenZoneDef>().FirstOrDefault(ged => ged.name.Equals("Research_GeoHavenZoneDef"));
                                 havenLab.ProvidesResearch = 2;
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                           
@@ -180,51 +183,49 @@ namespace PhoenixRising.BetterGeoscape
                             {
                                 FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
                                 festeringSkiesSettingsDef.HavenAttackCounterModifier = 0.66f;
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             
                             if (j == 10 && darkEventsCheck[j] == false)
                             {
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 11 && darkEventsCheck[j] == false)
                             {
-                                FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
-                                festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 15;
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                             /*   FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
+                                festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 15;*/
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                                 
                             }
                             if (j == 12 && darkEventsCheck[j] == false)
                             {
                                 VoidOmen12Active = true;
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
 
                             }
                             if (j == 13 && darkEventsCheck[j] == false)
                             {
-                                foreach (GameDifficultyLevelDef difficultyLevelDef in Repo.GetAllDefs<GameDifficultyLevelDef>()) 
-                                {
-                                    difficultyLevelDef.NestLimitations.MaxConcurrent = 1000;
-                                    difficultyLevelDef.LairLimitations.MaxConcurrent = 1000;
-                                    difficultyLevelDef.CitadelLimitations.MaxConcurrent = 1000;
-                                }
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                level.CurrentDifficultyLevel.NestLimitations.MaxConcurrent = 1000;
+                                level.CurrentDifficultyLevel.LairLimitations.MaxConcurrent = 1000;
+                                level.CurrentDifficultyLevel.CitadelLimitations.MaxConcurrent = 1000;
+                            
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);                      
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 14 && darkEventsCheck[j] == false)
                             {
                                 TacticalPerceptionDef tacticalPerceptionDef = Repo.GetAllDefs<TacticalPerceptionDef>().FirstOrDefault((TacticalPerceptionDef a) => a.name.Equals("Soldier_PerceptionDef"));
                                 tacticalPerceptionDef.PerceptionRange = 20;
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 15 && darkEventsCheck[j] == false)
                             {
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
                                 darkEventsCheck[j] = true;
                             }
                             if (j == 16 && darkEventsCheck[j] == false)
@@ -237,7 +238,11 @@ namespace PhoenixRising.BetterGeoscape
                                 {
                                     SetUmbraRandomValue(0.32f);
                                 }
-                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                darkEventsCheck[j] = true;
+                            }
+                            if (j == 17 && darkEventsCheck[j] == false)
+                            {
                                 darkEventsCheck[j] = true;
                             }
                         }
@@ -272,8 +277,8 @@ namespace PhoenixRising.BetterGeoscape
                             AmbushALN.CratesDeploymentPointsRange.Min = 30;
                             AmbushALN.CratesDeploymentPointsRange.Max = 50;
                             darkEventsCheck[1] = false;
-                            Logger.Always("Exploration ambush chance is now " + level.EventSystem.ExplorationAmbushChance);
-                            Logger.Always("Alien ambushes can now have a max of  " + AmbushALN.CratesDeploymentPointsRange.Max / 10 + " crates");
+                         //   Logger.Always("Exploration ambush chance is now " + level.EventSystem.ExplorationAmbushChance);
+                          //  Logger.Always("Alien ambushes can now have a max of  " + AmbushALN.CratesDeploymentPointsRange.Max / 10 + " crates");
                             Logger.Always("The check for VO#1 went ok");
                         }
                         else if (darkEventsCheck[2])
@@ -310,10 +315,11 @@ namespace PhoenixRising.BetterGeoscape
 
                         else if (darkEventsCheck[4])
                         {
-                            foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
+                          VoidOmen4Active = false;
+                            /*  foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
                             {
                                 missionTypeDef.MaxPlayerUnits = 8;
-                            }
+                            }*/
                             darkEventsCheck[4] = false;
                             Logger.Always("The check for VO#4 went ok");
                         }
@@ -403,8 +409,8 @@ namespace PhoenixRising.BetterGeoscape
 
                         else if (darkEventsCheck[11])
                         {
-                            FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
-                            festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 3;
+                         /*   FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
+                            festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 3;*/
                             darkEventsCheck[11] = false;
                             Logger.Always("The check for VO#11 went ok");
                         }
@@ -417,22 +423,19 @@ namespace PhoenixRising.BetterGeoscape
                         }
 
                         else if (darkEventsCheck[13])
-                        {
-                            foreach (GameDifficultyLevelDef difficultyLevelDef in Repo.GetAllDefs<GameDifficultyLevelDef>())
-                            {
-                                if (difficultyLevelDef.Order == 1)
+                        {                        
+                                if (level.CurrentDifficultyLevel.Order == 1)
                                 {
-                                    difficultyLevelDef.NestLimitations.MaxConcurrent = 2;
-                                    difficultyLevelDef.LairLimitations.MaxConcurrent = 2;
-                                    difficultyLevelDef.CitadelLimitations.MaxConcurrent = 2;
+                                    level.CurrentDifficultyLevel.NestLimitations.MaxConcurrent = 2;
+                                    level.CurrentDifficultyLevel.LairLimitations.MaxConcurrent = 2;
+                                    level.CurrentDifficultyLevel.CitadelLimitations.MaxConcurrent = 2;
                                 }
                                 else
                                 {
-                                    difficultyLevelDef.NestLimitations.MaxConcurrent = 3;
-                                    difficultyLevelDef.LairLimitations.MaxConcurrent = 3;
-                                    difficultyLevelDef.CitadelLimitations.MaxConcurrent = 3;
-                                }
-                            }
+                                level.CurrentDifficultyLevel.NestLimitations.MaxConcurrent = 3;
+                                level.CurrentDifficultyLevel.LairLimitations.MaxConcurrent = 3;
+                                level.CurrentDifficultyLevel.CitadelLimitations.MaxConcurrent = 3;
+                                }                        
                             darkEventsCheck[13] = false;
                             Logger.Always("The check for VO#13 went ok");
                         }
@@ -458,6 +461,13 @@ namespace PhoenixRising.BetterGeoscape
                             darkEventsCheck[16] = false;
                             Logger.Always("The check for VO#16 went ok");
                         }
+
+                        else if (darkEventsCheck[17])
+                        {                           
+                            darkEventsCheck[17] = false;
+                            Logger.Always("The check for VO#17 went ok");
+                        }
+
                     }
                 }
             }
@@ -522,7 +532,7 @@ namespace PhoenixRising.BetterGeoscape
                     if (geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) != 0)
                     {
                         allTheDarkEventsAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x);
-                        Logger.Always("Check Triggered Void Omens " + allTheDarkEventsAlreadyRolled[x]);
+                      //  Logger.Always("Check Triggered Void Omens " + allTheDarkEventsAlreadyRolled[x]);
                     }
                 }
                 int countVoidOmensY = 0;
@@ -538,12 +548,12 @@ namespace PhoenixRising.BetterGeoscape
                         if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
                         {
                             allTheDarkEventsVariables[difficulty - y - 1] = allTheDarkEventsAlreadyRolled[x];
-                            Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + allTheDarkEventsVariables[difficulty - y - 1]);
+                         //   Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + allTheDarkEventsVariables[difficulty - y - 1]);
                             variablesUsed++;
                         }
                         countVoidOmensY++;
                     }
-                    Logger.Always("the count of variables used is " + variablesUsed);
+                  //  Logger.Always("the count of variables used is " + variablesUsed);
                     if (variablesUsed == difficulty)
                     {
                         x = 20;
@@ -551,7 +561,6 @@ namespace PhoenixRising.BetterGeoscape
                     countVoidOmensX++;
                 }
                 return allTheDarkEventsVariables;
-                // Then we try to find in the array of the Dark Variables which one appeared the earliest
             }
             catch (Exception e)
             {
@@ -573,7 +582,6 @@ namespace PhoenixRising.BetterGeoscape
                 int[] allTheDarkEventsVariables = CheckForAlreadyRolledVoidOmens(geoLevelController);
                 Logger.Always("Checking if method invocation is working, these are allTheDarkEventsVariables " + allTheDarkEventsVariables[0] +" "
                     + allTheDarkEventsVariables[1] + " " + allTheDarkEventsVariables[2] + " " + allTheDarkEventsVariables[3]);
-
                 
                 int replacedVoidOmen = 0;
 
@@ -587,7 +595,8 @@ namespace PhoenixRising.BetterGeoscape
                         for (int y = 0; y < difficulty; y++)
                         {
                             // Once we find it, we want to remove it
-                            if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
+                            // Added the check to skip empty Void Omen variables, to hopefully make this method work even when list is not full
+                            if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) && allTheDarkEventsVariables[difficulty - y - 1] !=0)
                             {
                                 Logger.Always("The Void Omen Variable to be replaced is " + voidOmen + (difficulty - y) +
                                    " now holds VO " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));
@@ -613,7 +622,57 @@ namespace PhoenixRising.BetterGeoscape
             {
                 Logger.Error(e);
             }          
-        } 
+        }
+
+        public static void RemoveAllVoidOmens(GeoLevelController geoLevelController)
+        {
+        try
+            {
+                int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
+                string triggeredVoidOmens = "TriggeredVoidOmen_";
+                string voidOmen = "VoidOmen_";
+
+                // And an array to record which variables hold which Dark Events
+                int[] allTheDarkEventsVariables = CheckForAlreadyRolledVoidOmens(geoLevelController);
+                Logger.Always("Checking if method invocation is working, these are allTheDarkEventsVariables " + allTheDarkEventsVariables[0] + " "
+                    + allTheDarkEventsVariables[1] + " " + allTheDarkEventsVariables[2] + " " + allTheDarkEventsVariables[3]);
+
+                int replacedVoidOmen = 0;
+
+                for (int x = 1; x < 20; x++)
+                {
+                    // We check, starting from the earliest, which Dark Event is still in play
+                    if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
+                    {
+                        // Then we locate in which Variable it is recorded
+                        for (int y = 0; y < difficulty; y++)
+                        {
+                            // Once we find it, we want to remove it
+                            if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
+                            {
+                                Logger.Always("The Void Omen Variable to be replaced is " + voidOmen + (difficulty - y) +
+                                   " now holds VO " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));
+                                replacedVoidOmen = geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y));
+                                geoLevelController.EventSystem.SetVariable(voidOmen + (difficulty - y), 0);
+                                Logger.Always("The Void Omen Variable " + voidOmen + (difficulty - y) +
+                                    " is now " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));                                
+                            }
+                        }
+                    }
+                    if (replacedVoidOmen != 0)
+                    {
+                        string objectiveToBeReplaced = (string)CHReworkMain.DarkEvents_Title.GetValue(replacedVoidOmen - 1);
+                        Logger.Always("The target event that will be replaced is " + objectiveToBeReplaced);
+                        CHReworkMain.RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
+                    }
+                }
+            }
+         catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+        }
 
         public static void SetUmbraRandomValue(float value) 
         {
@@ -631,7 +690,9 @@ namespace PhoenixRising.BetterGeoscape
                 Logger.Error(e);
             }
 
-}
+        }
+
+        
 
     }
 }

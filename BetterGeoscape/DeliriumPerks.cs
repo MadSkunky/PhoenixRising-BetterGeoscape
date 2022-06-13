@@ -20,6 +20,9 @@ using System.Linq;
 using UnityEngine;
 using PhoenixPoint.Tactical.Levels;
 using PhoenixPoint.Common.UI;
+using PhoenixPoint.Common.Entities.GameTags;
+using PhoenixPoint.Tactical.Levels.Mist;
+using PhoenixPoint.Tactical.Entities.Animations;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -31,6 +34,8 @@ namespace PhoenixRising.BetterGeoscape
 
         public static void Main()
         {
+            Clone_GameTag();
+            AddAnimation();
             Create_ShutEye();
             Create_Photophobia();
             Create_AngerIssues();
@@ -38,12 +43,55 @@ namespace PhoenixRising.BetterGeoscape
             Create_OneOfUs();
             Create_OneOfUsPassive();
             Create_FleshEater();
+            Clone_Inspire();
             Create_Nails();
+            Create_NailsPassive();
             Create_Immortality();
             Create_Feral();
             Create_Solipsism();
-            Create_HallucinatingStatus();
-            Create_NailsPassive();
+            Clone_ArmorBuffStatus();
+        }
+
+        public static void AddAnimation()
+        {
+            ApplyStatusAbilityDef devour = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutog_Devour_AbilityDef"));
+            PlayActionAnimationAbilityDef devourAnim = Repo.GetAllDefs<PlayActionAnimationAbilityDef>().FirstOrDefault(p => p.name.Equals("Mutog_PlayDevourAnimation_AbilityDef"));
+
+            //OnActorDeathEffectStatusDef devourStatus = (OnActorDeathEffectStatusDef)devour.StatusDef;
+            //devourStatus.Range = 99;
+            //devourStatus.RequiredDyingActorTags = null;
+
+
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && !animActionDef.AbilityDefs.Contains(devour))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(devour).ToArray();
+                }
+            }
+
+            foreach (TacActorSimpleAbilityAnimActionDef animActionDef in Repo.GetAllDefs<TacActorSimpleAbilityAnimActionDef>().Where(aad => aad.name.Contains("Soldier_Utka_AnimActionsDef")))
+            {
+                if (animActionDef.AbilityDefs != null && !animActionDef.AbilityDefs.Contains(devourAnim))
+                {
+                    animActionDef.AbilityDefs = animActionDef.AbilityDefs.Append(devourAnim).ToArray();
+                }
+            }
+        }
+        public static void Clone_GameTag()
+        {
+            string skillName = "Takashi_GameTagDef";
+            GameTagDef source = Repo.GetAllDefs<GameTagDef>().FirstOrDefault(p => p.name.Equals("Takeshi_Tutorial3_GameTagDef"));
+            GameTagDef Takashi = Helper.CreateDefFromClone(
+                source,
+                "F9FF0EF9-4800-4355-B6F4-5543994C129F",
+                skillName);
+
+            TacticalVoxelMatrixDataDef tVMDD = Repo.GetAllDefs<TacticalVoxelMatrixDataDef>().FirstOrDefault(dtb => dtb.name.Equals("TacticalVoxelMatrixDataDef"));
+            tVMDD.MistImmunityTags = new GameTagsList()
+            {
+                Takashi,
+            };
         }
 
         public static void Create_ShutEye()
@@ -108,6 +156,60 @@ namespace PhoenixRising.BetterGeoscape
             hallucinating.ViewElementDef.LargeIcon = icon;
             hallucinating.ViewElementDef.SmallIcon = icon;
         }
+
+        public static void Clone_Inspire()
+        {
+            string skillName = "FleshEaterHP_AbilityDef";
+            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("Inspire_AbilityDef"));
+            ApplyStatusAbilityDef fleshEater = Helper.CreateDefFromClone(
+                source,
+                "FF52ACBE-FFB2-4A96-8DC2-0B8072036669",
+                skillName);
+            fleshEater.CharacterProgressionData = Helper.CreateDefFromClone(
+                source.CharacterProgressionData,
+                "B5D6B88F-5F0A-4B3B-9F53-3E14276F4533",
+                skillName);
+            fleshEater.ViewElementDef = Helper.CreateDefFromClone(
+                source.ViewElementDef,
+                "0078B9D3-8DFF-40C6-A009-8B572EFCF87A",
+                skillName);
+
+            OnActorDeathEffectStatusDef fleshEaterStatus = Helper.CreateDefFromClone(
+                fleshEater.StatusDef as OnActorDeathEffectStatusDef,
+                "42600C75-8E8A-4AC9-B192-49960957CAAA",
+                "E_KillListenerStatus [" + skillName + "]");
+
+            FactionMembersEffectDef fleshEaterEffectDef2 = Helper.CreateDefFromClone(
+                fleshEaterStatus.EffectDef as FactionMembersEffectDef,
+                "452133A6-BB2E-4DE7-B561-073CCBE48D49",
+                "E_Effect [" + skillName + "]");
+
+            StatsModifyEffectDef fleshEaterSingleEffectDef2 = Helper.CreateDefFromClone(
+                fleshEaterEffectDef2.SingleTargetEffect as StatsModifyEffectDef,
+                "9F39B97B-9DB7-4076-96AE-4AAD317E1A6D",
+                "E_SingleTargetEffect [" + skillName + "]");
+
+            fleshEater.ApplyStatusToAllTargets = false;
+            //(fleshEater.StatusDef as OnActorDeathEffectStatusDef).EffectDef = fleshEaterEffectDef;
+            //fleshEaterEffectDef.SingleTargetEffect = fleshEaterSingleTargetEffectDef;
+            //fleshEaterSingleTargetEffectDef.StatModifications[0].StatName = "";
+            fleshEater.StatusDef = fleshEaterStatus;
+            fleshEaterStatus.EffectDef = fleshEaterEffectDef2;
+            fleshEaterEffectDef2.SingleTargetEffect = fleshEaterSingleEffectDef2;
+            fleshEaterEffectDef2.IgnoreTargetActor = false;
+
+            fleshEaterSingleEffectDef2.StatModifications = new List<StatModification>
+            {
+                new StatModification()
+                {
+                    Modification = StatModificationType.AddRestrictedToBounds,
+                    StatName = "Health",
+                    Value = 80,
+                }
+            };
+        }
+
+
         public static void Create_FleshEater()
         {
             string skillName = "FleshEater_AbilityDef";
@@ -306,7 +408,6 @@ namespace PhoenixRising.BetterGeoscape
                 "3cc4d8c8-739c-403b-92c9-7a6f5c54abb5",
                 skillName);
 
-
             oneOfUs.DamageTypeDef = Repo.GetAllDefs<DamageTypeBaseEffectDef>().FirstOrDefault(dtb => dtb.name.Equals("Mist_SpawnVoxelDamageTypeEffectDef"));
             oneOfUs.Multiplier = 0;
 
@@ -326,11 +427,11 @@ namespace PhoenixRising.BetterGeoscape
                 skillName);
             ofuPassive.CharacterProgressionData = Helper.CreateDefFromClone(
                 source.CharacterProgressionData,
-                "BA1CF3A2-2175-4A2D-BC1A-59439722CD81",
+                "61e44215-fc05-4383-b9e4-17f384e3d003",
                 skillName);
             ofuPassive.ViewElementDef = Helper.CreateDefFromClone(
                 source.ViewElementDef,
-                "76E1161E-FAB9-4E7C-A039-B2945FC4D4FD",
+                "aaead24e-9dba-4ef7-ba2d-8df142cb9105",
                 skillName);
 
             ofuPassive.StatModifications = new ItemStatModification[]
@@ -380,13 +481,13 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     TargetStat = StatModificationTarget.Endurance,
                     Modification = StatModificationType.Add,
-                    Value = -5,
+                    Value = -4,
                 },
                 new ItemStatModification()
                 {
                     TargetStat = StatModificationTarget.Endurance,
                     Modification = StatModificationType.AddMax,
-                    Value = -5,
+                    Value = -4,
                 },
               };
             immortality.ItemTagStatModifications = new EquipmentItemTagStatModification[0];
@@ -396,36 +497,12 @@ namespace PhoenixRising.BetterGeoscape
             immortality.ViewElementDef.LargeIcon = icon;
             immortality.ViewElementDef.SmallIcon = icon;
         }
-        /*
-        public static void Create_Immortality2()
-        {
-            string skillName = "Immortality2_AbilityDef";
-            ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("IgnorePain_AbilityDef"));
-            ApplyStatusAbilityDef immortality = Helper.CreateDefFromClone(
-                source,
-                "eea26659-d54f-48d8-8025-cb7ca53c1749",
-                skillName);
-            immortality.CharacterProgressionData = Helper.CreateDefFromClone(
-                source.CharacterProgressionData,
-                "d99c2d2f-0cff-412c-ad99-218b39158c88",
-                skillName);
-            immortality.ViewElementDef = Helper.CreateDefFromClone(
-                source.ViewElementDef,
-                "3f8b13e1-70ff-4964-923d-1e2c73f66f4f",
-                skillName);
-
-            immortality.ViewElementDef.DisplayName1 = new LocalizedTextBind("IMMORTALITY", true);
-            immortality.ViewElementDef.Description = new LocalizedTextBind("<b>Strength reduced -4, Gain 10 natural Armour</b>\n<i>Self-mutilation is not uncommon to develop throughout Delirium affected subjects," +
-                " this one in particular believes he has become Immortal</i>", true);
-            Sprite icon = Helper.CreateSpriteFromImageFile("UI_AbilitiesIcon_PersonalTrack_Vampire.png");
-            immortality.ViewElementDef.LargeIcon = icon;
-            immortality.ViewElementDef.SmallIcon = icon;
-        }
-        */
+       
         public static void Create_Feral()
         {
             string skillName = "Feral_AbilityDef";
             ApplyStatusAbilityDef source = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(p => p.name.Equals("RapidClearance_AbilityDef"));
+            ProcessDeathReportEffectDef sourceEffect = Repo.GetAllDefs<ProcessDeathReportEffectDef>().FirstOrDefault(p => p.name.Equals("E_Effect [RapidClearance_AbilityDef]"));
             ApplyStatusAbilityDef feral = Helper.CreateDefFromClone(
                 source,
                 "34612505-8512-4eb3-8429-ef087c07c764",
@@ -439,20 +516,22 @@ namespace PhoenixRising.BetterGeoscape
                 "1135128c-a10d-4285-9d03-d93a4afd6733",
                 skillName);
             OnActorDeathEffectStatusDef feralStatusDef = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<OnActorDeathEffectStatusDef>().FirstOrDefault(a => a.name.Equals("E_RapidClearanceStatus [RapidClearance_AbilityDef]")),
+                source.StatusDef as OnActorDeathEffectStatusDef,
                 "9510c7e3-bef7-4b89-b20a-3bb57a7e664b",
                 "E_FeralStatus [Feral_AbilityDef]");
             ProcessDeathReportEffectDef feralEffectDef = Helper.CreateDefFromClone(
-                Repo.GetAllDefs<ProcessDeathReportEffectDef>().FirstOrDefault(a => a.name.Equals("E_Effect [RapidClearance_AbilityDef]")),
+                sourceEffect,
                 "d0f71701-4255-4b57-a387-0f3c936ed29e",
                 "E_Effect [Feral_AbilityDef]");
 
-            feral.StatusApplicationTrigger = StatusApplicationTrigger.ActorEnterPlay;
+            feral.StatusApplicationTrigger = StatusApplicationTrigger.AbilityAdded;
             feral.Active = false;
             feral.WillPointCost = 0;
-
             feral.StatusDef = feralStatusDef;
             feralStatusDef.EffectDef = feralEffectDef;
+            feralStatusDef.ExpireOnEndOfTurn = false;
+            feralStatusDef.Duration = -1;
+            feralStatusDef.DurationTurns = -1;
             feralEffectDef.RestoreActionPointsFraction = 0.25f;
 
             feral.ViewElementDef.DisplayName1.LocalizationKey = "DELIRIUM_PERK_FERAL_NAME";
@@ -460,6 +539,7 @@ namespace PhoenixRising.BetterGeoscape
             Sprite icon = Repo.GetAllDefs<TacticalAbilityViewElementDef>().FirstOrDefault(tav => tav.name.Equals("E_ViewElement [Mutog_PrimalInstinct_AbilityDef]")).LargeIcon;
             feral.ViewElementDef.LargeIcon = icon;
             feral.ViewElementDef.SmallIcon = icon;
+            feralStatusDef.ExpireOnEndOfTurn = false;
         }
         public static void Create_Solipsism()
         {
@@ -501,7 +581,35 @@ namespace PhoenixRising.BetterGeoscape
             hallucinatingStatus.DurationTurns = 2;
         }
 
+        public static void Clone_ArmorBuffStatus()
+        {
+            string skillName = "ArmorBuffStatus_StatusDef";
+            ItemSlotStatsModifyStatusDef source = Repo.GetAllDefs<ItemSlotStatsModifyStatusDef>().FirstOrDefault(p => p.name.Equals("E_Status [Acheron_RestorePandoranArmor_AbilityDef]"));
+            ItemSlotStatsModifyStatusDef armorBuffStatus = Helper.CreateDefFromClone(
+                source,
+                "D2B46847-FC47-436D-A940-19CDEF472ED1",
+                skillName);
+
+            armorBuffStatus.StatsModifications = new ItemSlotStatsModifyStatusDef.ItemSlotModification[]
+            {
+                new ItemSlotStatsModifyStatusDef.ItemSlotModification()
+                {
+                    Type = ItemSlotStatsModifyStatusDef.StatType.Armour,
+                    ModificationType = StatModificationType.Add,
+                    Value = 10,
+                },
+                new ItemSlotStatsModifyStatusDef.ItemSlotModification()
+                {
+                    Type = ItemSlotStatsModifyStatusDef.StatType.Armour,
+                    ModificationType = StatModificationType.AddMax,
+                    Value = 10,
+                },
+            };
+
+        }
     }
+
 }
+
 
 

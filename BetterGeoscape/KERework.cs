@@ -1,4 +1,5 @@
-﻿using Base.Defs;
+﻿using Assets.Code.PhoenixPoint.Geoscape.Entities.Sites.TheMarketplace;
+using Base.Defs;
 using Base.UI;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Geoscape.Events;
@@ -17,17 +18,26 @@ namespace PhoenixRising.BetterGeoscape
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
-
+        
         public static void Apply_Changes()
         {
             try
-            {
+            {       
+                foreach (GeoMarketplaceItemOptionDef geoMarketplaceItemOptionDef in Repo.GetAllDefs<GeoMarketplaceItemOptionDef>())
+                {
+                    if (!geoMarketplaceItemOptionDef.DisallowDuplicates) 
+                    { 
+                    geoMarketplaceItemOptionDef.DisallowDuplicates = true;
+                    
+                    }
+                }
+
                 //ID all the factions for later
                 GeoFactionDef PhoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
                 GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
                 GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
                 GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
-
+                /*
                 // KE Story rework - remove missions + Maker
                 GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
                 GeoscapeEventDef KE1MissWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE1_WIN_GeoscapeEventDef"));
@@ -77,15 +87,18 @@ namespace PhoenixRising.BetterGeoscape
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[2].MinNumberOfOffers = 15;
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[3].MinNumberOfOffers = 16;
                 theMarketplaceSettings.TheMarketplaceItemOfferAmounts[3].MinNumberOfOffers = 20;
+                */
 
                 //Replace all LOTA Schemata missions with KE2 mission
+                GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
+                GeoscapeEventDef KE2Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_KE2_GeoscapeEventDef"));
                 GeoscapeEventDef LE1Miss = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_MISS_GeoscapeEventDef"));
                 LE1Miss.GeoscapeEventData.Choices[0].Outcome.StartMission.MissionTypeDef = KE2Miss.GeoscapeEventData.Choices[0].Outcome.StartMission.MissionTypeDef;
                 //Don't generate next Schemata mission
                 GeoscapeEventDef LE1Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE1_WIN_GeoscapeEventDef"));
                 //GeoscapeEventDef geoEventFS9 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_FS9_GeoscapeEventDef"));
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.SetEvents = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.SetEvents;
-                LE1Win.GeoscapeEventData.Choices[0].Outcome.TrackEncounters = geoEventFS9.GeoscapeEventData.Choices[0].Outcome.TrackEncounters;
+                LE1Win.GeoscapeEventData.Choices[0].Outcome.SetEvents.Clear();
+                LE1Win.GeoscapeEventData.Choices[0].Outcome.TrackEncounters.Clear();
                 //Unlock all ancient weapons research and add hidden variable to unlock final cinematic
                 GeoscapeEventDef LE2Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE2_WIN_GeoscapeEventDef"));
                 GeoscapeEventDef LE3Win = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_LE3_WIN_GeoscapeEventDef"));

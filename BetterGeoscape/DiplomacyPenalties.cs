@@ -74,246 +74,53 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef ProgAnuAlliance1 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_WIN1_GeoscapeEventDef"));
                 GeoscapeEventDef ProgAnuAlliance2 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_WIN2_GeoscapeEventDef"));
                 GeoscapeEventDef ProgNJAlliance = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynAlliancePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynAllianceTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN2_GeoscapeEventDef"));
+                GeoscapeEventDef ProgSynAllianceTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN1_GeoscapeEventDef"));
+                GeoscapeEventDef ProgSynAlliancePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN2_GeoscapeEventDef"));
 
+                //Anu
+                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
+                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -10)); 
+                ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -15));
+                ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
+                ProgAnuAlliance1.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
+                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -20));
+                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -15));
+                
+                //Synedrion
+                //Supportive Polyphonic
+                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
+                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Polyphonic",1,false));
+                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -5));
+                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
+                //Supportive Terra
+                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15));
+                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Terraformers",1,false));
+                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -5));
+                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -10));
+                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Polyphonic", 1, false));
+                //Aligned
+                ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -18));
+                ProgSynPact.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -18));
+                ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15));
+                ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
+                //Aliance Polyphonic             
+                OutcomeDiplomacyChange outcomeAlliancePolyphonic = ProgSynAlliancePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
+                outcomeAlliancePolyphonic.Value=-20;
+                //Alliance Terra
+                ProgSynAllianceTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -20));
 
-                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgAnuAlliance1.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Polyphonic",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Terraformers",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Terraformers",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                }); ;
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -5
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.VariablesChange.Add(new OutcomeVariableChange()
-                {
-                    VariableName = "Polyphonic",
-                    Value = { Min = 1, Max = 1 },
-                    IsSetOperation = false,
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -18
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -18
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgSynAlliancePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-
-                {
-                    PartyFaction = NewJericho,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                ProgSynAllianceTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
-                ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -10
-                });
-
-                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -15
-                });
-
-                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
-                {
-                    PartyFaction = Anu,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = -20
-                });
-
+                //New Jericho
+                ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -10)); 
+                ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -10));
+                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15)); 
+                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
+                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -20)); 
                 OutcomeDiplomacyChange outcomeDiplomacyChange = ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
                 outcomeDiplomacyChange.Value = -20;
 
                 //Change Reward introductory mission Synedrion
                 GeoscapeEventDef ProgSynIntroWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY0_WIN_GeoscapeEventDef"));
-                ProgSynIntroWin.GeoscapeEventData.Choices[1].Outcome.Diplomacy[0] = new OutcomeDiplomacyChange
-                {
-                    PartyFaction = Synedrion,
-                    TargetFaction = PhoenixPoint,
-                    PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
-                    Value = 0
-                };
-
+                ProgSynIntroWin.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Clear();
             }
 
             catch (Exception e)

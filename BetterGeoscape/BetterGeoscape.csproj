@@ -86,10 +86,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AirCombat.cs" />
     <Compile Include="CHReworkMain.cs" />
     <Compile Include="ChangesToEvents.cs" />
     <Compile Include="ChangesToAmbushes.cs" />
     <Compile Include="AugmentationWOCH.cs" />
+    <Compile Include="InfestationOptionEvent.cs" />
+    <Compile Include="InfestationOptionMission.cs" />
     <Compile Include="Intro.cs" />
     <Compile Include="MutationsAndBionicsDiplo.cs" />
     <Compile Include="Umbra.cs" />
@@ -125,6 +128,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Textures\alistair.png" />
+    <Content Include="Assets\Textures\BG_alistair_small.png" />
     <Content Include="Assets\Textures\BG_Intro_0.jpg" />
     <Content Include="Assets\Textures\BG_Intro_1.jpg" />
     <Content Include="Assets\Textures\BG_Olena.jpg" />
@@ -203,6 +208,10 @@
     <Content Include="Assets\Textures\UI_Ability_GunAndRun.png" />
     <Content Include="Assets\Textures\UI_StatusesIcons_CanBeRecruitedIntoPhoenix-2.png" />
     <Content Include="Assets\Textures\Void-04P.png" />
+    <Content Include="Assets\Textures\VO_05.jpg" />
+    <Content Include="Assets\Textures\VO_11.jpg" />
+    <Content Include="Assets\Textures\VO_12.jpg" />
+    <Content Include="Assets\Textures\VO_13.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

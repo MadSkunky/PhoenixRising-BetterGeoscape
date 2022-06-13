@@ -63,7 +63,7 @@ KEY_MARKETPLACE_DESCRIPTION_1,Text,,"The leader of the haven, Sol ""Maker"" Mark
 KEY_MARKETPLACE_DESCRIPTION_2,Text,,Sol is happy and reminds us to do as we are told if we want to receive further blessings,,,,,,,,
 KEY_MARKETPLACE_DESCRIPTION_3,Text,,Sol has received the Bionics tech. He hints that Subject 24 should be destroyed.,,,,,,,,
 KEY_MARKETPLACE_DESCRIPTION_4,Text,,Sol is happy because we destroyed the fortress,,,,,,,,
-KEY_MARKETPLACE_DESCRIPTION_5,Text,,Sol is most happy because we stole Bionics tech and destroyed the fortress,,,,,,,,
+KEY_MARKETPLACE_DESCRIPTION_5,Text,,Enjoy the sights and pungent smells! ,,,,,,,,
 DLC5/KEY_MARKETPLACE_HAVEN_HEADER,Text,,BAZAAR HAVEN,,,,,,,,
 DLC5/KEY_KAOS_SYNDICATE,Text,,The Bazaar,,,,,,,,
 PROG_KE1_TITLE,Text,,Mind Tricks,,,,,,,,
@@ -98,7 +98,8 @@ SDI_01_TITLE,Text,,The Third Mist,,,,,,,,
 SDI6_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
 
 <b>Our operatives can now be afflicted with a Delirium status of up to half of their Willpower</b>",,,,,,,,
-SDI16_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
+SDI7_OUTCOME,Text,,Havens in the Mist can become infested instead of destroyed when attacked by Pandorans. Infested havens accelerate Pandoran evolution.,,,,,,,,
+SDI10_OUTCOME,Text,,"The Oneiric Delirium grows stronger.
 
 <b>Our operatives can now be afflicted with a Delirium status equal to their Willpower</b>",,,,,,,,
 PROG_LE0_MISS_CHOICE_2_TEXT,Text,,Ask West to release Dr. Helena,,,,,,,,
@@ -176,7 +177,7 @@ The leader of [HavenName], [HavenLeaderForename] [HavenLeaderSurname], will not 
 There might be other options as well.",,,,,,,,
 PROG_PU12_WIN2_TITLE,Text,,Just Doing Our Job,,,,,,,,
 PROG_PU12_WIN2_CHOICE_0_TEXT,Text,,OK,,,,,,,,
-,Text,,"Given the good relations between Phoenix Project and Synedrion, [HavenLeaderForename] [HavenLeaderSurname] was not surprised at the presence of [AircraftName] in the [HavenName] at the time of the attack, and [HavenLeaderForename] assumed that you were aware of the research going on in the restricted research campus. After defending [HavenName] from the raid, Phoenix operatives stole the secrets to Synderion bionics research.",,,,,,,,
+PROG_PU12_WIN2_TEXT_GENERAL_0,Text,,"Given the good relations between Phoenix Project and Synedrion, [HavenLeaderForename] [HavenLeaderSurname] was not surprised at the presence of [AircraftName] in the [HavenName] at the time of the attack, and [HavenLeaderForename] assumed that you were aware of the research going on in the restricted research campus. After defending [HavenName] from the raid, Phoenix operatives stole the secrets to Synderion bionics research.",,,,,,,,
 PROG_PU12_FAIL2_TITLE,Text,,Miserable Failure!,,,,,,,,
 PROG_PU12_FAIL2_TEXT_GENERAL_0,Text,,You suck!,,,,,,,,
 PROG_PU12_FAIL2_CHOICE_0_TEXT,Text,,:(,,,,,,,,
@@ -223,36 +224,37 @@ DARK_EVENT_TITLE_07,Text,,More Mist in missions,,,,,,,,
 DARK_EVENT_TITLE_08,Text,,"Diplomatic penalties among factions +50%, but double faction research",,,,,,,,
 DARK_EVENT_TITLE_09,Text,,Attacks on havens twice as frequent,,,,,,,,
 DARK_EVENT_TITLE_10,Text,,"No limit to Delirium, regardless of ODI level",,,,,,,,
-DARK_EVENT_TITLE_11,Text,,Behemoth dispruption threshold increased by 12,,,,,,,,
+DARK_EVENT_TITLE_11,Text,,Behemoth disruption threshold increased,,,,,,,,
 DARK_EVENT_TITLE_12,Text,,Strength of Pandoran attacks on Havens increased by 50%,,,,,,,,
 DARK_EVENT_TITLE_13,Text,,Unlimited Pandoran bases,,,,,,,,
 DARK_EVENT_TITLE_14,Text,,Human perception lowered to 20 from 35,,,,,,,,
 DARK_EVENT_TITLE_15,Text,,More Umbras,,,,,,,,
 DARK_EVENT_TITLE_16,Text,,Umbras can appear anywhere and attack anyone,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_01,Text,,"Ambushes more likely and more dangerous, but also be more crates. ",,,,,,,,
+DARK_EVENT_TITLE_17,Text,,Destroyed havens in Mist always become infested ,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_01,Text,,"<i>""The reports we are intercepting from both faction and independent scavenging teams is that it's getting more dangerous out there… But we will probably see more loot, because… fewer competitors.""</i> ",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_02,Text,,"<i>""We are losing our moral compass, if we ever had one""</i> ",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_03,Text,,"<i>""It's a waking nightmare. Can you get used to nightmares?""</i> ",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_04,Text,,"<i>""Have you seen the latest psych-evals? 'Trust issues' is putting it mildly: they can start shooting each other any minute. If you want my advice, keep the combat units small, at least for a while.""</i>",,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_05,Text,,Haven defenders are hostile to Phoenix operatives during haven defense missios,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_05,Text,,"<i>""They went Paranoid cuckoo! They think we are not there to defend them, but to take their stuff. Honestly, I think we should, just to teach them a lesson.""</i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_06,Text,,"<i> ""What did you expect? They too are capable of learning from their mistakes.""</i>",,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_07,Text,,More Mist in missions,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_07,Text,,"<i> ""It has nothing to do with meteorology. We know nothing about the Mist: why it moves, where to, why there is so much more of it all of a sudden. Yes, as a ""Mist Expert"" I admit I'm a fraud."" </i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_08,Text,,"<i> ""Them and us, we can't help but see the world that way. Odd how sometimes that peaks and we forget that we are all part of the same species. A species that is currently facing extinction.""</i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_09,Text,,"<i> ""I would say they are off the leash now, but, if so, who was holding it?""</i>",,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_10,Text,,"No limit to Delirium, regardless of ODI level",,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_11,Text,,Behemoth dispruption thresold increased by 12,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_12,Text,,Strength of Pandoran attacks on Havens increased by 50%,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_13,Text,,Unlimited Pandoran bases,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_10,Text,,<i>I can't wake up I can't wake up I can't wake up <b> I CAN'T WAKE UP</b></i>,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_11,Text,,<i>It just won't quit</i>,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_12,Text,,<i>They are throwing everything they have at us</i>,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_13,Text,,"<i>""Look, the Pandron Colonies don't just happen… They follow some pattern; I can't tell you what it is because we don't understand it… yet. But I can tell you that something has changed. </i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_14,Text,,Human perception lowered to 20 from 35,,,,,,,,
-DARK_EVENT_DESCRIPTION_TEXT_15,Text,,More Umbras,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_15,Text,,"<i>""Our people are seeing <b>more</b> oil monsters in the field. I look forward to the strict adherents of the scientific method explaining this away as our operatives going <b>more</b> crazy.""</i>",,,,,,,,
 DARK_EVENT_DESCRIPTION_TEXT_16,Text,,Umbras can appear anywhere and attack anyone,,,,,,,,
+DARK_EVENT_DESCRIPTION_TEXT_17,Text,,Destroyed havens in Mist always become infested ,,,,,,,,
 VOID_OMEN_INTRO,Text,,"We believe we are observing the first effects of the Oneiric Delirium on a collective scale. The phenomenon is akin to mass hysteria. 
 
 Synedrion psycho-sociologists are rationalizing the documented instances of widespread psychosis as the result of stresses to which our communities are subjected when our species is facing the possibility of extinction. 
 
 However, the global scale and eerie thematic homogeneity of these events suggests a different causal relationship. 
 
-Given what we know about the Oneiric Delirium and its connection to the Mist, there is little room for doubt: our collective psyche has become another battleground in our struggle with the Pandoravirus.
-",,,,,,,,
+Given what we know about the Oneiric Delirium and its connection to the Mist, there is little room for doubt: our collective psyche has become another battleground in our struggle with the Pandoravirus.",,,,,,,,
 VOID_OMEN_INTRO_TITLE,Text,,Omens of the Void,,,,,,,,
 ALN_CRABMANUMBRA_RESEARCHDEF_COMPLETE,Text,,"""What are they? You ask me, but I do not know; there is nothing in them to sequence. Perhaps you should talk to Martika the Priest... These 'purple shadows' our warriors speak of sound like her field of expertise.""
 
@@ -268,7 +270,7 @@ ALN_FISHMANUMBRA_RESEARCHDEF_COMPLETE,Text,,"""It grew from the fishman’s pool
 
 ""Oh, but the Umbra are quite real, I assure you. Why wouldn't they, when we live in the age of horrors?"" 
 
-- Prof. Alistair A. Arestovych, Phoenix Project",,,,,,,,
+- Alistair Ashby, Phoenix Project",,,,,,,,
 ALN_FISHMANUMBRA_RESEARCHDEF_NAME,Text,,TRITON UMBRA,,,,,,,,
 BG_INTRO_0_TITLE,Text,,A Cold Reboot,,,,,,,,
 BG_INTRO_0_DESCRIPTION,Text,,"After all these years, you finally got the call. It meant that Symes and his deputies were dead or unreachable. Phoenix Project had gone dark. 
@@ -279,8 +281,7 @@ BG_INTRO_1_DESCRIPTION,Text,,"I'm Alistair Ashby. Yes, the ""Mist Expert"". Than
 
 A few of us managed to get to this bunker and activate the emergency beacon before we were overrun by the creatures that followed us here. 
 
-We got this place mostly up and running... Thanks to Olena, she is quite the wunderkind
-",,,,,,,,
+We got this place mostly up and running... Thanks to Olena, she is quite the wunderkind.",,,,,,,,
 BG_INTRO_1_OUTCOME,Text,,"We will get this place up and running. The average IQ in our group is pretty high. Of course, Olena is largely to blame for that, she is quite the wunderkind.
 
 Anyway, we will take care of the day to day operations so that you can focus on the important stuff.",,,,,,,,
@@ -288,3 +289,8 @@ BG_INTRO_2_TITLE,Text,,Olena Kim,,,,,,,,
 BG_INTRO_2_DESCRIPTION,Text,,"<i>Oppa</i> Alistair is good with people. I'm good with machines and software. I have already restored basic research and manufacturing functionality. 
 
 Our bottleneck is processing power; we have enough people and we can always get more, or allow remote access to our facilities... it's all q-bit encrypted and compartmentalized.",,,,,,,,
+KEY_MISSION_HAVEN_INFESTED_VICTORY_NAME,Text,,INFESTATION CLEANSED,,,,,,,,
+KEY_MISSION_HAVEN_INFESTED_VICTORY_DESCRIPTION,Text,,"We destroyed the monstrosity that had taken over the remaining inhabitants of the haven, delivering them from a fate worse than death.",,,,,,,,
+KEY_MISSION_HAVEN_INFESTED_DEFEAT_NAME,Text,,DEFEAT,,,,,,,,
+KEY_MISSION_HAVEN_INFESTED_DEFEAT_DESCRIPTION,Text,,Infestation remains.,,,,,,,,
+KEY_GEOSCAPE_HAVEN_INFESTED,Text,,A haven in the Mist has succumbed to Pandoran infestation!,,,,,,,,

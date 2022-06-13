@@ -39,6 +39,8 @@ namespace PhoenixRising.BetterGeoscape
 
             PandoranProgress.Apply_Changes();
 
+            AirCombat.ModifyAirCombatDefs();
+
             if (Config.ActivateReverseEngineeringResearch) 
             { 
             ReverseEgineeringResearch.Apply_Changes();
@@ -61,6 +63,7 @@ namespace PhoenixRising.BetterGeoscape
             }
            
             Resources.Apply_Changes();
+            InfestationOptionMission.Apply_Infestation_Changes();
 
             if (Config.ActivateKERework)
             {

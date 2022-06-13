@@ -1,10 +1,8 @@
-﻿using AK.Wwise;
-using Base;
+﻿using Base;
 using Base.Core;
 using Base.Defs;
 using Base.Entities.Abilities;
 using Base.Entities.Statuses;
-using Base.Eventus;
 using Base.Eventus.Filters;
 using Base.UI;
 using Base.UI.MessageBox;
@@ -14,7 +12,6 @@ using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Entities.Characters;
 using PhoenixPoint.Common.Entities.GameTags;
 using PhoenixPoint.Common.UI;
-using PhoenixPoint.Geoscape.Achievements;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.Research;
 using PhoenixPoint.Geoscape.Entities.Research.Requirement;
@@ -27,11 +24,9 @@ using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
 using PhoenixPoint.Geoscape.Levels.Objectives;
 using PhoenixPoint.Geoscape.View.DataObjects;
-using PhoenixPoint.Geoscape.View.ViewControllers;
 using PhoenixPoint.Geoscape.View.ViewControllers.AugmentationScreen;
 using PhoenixPoint.Geoscape.View.ViewControllers.BaseRecruits;
 using PhoenixPoint.Geoscape.View.ViewModules;
-using PhoenixPoint.Geoscape.View.ViewStates;
 using PhoenixPoint.Tactical.Entities;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.ActorsInstance;
@@ -41,8 +36,6 @@ using PhoenixPoint.Tactical.Levels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 
 namespace PhoenixRising.BetterGeoscape
@@ -55,7 +48,7 @@ namespace PhoenixRising.BetterGeoscape
 
         public static void Apply_Changes()
         {
-                        
+
             try
             {
                 // Voland messing with Corruption
@@ -83,18 +76,18 @@ namespace PhoenixRising.BetterGeoscape
 
                 // Make CH0 Mission appear when Player completes Acheron Autopsy and Capture and Containment doesn't work atmo
                 GeoResearchEventFilterDef PP_ResearchConditionCH0_Miss = Repo.GetAllDefs<GeoResearchEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_CH0_ResearchCompleted [GeoResearchEventFilterDef]"));
-                
+
                 OrEventFilterDef triggerCH1 = Repo.GetAllDefs<OrEventFilterDef>().FirstOrDefault(ged => ged.name.Equals("E_PROG_CH1_MultipleTriggers [OrEventFilterDef]"));
                 triggerCH1.OR_Filters[1] = PP_ResearchConditionCH0_Miss;
                 GeoscapeEventDef CH0_Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH0_GeoscapeEventDef"));
                 CH0Event.Filters[0] = triggerCH1;
-                                
+
 
                 // Make CH1 Mission appear when Player win CH0 Mission; CH1 Event will not be used!
                 GeoscapeEventDef CH1_Event = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_CH1_GeoscapeEventDef"));
                 CH0Event.GeoscapeEventData.Conditions.Add(CH1_Event.GeoscapeEventData.Conditions[1]);
                 CH0Event.GeoscapeEventData.Conditions.Add(CH1_Event.GeoscapeEventData.Conditions[3]);
-                
+
                 var revealSiteCH1_Miss = CH1_Event.GeoscapeEventData.Choices[0].Outcome.RevealSites[0];
                 var setEventCH1_Miss = CH1_Event.GeoscapeEventData.Choices[0].Outcome.SetEvents[0];
                 var trackEventCH1_Miss = CH1_Event.GeoscapeEventData.Choices[0].Outcome.TrackEncounters[0];
@@ -171,25 +164,33 @@ namespace PhoenixRising.BetterGeoscape
 
                 //Changes to SDI Events
                 sdi1.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI1_OUTCOME";
+                GeoscapeEventDef sdi3 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_03_GeoscapeEventDef"));
+                sdi3.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Umbra_Encounter_Variable", 1, false));
                 GeoscapeEventDef sdi6 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_06_GeoscapeEventDef"));
                 sdi6.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI6_OUTCOME";
-                GeoscapeEventDef sdi16 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_16_GeoscapeEventDef"));
-                sdi16.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI16_OUTCOME";
+                GeoscapeEventDef sdi7 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_07_GeoscapeEventDef"));
+                //Need to fix a broken SDI event!
+                sdi7.GeoscapeEventData.Choices = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_06_GeoscapeEventDef")).GeoscapeEventData.Choices;
+                sdi7.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI7_OUTCOME";
+                sdi7.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Infestation_Encounter_Variable", 1, false));
+                GeoscapeEventDef sdi09 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_09_GeoscapeEventDef"));
+                sdi09.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Umbra_Encounter_Variable", 1, false));
+                GeoscapeEventDef sdi10 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_10_GeoscapeEventDef"));
+                sdi10.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI10_OUTCOME";
                 GeoscapeEventDef sdi20 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_20_GeoscapeEventDef"));
                 sdi20.GeoscapeEventData.Choices[0].Outcome.GameOverVictoryFaction = null;
-                GeoscapeEventDef sdi3 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_03_GeoscapeEventDef"));
-                sdi3.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Umbra_Encounter_Variable", 1, true));
+
 
             }
-            
+
             catch (Exception e)
             {
                 Logger.Error(e);
             }
         }
 
-      //  public static string darkEventDescription;
-      //  public static string darkEventTitle;
+        //  public static string darkEventDescription;
+        //  public static string darkEventTitle;
 
         // Current and last ODI level
         public static int CurrentODI_Level = 0;
@@ -261,7 +262,7 @@ namespace PhoenixRising.BetterGeoscape
                 // If current calculated level is different to last saved one then new ODI level is reached, show the new ODI event
                 if (geoLevelController.EventSystem.GetVariable("CorruptionActive") == 0 && geoLevelController.EventSystem.GetVariable("PandoraVirus") == 1)
                 {
-
+                    VoidOmens.RemoveAllVoidOmens(geoLevelController);
                 }
 
                 else
@@ -273,12 +274,6 @@ namespace PhoenixRising.BetterGeoscape
                     string eventID = ODI_EventIDs[CurrentODI_Level];
                     GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
                     GeoscapeEventDef oDIEventToTrigger = geoLevelController.EventSystem.GetEventByID(ODI_EventIDs[CurrentODI_Level]);
-
-                    //Need to fix a broken SDI event!
-                    if(oDIEventToTrigger.GeoscapeEventData.EventID== "SDI_07") 
-                    { 
-                    oDIEventToTrigger.GeoscapeEventData.Choices= Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_06_GeoscapeEventDef")).GeoscapeEventData.Choices;
-                    }
 
                     // Dark Events roll
                     // Before the roll, Dark Event has not been rolled
@@ -293,7 +288,7 @@ namespace PhoenixRising.BetterGeoscape
                     string voidOmen = "VoidOmen_";
 
                     if (geoLevelController.EventSystem.GetVariable("BC_SDI") > 0)
-                    {              
+                    {
                         // Here comes the roll, for testing purposes with 1/10 chance of no VO happening    
                         int roll = UnityEngine.Random.Range(1, 10);
                         Logger.Always("The roll on the 1D10 is " + roll);
@@ -301,20 +296,20 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             VoidOmens.RemoveEarliestVoidOmen(geoLevelController);
                         }
-                                  
+
                         if (roll >= 2 && roll <= 10)
                         {
-                            
+
                             // If a Dark Event rolls
                             // Create list of dark events currently implemented
-                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14};
-                            if (geoAlienFaction.Research.HasCompleted("ALN_CrabmanUmbra_ResearchDef")) 
+                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 17 };
+                            if (geoAlienFaction.Research.HasCompleted("ALN_CrabmanUmbra_ResearchDef"))
                             {
                                 darkEvents.Add(15);
                                 darkEvents.Add(16);
-                                Logger.Always("The list of Void Omens is now "+darkEvents.Count+" long");
+                                Logger.Always("The list of Void Omens is now " + darkEvents.Count + " long");
                             }
-                            if (geoAlienFaction.GeoLevel.EventSystem.GetVariable("BehemothEggHatched") == 1) 
+                            if (geoAlienFaction.GeoLevel.EventSystem.GetVariable("BehemothEggHatched") == 1)
                             {
                                 darkEvents.Add(11);
                                 Logger.Always("The list of Void Omens is now " + darkEvents.Count + " long");
@@ -326,9 +321,9 @@ namespace PhoenixRising.BetterGeoscape
                             // The loop will try a 100 times if necessary to get a valid random dark event (one that has not been in play before)                                                 
                             for (int i = 0; i < 100; i++)
                             {
-                                
+
                                 // Get a random dark event from the Dark Events list
-                                darkEventRoll = darkEvents.GetRandomElement();                           
+                                darkEventRoll = darkEvents.GetRandomElement();
                                 countI++;
                                 // Check if this event has already appeared 
                                 for (int j = 1; j < 19; j++)
@@ -366,7 +361,7 @@ namespace PhoenixRising.BetterGeoscape
                                             // Then close both loops:
                                             t = 4;
                                             i = 100;
-                                        }                                      
+                                        }
                                     }
                                     // If we managed to roll a Dark Event, because we found a dark event not in use and we found a variable to log it in,
                                     // the Voland loop ends here
@@ -376,7 +371,7 @@ namespace PhoenixRising.BetterGeoscape
                                     }
                                     // But if all the Dark Event variables are already in use, we have to find the earliest TriggeredDarkEvent still in play
                                     // to replace it with the new darkevent
-                                    
+
                                     else if (darkEventRolled == false)
                                     {
                                         Logger.Always("The i loop was done " + countI + " times");
@@ -399,11 +394,11 @@ namespace PhoenixRising.BetterGeoscape
                                         // Then we check our Dark Event variables to see which one has the earliest Dark Event already rolled                                
                                         for (int x = 1; x < 20; x++)
                                         {
-                                            
+
                                             // We will look through the DarkEvents variables in the order in which they were filled
                                             for (int y = 0; y < difficulty; y++)
                                             {
-                                                
+
                                                 // And record which variable holds which Dark Event
                                                 if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
                                                 {
@@ -411,11 +406,11 @@ namespace PhoenixRising.BetterGeoscape
                                                     Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + allTheDarkEventsVariables[difficulty - y - 1]);
                                                     variablesUsed++;
                                                 }
-                                                
+
                                                 countVoidOmensY++;
                                             }
                                             Logger.Always("the count of variables used is " + variablesUsed);
-                                            if (variablesUsed==difficulty)
+                                            if (variablesUsed == difficulty)
                                             {
                                                 x = 20;
                                             }
@@ -430,26 +425,26 @@ namespace PhoenixRising.BetterGeoscape
                                             xCounter++;
                                             // We check, starting from the earliest, which Dark Event is still in play
                                             if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
-                                            {                            
+                                            {
                                                 // Then we locate in which Variable it is recorded
                                                 for (int y = 0; y < difficulty; y++)
-                                                {                                                
+                                                {
                                                     // Once we find it, that's where we want to put our new Dark Event
                                                     if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
-                                                    {                                                       
+                                                    {
                                                         darkEventReplaced = allTheDarkEventsVariables[difficulty - y - 1];
-                                                        Logger.Always("The Void Omen that will be replaced is "+ darkEventReplaced);
+                                                        Logger.Always("The Void Omen that will be replaced is " + darkEventReplaced);
                                                         oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
                                                         {
                                                             VariableName = voidOmen + (difficulty - y),
                                                             Value = { Min = darkEventRoll, Max = darkEventRoll },
                                                             IsSetOperation = true,
                                                         });
-                                                        Logger.Always("The Void Omen Variable we are using is " + voidOmen + (difficulty-y));
+                                                        Logger.Always("The Void Omen Variable we are using is " + voidOmen + (difficulty - y));
                                                         geoLevelController.EventSystem.SetVariable(triggeredVoidOmens + CurrentODI_Level, darkEventRoll);
                                                         // And the flag is raised here too!
                                                         darkEventRolled = true;
-                                                        Logger.Always("Void Omen rolled "+ darkEventRolled);
+                                                        Logger.Always("Void Omen rolled " + darkEventRolled);
                                                         // Close the loops when you leave!
                                                         y = 5;
                                                         x = 20;
@@ -470,32 +465,38 @@ namespace PhoenixRising.BetterGeoscape
                     geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
                     //UpdateODITracker(CurrentODI_Level, geoLevelController); not used currently, because clogs the UI
                     // And if a Dark Event has been rolled, a Dark Event will appear
-                    if(darkEventRolled && geoLevelController.EventSystem.GetVariable(voidOmen + difficulty) == darkEventRoll && geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - 1)) == 0) 
+                    if (darkEventRolled && geoLevelController.EventSystem.GetVariable(voidOmen + difficulty) == darkEventRoll && geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - 1)) == 0)
                     {
                         GeoscapeEventDef voidOmenIntro = geoLevelController.EventSystem.GetEventByID("VoidOmen");
                         voidOmenIntro.GeoscapeEventData.Title.LocalizationKey = "VOID_OMEN_INTRO_TITLE";
                         voidOmenIntro.GeoscapeEventData.Description[0].General.LocalizationKey = "VOID_OMEN_INTRO";
+                        if (darkEventRoll == 1 || darkEventRoll == 13 || darkEventRoll == 8)
+                        {
+
+                        }
                         geoLevelController.EventSystem.TriggerGeoscapeEvent("VoidOmen", geoscapeEventContext);
-                    } 
+                    }
 
                     if (darkEventRolled)
                     {
-                        string title = (string)DarkEvents_Title.GetValue(darkEventRoll-1);
-                        string description = (string)DarkEvents_Description.GetValue(darkEventRoll-1);
+                        string title = (string)DarkEvents_Title.GetValue(darkEventRoll - 1);
+                        string description = (string)DarkEvents_Description.GetValue(darkEventRoll - 1);
                         GeoscapeEventDef darkEvent = geoLevelController.EventSystem.GetEventByID("DarkEvent");
                         darkEvent.GeoscapeEventData.Title.LocalizationKey = title;
                         darkEvent.GeoscapeEventData.Description[0].General.LocalizationKey = description;
                         geoLevelController.EventSystem.TriggerGeoscapeEvent("DarkEvent", geoscapeEventContext);
                         CreateDarkEventObjective(title, description, geoLevelController);
 
-                        if (darkEventReplaced != 0) 
+                        if (darkEventReplaced != 0)
                         {
-                            string objectiveToBeReplaced = (string)DarkEvents_Title.GetValue(darkEventReplaced - 1);                                
+                            Logger.Always((string)DarkEvents_Title.GetValue(1));
+                            Logger.Always((string)DarkEvents_Title.GetValue(0));
+                            string objectiveToBeReplaced = (string)DarkEvents_Title.GetValue(darkEventReplaced - 1);
                             Logger.Always("The target event that will be replaced is " + objectiveToBeReplaced);
                             RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
-                            darkEventReplaced= 0;
-                        } 
-                    }                     
+                            darkEventReplaced = 0;
+                        }
+                    }
                 }
             }
 
@@ -509,13 +510,12 @@ namespace PhoenixRising.BetterGeoscape
         {
             try
             {
-
                 DiplomaticGeoFactionObjective darkEventObjective = new DiplomaticGeoFactionObjective(level.PhoenixFaction, level.PhoenixFaction)
-            {
-                Title = new LocalizedTextBind(title),
-                Description = new LocalizedTextBind(description),
-            };
-           level.PhoenixFaction.AddObjective(darkEventObjective);
+                {
+                    Title = new LocalizedTextBind(title),
+                    Description = new LocalizedTextBind(description),
+                };
+                level.PhoenixFaction.AddObjective(darkEventObjective);
             }
             catch (Exception e)
             {
@@ -560,12 +560,12 @@ namespace PhoenixRising.BetterGeoscape
         [HarmonyPatch(typeof(GeoFactionObjective), "GetIcon")]
         internal static class BG_GeoFactionObjective_GetIcon_patch
         {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
-        private static void Postfix(ref Sprite __result, GeoFactionObjective __instance)
-        {
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
+            private static void Postfix(ref Sprite __result, GeoFactionObjective __instance)
+            {
                 try
                 {
-                    if (__instance.Title!=null && __instance.Title.LocalizationKey.Contains("DARK_EVENT_TITLE_"))
+                    if (__instance.Title != null && __instance.Title.LocalizationKey.Contains("DARK_EVENT_TITLE_"))
                     {
                         __result = Helper.CreateSpriteFromImageFile("Void-04P.png");
                     }
@@ -603,20 +603,20 @@ namespace PhoenixRising.BetterGeoscape
         {
             try
             {
-                DiplomaticGeoFactionObjective darkEventObjective = 
+                DiplomaticGeoFactionObjective darkEventObjective =
             (DiplomaticGeoFactionObjective)level.PhoenixFaction.Objectives.FirstOrDefault(ged => ged.Title.LocalizationKey.Equals(title));
-            string checktitle = darkEventObjective.GetTitle();
-            Logger.Always("the title in the RemoveDarkEventObjective method is " + title);
-           // Logger.Always("the localizedTextBind in the RemoveDarkEventObjective method is " + localizedTextBind);
-            Logger.Always("if we found the objective, there should be something here " + checktitle);
-            level.PhoenixFaction.RemoveObjective(darkEventObjective);
-                }
+                string checktitle = darkEventObjective.GetTitle();
+                Logger.Always("the title in the RemoveDarkEventObjective method is " + title);
+                // Logger.Always("the localizedTextBind in the RemoveDarkEventObjective method is " + localizedTextBind);
+                Logger.Always("if we found the objective, there should be something here " + checktitle);
+                level.PhoenixFaction.RemoveObjective(darkEventObjective);
+            }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
 
-}
+        }
 
         //ODI Tracker
         /*
@@ -660,14 +660,14 @@ namespace PhoenixRising.BetterGeoscape
                         {
                             numberOfMutations++;
                         }
-                    }                   
-                    
+                    }
+
 
                     if (numberOfMutations > 0)
                     {
-                        __result = 1f + (numberOfMutations*2)/100 * (float)base_TacticalActor.CharacterStats.Corruption;
+                        __result = 1f + (numberOfMutations * 2) / 100 * (float)base_TacticalActor.CharacterStats.Corruption;
                     }
-                    
+
                 }
 
                 catch (Exception e)
@@ -679,22 +679,22 @@ namespace PhoenixRising.BetterGeoscape
 
         //General method to calculate max Delirium a character on geo can have taking into account ODI and bionics
         public static float CalculateMaxCorruption(GeoCharacter character)
+        {
+
+            try
             {
+                float maxCorruption = 0;
+                int bionics = 0;
+                int currentODIlevel = character.Faction.GeoLevel.EventSystem.GetVariable("BC_SDI");
+                int odiPerc = currentODIlevel * 100 / ODI_EventIDs.Length;
 
-                try
+                GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
+                foreach (GeoItem bionic in character.ArmourItems)
                 {
-                    float maxCorruption = 0;
-                    int bionics = 0;
-                    int currentODIlevel = character.Faction.GeoLevel.EventSystem.GetVariable("BC_SDI");
-                    int odiPerc = currentODIlevel * 100 / ODI_EventIDs.Length;
+                    if (bionic.ItemDef.Tags.Contains(bionicalTag))
 
-                    GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
-                    foreach (GeoItem bionic in character.ArmourItems)
-                    {
-                        if (bionic.ItemDef.Tags.Contains(bionicalTag))
-
-                            bionics += 1;
-                    }
+                        bionics += 1;
+                }
 
                 if (!VoidOmens.VoidOmen10Active)
                 {
@@ -718,7 +718,7 @@ namespace PhoenixRising.BetterGeoscape
                     }
                     else
                     {
-                        if (odiPerc < 75)
+                        if (odiPerc < 50)
                         {
                             maxCorruption = character.CharacterStats.Willpower.IntMax * 1 / 2;
 
@@ -758,7 +758,7 @@ namespace PhoenixRising.BetterGeoscape
                     }
 
                 }
-                if (VoidOmens.VoidOmen10Active) 
+                if (VoidOmens.VoidOmen10Active)
                 {
                     maxCorruption = character.CharacterStats.Willpower.IntMax;
 
@@ -779,16 +779,16 @@ namespace PhoenixRising.BetterGeoscape
 
                 }
 
-                }
-                catch (System.Exception e)
-                {
-                    Logger.Error(e);
-                }
-            
-            throw new InvalidOperationException();
+            }
+            catch (System.Exception e)
+            {
+                Logger.Error(e);
             }
 
-        
+            throw new InvalidOperationException();
+        }
+
+
         // General method to calculate Stamina effect on Delirium, where each 10 stamina reduces Delirium effects by 1
         public static int CalculateStaminaEffectOnDelirium(GeoCharacter character)
         {
@@ -796,17 +796,17 @@ namespace PhoenixRising.BetterGeoscape
 
                 try
                 {
-                   /* string stamina40 = "<color=#18f005>-4 to Delirium effect(WP loss)</color>";
-                    string stamina30to39 = "<color=#c1f005>-3 to Delirium effect(WP loss)</color>";
-                    string stamina20to29 = "<color=#f0e805>-2 to Delirium effect(WP loss)</color>";
-                    string stamina10to19 = "<color=##f07b05>-1 to Delirium effect(WP loss)</color>";
-                    string stamina0to9= "<color=#f00505>Delirium has full effect</color>";*/
+                    /* string stamina40 = "<color=#18f005>-4 to Delirium effect(WP loss)</color>";
+                     string stamina30to39 = "<color=#c1f005>-3 to Delirium effect(WP loss)</color>";
+                     string stamina20to29 = "<color=#f0e805>-2 to Delirium effect(WP loss)</color>";
+                     string stamina10to19 = "<color=##f07b05>-1 to Delirium effect(WP loss)</color>";
+                     string stamina0to9= "<color=#f00505>Delirium has full effect</color>";*/
 
-                    if (character.Fatigue.Stamina == 40) 
+                    if (character.Fatigue.Stamina == 40)
                     {
                         return 4;
                     }
-                    else if(character.Fatigue.Stamina <40 && character.Fatigue.Stamina >=30)
+                    else if (character.Fatigue.Stamina < 40 && character.Fatigue.Stamina >= 30)
                     {
                         return 3;
                     }
@@ -822,34 +822,34 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         return 0;
                     }
-      
+
                 }
                 catch (System.Exception e)
                 {
                     Logger.Error(e);
                 }
-            
-            throw new InvalidOperationException();
+
+                throw new InvalidOperationException();
             }
         }
 
-       
+
         //This method changes how WP are displayed in the Edit personnel screen, to show effects of Delirium on WP
 
         [HarmonyPatch(typeof(UIModuleCharacterProgression), "GetStarBarValuesDisplayString")]
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
         internal static class BG_UIModuleCharacterProgression_RefreshStatPanel_patch
         {
-            
+
             private static void Postfix(GeoCharacter ____character, ref string __result, CharacterBaseAttribute attribute, int currentAttributeValue)
             {
                 try
                 {
                     if (____character.CharacterStats.Corruption > CalculateStaminaEffectOnDelirium(____character) && attribute.Equals(CharacterBaseAttribute.Will))
                     {
-                        __result = $"<color=#da5be3>{currentAttributeValue - ____character.CharacterStats.Corruption.Value + CalculateStaminaEffectOnDelirium(____character)}</color>" + $"({currentAttributeValue}) / "  +
+                        __result = $"<color=#da5be3>{currentAttributeValue - ____character.CharacterStats.Corruption.Value + CalculateStaminaEffectOnDelirium(____character)}</color>" + $"({currentAttributeValue}) / " +
                         $"{____character.Progression.GetMaxBaseStat(CharacterBaseAttribute.Will)}";
-                    }          
+                    }
                 }
                 catch (Exception e)
                 {
@@ -864,13 +864,13 @@ namespace PhoenixRising.BetterGeoscape
         [System.Diagnostics.CodeAnalysis.SuppressMessage("CodeQuality", "IDE0051")]
         internal static class BG_UIModuleCharacterProgression_SetStatusesPanel_patch
         {
-            
+
             private static void Postfix(UIModuleCharacterProgression __instance, GeoCharacter ____character)
             {
                 try
                 {
                     if (____character.CharacterStats.Corruption > 0f)
-                   
+
                     {
                         __instance.CorruptionSlider.minValue = 0f;
                         __instance.CorruptionSlider.maxValue = CalculateMaxCorruption(____character);
@@ -885,7 +885,7 @@ namespace PhoenixRising.BetterGeoscape
                         if (num != num2)
                         {
                             string deliriumReducedStamina = "";
-                            for(int i = 0; i < CalculateStaminaEffectOnDelirium(____character); i++) 
+                            for (int i = 0; i < CalculateStaminaEffectOnDelirium(____character); i++)
                             {
                                 deliriumReducedStamina += "-";
 
@@ -895,8 +895,8 @@ namespace PhoenixRising.BetterGeoscape
                         else
                         {
                             __instance.StaminaStatText.text = "<color=#da5be3> ---- </color>" + num.ToString();
-                        }  
-                    }                    
+                        }
+                    }
                 }
                 catch (Exception e)
                 {
@@ -947,7 +947,7 @@ namespace PhoenixRising.BetterGeoscape
                     // Get max corruption dependent on max WP of the selected actor
                     if (!VoidOmens.VoidOmen10Active)
                     {
-                        
+
                         if (odiPerc < 25)
                         {
                             maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax / 3;
@@ -965,7 +965,7 @@ namespace PhoenixRising.BetterGeoscape
                         }
                         else
                         {
-                            if (odiPerc < 75)
+                            if (odiPerc < 50)
                             {
                                 maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax * 1 / 2;
 
@@ -996,7 +996,7 @@ namespace PhoenixRising.BetterGeoscape
                             }
                         }
                     }
-                    if (VoidOmens.VoidOmen10Active) 
+                    if (VoidOmens.VoidOmen10Active)
                     {
                         maxCorruption = base_TacticalActor.CharacterStats.Willpower.IntMax;
 
@@ -1072,7 +1072,7 @@ namespace PhoenixRising.BetterGeoscape
                     TacticalActor base_TacticalActor = (TacticalActor)AccessTools.Property(typeof(TacStatus), "TacticalActor").GetValue(__instance, null);
 
                     // Get characters geoscape stamina by his actor ID
-                  
+
                     int stamina = 40;
                     if (StaminaMap.ContainsKey(base_TacticalActor.GeoUnitId))
                     {
@@ -1122,7 +1122,7 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-       
+
         [HarmonyPatch(typeof(GeoCharacter), "CureCorruption")]
         public static class GeoCharacter_CureCorruption_SetStaminaTo0_patch
         {
@@ -1133,25 +1133,25 @@ namespace PhoenixRising.BetterGeoscape
                 {
 
                     PassiveModifierAbilityDef shutEye_Ability = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("ShutEye_AbilityDef"));
-                    
+
                     PassiveModifierAbilityDef hallucinating_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Hallucinating_AbilityDef"));
-                   
+
                     PassiveModifierAbilityDef solipsism_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Solipsism_AbilityDef"));
-                    
+
                     PassiveModifierAbilityDef angerIssues_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("AngerIssues_AbilityDef"));
-                    
+
                     PassiveModifierAbilityDef photophobia_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Photophobia_AbilityDef"));
-                    
+
                     ApplyStatusAbilityDef nails_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Nails_AbilityDef"));
-                    
+
                     PassiveModifierAbilityDef immortality_AbilityDef = Repo.GetAllDefs<PassiveModifierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Immortality_AbilityDef"));
-                    
+
                     ApplyStatusAbilityDef feral_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("Feral_AbilityDef"));
-                    
+
                     DamageMultiplierAbilityDef oneOfUs_AbilityDef = Repo.GetAllDefs<DamageMultiplierAbilityDef>().FirstOrDefault(ged => ged.name.Equals("OneOfUs_AbilityDef"));
-                   
+
                     ApplyStatusAbilityDef fleshEater_AbilityDef = Repo.GetAllDefs<ApplyStatusAbilityDef>().FirstOrDefault(ged => ged.name.Equals("FleshEater_AbilityDef"));
-                    
+
 
                     List<TacticalAbilityDef> abilityList = new List<TacticalAbilityDef>
                     { shutEye_Ability, hallucinating_AbilityDef, solipsism_AbilityDef, angerIssues_AbilityDef, photophobia_AbilityDef, nails_AbilityDef, immortality_AbilityDef, feral_AbilityDef,
@@ -1168,27 +1168,27 @@ namespace PhoenixRising.BetterGeoscape
                     if (num >= 0 && num <= 50)
                     {
                         for (int i = 0; i < 100; i++)
-                        { 
-                           TacticalAbilityDef abilityToAdd=abilityList.GetRandomElement();
-                           Logger.Always("The randomly chosen ability is " + abilityToAdd.name);
-                           if (!__instance.Progression.Abilities.Contains(abilityToAdd)) 
-                           {
-                                
+                        {
+                            TacticalAbilityDef abilityToAdd = abilityList.GetRandomElement();
+                            Logger.Always("The randomly chosen ability is " + abilityToAdd.name);
+                            if (!__instance.Progression.Abilities.Contains(abilityToAdd))
+                            {
+
                                 __instance.Progression.AddAbility(abilityToAdd);
                                 //__instance.Faction.GeoLevel.View.GeoscapeModules.TutorialModule.SetTutorialStep(test, false);
-                                GameUtl.GetMessageBox().ShowSimplePrompt($"{__instance.GetName()}"+" appears to be afflicted with " + $"<b>{abilityToAdd.ViewElementDef.DisplayName1.LocalizeEnglish()}</b>" 
+                                GameUtl.GetMessageBox().ShowSimplePrompt($"{__instance.GetName()}" + " appears to be afflicted with " + $"<b>{abilityToAdd.ViewElementDef.DisplayName1.LocalizeEnglish()}</b>"
                                     + " as a result of the experimental mutagen treatment. This condition is likely to be permanent."
-                                    + "\n\n"+$"<i>{abilityToAdd.ViewElementDef.Description.LocalizeEnglish()}</i>", MessageBoxIcon.None, MessageBoxButtons.OK, null);
+                                    + "\n\n" + $"<i>{abilityToAdd.ViewElementDef.Description.LocalizeEnglish()}</i>", MessageBoxIcon.None, MessageBoxButtons.OK, null);
                                 Logger.Always("Added ability " + abilityToAdd.ViewElementDef.DisplayName1.LocalizeEnglish());
                                 i = 100;
-                           }                            
-                        }                                           
+                            }
+                        }
                     }
                     else if (num > 50 && num <= 125)
                     {
                         CommonMethods.SetStaminaToZero(__instance);
                         GameUtl.GetMessageBox().ShowSimplePrompt($"{__instance.GetName()}" + " did not suffer any lasting side effects, but had to be heavily sedated"
-                                    + "\n\n" + $"<i>STAMINA reduced to zero</i>", MessageBoxIcon.None, MessageBoxButtons.OK, null);                     
+                                    + "\n\n" + $"<i>STAMINA reduced to zero</i>", MessageBoxIcon.None, MessageBoxButtons.OK, null);
                     }
                 }
 
@@ -1217,7 +1217,7 @@ namespace PhoenixRising.BetterGeoscape
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef) != null)
                                 {
                                     actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("Frenzy_StatusDef")));
-                                    Logger.Always(actor.name + " with " + abilityDef.name+ " has the following statuses: "+actor.Status.CurrentStatuses.ToString());
+                                    Logger.Always(actor.name + " with " + abilityDef.name + " has the following statuses: " + actor.Status.CurrentStatuses.ToString());
                                 }
 
                                 TacticalAbilityDef abilityDef1 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Hallucinating_AbilityDef"));
@@ -1230,46 +1230,31 @@ namespace PhoenixRising.BetterGeoscape
                                 TacticalAbilityDef abilityDef2 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("FleshEater_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef2) != null)
                                 {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Devour_AbilityDef")), actor);
+                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("FleshEaterHP_AbilityDef")), actor);
                                     Logger.Always(actor.name + " with " + abilityDef2.name + " has the following statuses: " + actor.Status.CurrentStatuses.ToString());
                                 }
                                 TacticalAbilityDef abilityDef3 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("OneOfUsPassive_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef3) != null)
                                 {
                                     actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("MistResistance_StatusDef")));
+                                    actor.GameTags.Add(Repo.GetAllDefs<GameTagDef>().FirstOrDefault(sd => sd.name.Equals("Takashi_GameTagDef")), GameTagAddMode.ReplaceExistingExclusive);
                                     Logger.Always(actor.name + " with " + abilityDef3.name + " has the following statuses: " + actor.Status.CurrentStatuses.ToString());
                                 }
 
-                                  TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
-                                  if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
-                                  {
-                                      actor.AddAbility(Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("NailsPassive_AbilityDef")), actor);
-                                      Logger.Always(actor.name + " with " + abilityDef5.name + " has the following statuses: " + actor.Status.CurrentStatuses.ToString());
-                                  }
+                                TacticalAbilityDef abilityDef5 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Nails_AbilityDef"));
+                                if (actor.GetAbilityWithDef<Ability>(abilityDef5) != null)
+                                {
+                                    actor.AddAbility(Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("NailsPassive_AbilityDef")), actor);
+                                    Logger.Always(actor.name + " with " + abilityDef5.name + " has the following statuses: " + actor.Status.CurrentStatuses.ToString());
+                                }
 
                                 TacticalAbilityDef abilityDef7 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
                                 if (actor.GetAbilityWithDef<Ability>(abilityDef7) != null)
                                 {
-                                    actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("IgnorePain_AbilityDef")), actor);
+                                    actor.Status.ApplyStatus(Repo.GetAllDefs<StatusDef>().FirstOrDefault(sd => sd.name.Equals("ArmorBuffStatus_StatusDef")));
                                     Logger.Always(actor.name + " with " + abilityDef7.name + " has the following statuses: " + actor.Status.CurrentStatuses.ToString());
+
                                 }
-
-                                /*
-                                TacticalAbilityDef abilityDef6 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Feral_AbilityDef"));
-                                        if (actor.GetAbilityWithDef<Ability>(abilityDef6) != null)
-                                        {
-                                            actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_CanLeap_AbilityDef")), actor);
-                                            actor.AddAbility(Repo.GetAllDefs<AbilityDef>().FirstOrDefault(sd => sd.name.Equals("Mutog_Leap_AbilityDef")), actor);                          
-                                        }
-
-                                        TacticalAbilityDef abilityDef8 = Repo.GetAllDefs<TacticalAbilityDef>().FirstOrDefault(tad => tad.name.Equals("Immortality_AbilityDef"));
-                                        if (actor.GetAbilityWithDef<Ability>(abilityDef8) != null)
-                                        {
-                                            actor.GetArmor().Add(50);
-                                            actor.CharacterStats.Armour.Add(100);
-                                            //actor.UpdateStats();
-                                        }
-                                        */
                             }
                         }
                     }
@@ -1281,7 +1266,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-       
+
 
         [HarmonyPatch(typeof(TacticalAbility), "FumbleActionCheck")]
         public static class TacticalAbility_FumbleActionCheck_Patch
@@ -1342,7 +1327,7 @@ namespace PhoenixRising.BetterGeoscape
                 catch (Exception e)
                 {
                     Logger.Error(e);
-                    return true;                   
+                    return true;
                 }
             }
 
@@ -1372,16 +1357,16 @@ namespace PhoenixRising.BetterGeoscape
                     //check number of augments the character has
                     GameTagDef bionicalTag = GameUtl.GameComponent<SharedData>().SharedGameTags.BionicalTag;
                     int numberOfBionics = AugmentScreenUtilities.GetNumberOfBionicsAugmentations(__instance.CurrentCharacter);
-                    
+
                     for (int i = 0; i < numberOfBionics; i++)
                     {
                         if (__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Willpower * 0.33 >= 0)
                         {
-                        __instance.CurrentCharacter.CharacterStats.Corruption.Set((float)(__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Willpower * 0.33));
+                            __instance.CurrentCharacter.CharacterStats.Corruption.Set((float)(__instance.CurrentCharacter.CharacterStats.Corruption - __instance.CurrentCharacter.CharacterStats.Willpower * 0.33));
                         }
                         else
                         {
-                         __instance.CurrentCharacter.CharacterStats.Corruption.Set(0);
+                            __instance.CurrentCharacter.CharacterStats.Corruption.Set(0);
                         }
                     }
                 }

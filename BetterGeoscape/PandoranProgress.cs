@@ -33,6 +33,7 @@ namespace PhoenixRising.BetterGeoscape
                 veryhard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
                 veryhard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
                 veryhard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                veryhard.InfestationOutcomeChance = -50;
 
                 //reducing evolution per day because there other sources of evolution points now
                 veryhard.EvolutionProgressPerDay = pandoranEvolutionLegend; //vanilla 100
@@ -50,6 +51,7 @@ namespace PhoenixRising.BetterGeoscape
                 hard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
                 hard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
                 hard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                hard.InfestationOutcomeChance = 0;
 
                 //reducing evolution per day because there other sources of evolution points now
                 hard.EvolutionProgressPerDay = 60; //vanilla 70
@@ -67,6 +69,7 @@ namespace PhoenixRising.BetterGeoscape
                 standard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
                 standard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
                 standard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                standard.InfestationOutcomeChance = 0;
 
                 //reducing evolution per day because there other sources of evolution points now
                 standard.EvolutionProgressPerDay = 40; //vanilla 55
@@ -78,8 +81,9 @@ namespace PhoenixRising.BetterGeoscape
                 easy.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
                 easy.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
                 easy.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                easy.InfestationOutcomeChance = 0;
 
-                //reducing evolution per day because there other sources of evolution points now
+                //keeping evolution per day because low enough already
                 easy.EvolutionProgressPerDay = 35; //vanilla 35
 
                 //Remove faction diplo penalties for not destroying revealed PCs and increase rewards for haven leader
@@ -158,9 +162,11 @@ namespace PhoenixRising.BetterGeoscape
                     }               
                 }
                 int difficulty = __instance.GeoLevel.CurrentDifficultyLevel.Order;
-                __instance.AddEvolutionProgress(nests * difficulty * 2 + lairs * 4 * difficulty + citadels * 5 * difficulty);
+                __instance.AddEvolutionProgress(nests * 10 + lairs * 20 + citadels * 30);
+                __instance.AddEvolutionProgress(__instance.GeoLevel.EventSystem.GetVariable(InfestationOptionMission.InfestedHavensVariable)*20);
                 Logger.Always("There are " + nests+ " nests, " + lairs+" lairs and "+citadels+" citadels on " + __instance.GeoLevel.ElaspedTime);
-                Logger.Always("The evolution points per day are " + (nests * difficulty * 2 + lairs * 4 * difficulty + citadels * 5 * difficulty));
+                Logger.Always("The evolution points per day from Pandoran Colonies are " + (nests * 10 + lairs * 20 + citadels * 30) 
+                    + " And from Infested Havens " + __instance.GeoLevel.EventSystem.GetVariable(InfestationOptionMission.InfestedHavensVariable)*20);
             }
         }
 

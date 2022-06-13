@@ -1,35 +1,19 @@
-﻿using Base;
+﻿using Assets.Code.PhoenixPoint.Geoscape.Entities.Sites.TheMarketplace;
 using Base.Core;
 using Base.Defs;
-using Base.Entities.Effects.ApplicationConditions;
 using Base.UI;
-using Base.Utils.GameConsole;
 using Harmony;
 using PhoenixPoint.Common.Core;
-using PhoenixPoint.Common.Entities.GameTags;
-using PhoenixPoint.Common.Entities.GameTagsTypes;
-using PhoenixPoint.Common.Entities.Items.SkinData;
-using PhoenixPoint.Common.Levels.Missions;
 using PhoenixPoint.Geoscape.Core;
 using PhoenixPoint.Geoscape.Entities;
-using PhoenixPoint.Geoscape.Entities.Missions;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
-using PhoenixPoint.Geoscape.Entities.Research;
-using PhoenixPoint.Geoscape.Entities.Research.Requirement;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
-using PhoenixPoint.Tactical.AI;
-using PhoenixPoint.Tactical.Entities;
+using PhoenixPoint.Geoscape.View.ViewStates;
 using PhoenixPoint.Tactical.Entities.Abilities;
-using PhoenixPoint.Tactical.Entities.DamageKeywords;
-using PhoenixPoint.Tactical.Entities.Equipments;
 using PhoenixPoint.Tactical.Entities.Statuses;
-using PhoenixPoint.Tactical.Entities.Weapons;
-using PhoenixPoint.Tactical.Levels;
-using PhoenixPoint.Tactical.Levels.FactionEffects;
-using PhoenixPoint.Tactical.Levels.Missions;
 using PhoenixPoint.Tactical.Levels.Mist;
 using System;
 using System.Collections.Generic;
@@ -43,13 +27,13 @@ namespace PhoenixRising.BetterGeoscape
 
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
-        
+
         public static void Apply_Changes()
         {
             // @Voland: play down from here
             try
             {
-               
+
                 //ID all the factions for later
                 GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
                 GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
@@ -60,14 +44,6 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef sourceLoseGeoEvent = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_PU12_FAIL_GeoscapeEventDef"));
                 sourceLoseGeoEvent.GeoscapeEventData.Choices[0].Outcome.ReEneableEvent = false;
                 sourceLoseGeoEvent.GeoscapeEventData.Choices[0].Outcome.ReactiveEncounters.Clear();
-
-                //Source for creating new ResearchVariableRequirement
-                EncounterVariableResearchRequirementDef sourceVarResReq = 
-                    Repo.GetAllDefs<EncounterVariableResearchRequirementDef>().
-                    FirstOrDefault(ged => ged.name.Equals("NJ_Bionics1_ResearchDef_EncounterVariableResearchRequirementDef_0"));
-                
-
-                // PhoenixPoint.UseGlobalStorage = false;
 
                 //Experiment new HD
                 // var survive3turnsobjective = AmbushALN.CustomObjectives[0];
@@ -166,7 +142,7 @@ namespace PhoenixRising.BetterGeoscape
                 anuReallyPissedAtBionics.GeoscapeEventData.Title.LocalizationKey = "ANU_REALLY_PISSED_BIONICS_TITLE";
                 anuReallyPissedAtBionics.GeoscapeEventData.Choices[0].Text.LocalizationKey = "ANU_REALLY_PISSED_BIONICS_CHOICE_0";
                 //anuReallyPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "ANU_REALLY_PISSED_BIONICS_CHOICE_0_OUTCOME";
-               // GenerateGeoEventChoice(anuReallyPissedAtBionics, "blah", "blah");
+                // GenerateGeoEventChoice(anuReallyPissedAtBionics, "blah", "blah");
                 anuReallyPissedAtBionics.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = Anu,
@@ -253,7 +229,7 @@ namespace PhoenixRising.BetterGeoscape
                 nJReallyPissedAtMutations.GeoscapeEventData.Title.LocalizationKey = "NJ_REALLY_PISSED_MUTATIONS_TITLE";
                 nJReallyPissedAtMutations.GeoscapeEventData.Choices[0].Text.LocalizationKey = "NJ_REALLY_PISSED_MUTATIONS_CHOICE_0";
                 //nJReallyPissedAtMutations.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "NJ_REALLY_PISSED_MUTATIONS_CHOICE_0_OUTCOME";
-                
+
                 nJReallyPissedAtMutations.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(new OutcomeDiplomacyChange()
                 {
                     PartyFaction = NewJericho,
@@ -262,58 +238,17 @@ namespace PhoenixRising.BetterGeoscape
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                 });
 
-                /* 
-                 VariablesChange = new List<OutcomeVariableChange>
-                     { new OutcomeVariableChange
-                         {
-                             VariableName = "BG_NJ_Pissed_Made_Promise",
-                             Value = { Min = 1, Max = 1 },
-                             IsSetOperation = true,
-                          }
-                     },
-                */
                 GeoscapeEventDef darkEvent = Helper.CreateDefFromClone(sourceLoseGeoEvent, "4585B351-3403-4798-B45A-B9DAD77361ED", "DarkEventDef");
                 darkEvent.GeoscapeEventData.EventID = "DarkEvent";
                 GeoscapeEventDef voidOmen = Helper.CreateDefFromClone(sourceLoseGeoEvent, "396AE9AA-3E2F-440A-83D0-C89255DCB92D", "VoidOmenEventDef");
                 voidOmen.GeoscapeEventData.EventID = "VoidOmen";
 
-                //Changing Umbra Crab and Triton to appear after SDI event 3;
-                ResearchDef umbraCrabResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_CrabmanUmbra_ResearchDef"));
-                
-                //Creating new Research Requirement, requiring a variable to be triggered  
-                EncounterVariableResearchRequirementDef variableResReqUmbra = Helper.CreateDefFromClone(sourceVarResReq, "0CCC30E0-4DB1-44CD-9A60-C1C8F6588C8A", "UmbraResReqDef");
-                string variableUmbraALNResReq = "Umbra_Encounter_Variable";
-                variableResReqUmbra.VariableName = variableUmbraALNResReq;
-                // This changes the Umbra reserach so that 2 conditions have to be fulfilled: 1) a) nest has to be researched, or b) exotic material has to be found
-                // (because 1)a) is fufilled at start of the game, b)) is redundant but harmless), and 2) a special variable has to be triggered, assigned to event sdi3
-                umbraCrabResearch.RevealRequirements.Operation = ResearchContainerOperation.ALL;
-                umbraCrabResearch.RevealRequirements.Container[0].Operation = ResearchContainerOperation.ANY;
-                umbraCrabResearch.RevealRequirements.Container[1].Requirements[0] = variableResReqUmbra;
-                //Now same thing for Triton Umbra, but it will use same variable because we want them to appear at the same time
-                ResearchDef umbraFishResearch = Repo.GetAllDefs<ResearchDef>().FirstOrDefault(ged => ged.name.Equals("ALN_FishmanUmbra_ResearchDef"));                
-                umbraFishResearch.RevealRequirements.Operation = ResearchContainerOperation.ALL;
-                umbraFishResearch.RevealRequirements.Container[0].Operation = ResearchContainerOperation.ANY;
-                umbraFishResearch.RevealRequirements.Container[1].Requirements[0] = variableResReqUmbra;
-                //Because Triton research has 2 requirements in the second container, we set them to any
-                umbraFishResearch.RevealRequirements.Container[1].Operation = ResearchContainerOperation.ANY;
-                //We will modify the Umbra to make them a bit weaker
-                WeaponDef umbraCrab = Repo.GetAllDefs<WeaponDef>().
-                FirstOrDefault(ged => ged.name.Equals("Oilcrab_Torso_BodyPartDef"));
-                umbraCrab.HitPoints = 250;
-                umbraCrab.DamagePayload.DamageKeywords[0].Value = 60;
-                BodyPartAspectDef umbraCrabBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
-                FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilcrab_Torso_BodyPartDef]"));
-                umbraCrabBodyAspect.Endurance = 25.0f; 
-                WeaponDef umbraFish = Repo.GetAllDefs<WeaponDef>().
-                FirstOrDefault(ged => ged.name.Equals("Oilfish_Torso_BodyPartDef"));
-                umbraFish.HitPoints = 250;
-                umbraFish.DamagePayload.DamageKeywords[0].Value = 70;           
-                BodyPartAspectDef umbraFishBodyAspect = Repo.GetAllDefs<BodyPartAspectDef>().
-                FirstOrDefault(ged => ged.name.Equals("E_BodyPartAspect [Oilfish_Torso_BodyPartDef]"));
-                umbraFishBodyAspect.Endurance = 25.0f;
+
                 Intro.CreateIntro();
                 VoidOmens.SetUmbraRandomValue(0);
-                
+
+
+
             }
             catch (Exception e)
             {
@@ -376,21 +311,22 @@ namespace PhoenixRising.BetterGeoscape
         [HarmonyPatch(typeof(PhoenixStatisticsManager), "OnGeoscapeLevelStart")]
         public static class PhoenixStatisticsManager_OnGeoscapeLevelStart_VoidOmens_Patch
         {
-           
+
             public static void Postfix(GeoLevelController level)
             {
                 try
                 {
                     VoidOmens.CreateVoidOmens(level);
                     VoidOmens.CheckForRemovedVoidOmens(level);
+                    Umbra.SetUmbraEvolution(level);
 
-                    if(level.EventSystem.GetVariable("BG_Intro_Played")==0) 
+                    if (level.EventSystem.GetVariable("BG_Intro_Played") == 0)
                     {
                         GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(level.PhoenixFaction, level.ViewerFaction);
                         level.EventSystem.TriggerGeoscapeEvent("IntroBetterGeo_0", geoscapeEventContext);
-                        level.EventSystem.SetVariable("BG_Intro_Played", 1);                   
+                        level.EventSystem.SetVariable("BG_Intro_Played", 1);
                     }
-                    if (level.EventSystem.GetVariable("BG_Intro_Played") == 1) 
+                    if (level.EventSystem.GetVariable("BG_Intro_Played") == 1)
                     {
                         GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(level.PhoenixFaction, level.ViewerFaction);
                         level.EventSystem.TriggerGeoscapeEvent("IntroBetterGeo_1", geoscapeEventContext);
@@ -402,9 +338,6 @@ namespace PhoenixRising.BetterGeoscape
                         level.EventSystem.TriggerGeoscapeEvent("IntroBetterGeo_2", geoscapeEventContext);
                         level.EventSystem.SetVariable("BG_Intro_Played", 3);
                     }
-
-
-
                 }
                 catch (Exception e)
                 {
@@ -421,12 +354,13 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
+                    Umbra.SetUmbraEvolution(level);
                     VoidOmens.CheckForVoidOmensRequiringTacticalPatching(level);
-                    if (VoidOmens.VoidOmen16Active && VoidOmens.VoidOmen15Active) 
+                    if (VoidOmens.VoidOmen16Active && VoidOmens.VoidOmen15Active)
                     {
                         VoidOmens.SetUmbraRandomValue(0.32f);
                     }
-                    if(VoidOmens.VoidOmen16Active && !VoidOmens.VoidOmen15Active)
+                    if (VoidOmens.VoidOmen16Active && !VoidOmens.VoidOmen15Active)
                     {
                         VoidOmens.SetUmbraRandomValue(0.16f);
                     }
@@ -438,7 +372,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-       
+
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionHourly")]
         public static class GeoAlienFaction_UpdateFactionHourly_DarkEvents_Patch
         {
@@ -448,6 +382,7 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     VoidOmens.CreateVoidOmens(__instance.GeoLevel);
                     VoidOmens.CheckForRemovedVoidOmens(__instance.GeoLevel);
+                    Umbra.SetUmbraEvolution(__instance.GeoLevel);
                 }
                 catch (Exception e)
                 {
@@ -497,51 +432,131 @@ namespace PhoenixRising.BetterGeoscape
                 }
             }
         }
-      /* [HarmonyPatch(typeof(GeoSite), "DestroySite")]
-        public static class GeoSite_DestroySite_DestroyedHavenGenerateScav_patch
-        {
-            internal static bool flag = false;
 
-            public static void Postfix(GeoSite __instance, GeoSiteType ____type)
+        [HarmonyPatch(typeof(UIStateRosterDeployment), "get__squadMaxDeployment")]
+        public static class UIStateRosterDeployment_get_SquadMaxDeployment_VoidOmenLimitedDeployment_Patch
+        {
+            public static void Postfix(ref int __result)
             {
                 try
                 {
-                    
-                    if (__instance.Type == GeoSiteType.Haven && !flag)
+                    if (VoidOmens.VoidOmen4Active)
                     {
-                       flag = true;
-                    }
-                    else if (flag)
-                    {
-                       __instance.ActiveMission = null;
-                        __instance.CreateScavengingMission();
-                       flag = false;
+                        __result -= 2;
                     }
                 }
+
                 catch (Exception e)
                 {
                     Logger.Error(e);
                 }
+
             }
-        }*/
+        }
+
+        [HarmonyPatch(typeof(GeoBehemothActor), "get_DisruptionMax")]
+        public static class GeoBehemothActor_get_DisruptionMax_VoidOmenBehemothRoamsMore_Patch
+        {
+            public static void Postfix(ref int __result, GeoBehemothActor __instance)
+            {
+                try
+                {
+                    int[] voidOmensInEffect = VoidOmens.CheckForAlreadyRolledVoidOmens(__instance.GeoLevel);
+                    if (voidOmensInEffect.Contains(11))
+                    {
+                        __result += 3 * __instance.GeoLevel.CurrentDifficultyLevel.Order;
+                    }
+                }
+
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+
+            }
+        }
+
+
+
+
+
+        /* [HarmonyPatch(typeof(GeoSite), "DestroySite")]
+          public static class GeoSite_DestroySite_DestroyedHavenGenerateScav_patch
+          {
+              internal static bool flag = false;
+
+              public static void Postfix(GeoSite __instance, GeoSiteType ____type)
+              {
+                  try
+                  {
+
+                      if (__instance.Type == GeoSiteType.Haven && !flag)
+                      {
+                         flag = true;
+                      }
+                      else if (flag)
+                      {
+                         __instance.ActiveMission = null;
+                          __instance.CreateScavengingMission();
+                         flag = false;
+                      }
+                  }
+                  catch (Exception e)
+                  {
+                      Logger.Error(e);
+                  }
+              }
+          }*/
+
 
 
         [HarmonyPatch(typeof(SiteEncountersArtCollectionDef), "GetEventArt")]
         public static class SiteEncountersArtCollectionDef_GetEventArt_InjectArt_patch
         {
-             public static void Postfix(ref EncounterEventArt __result, GeoscapeEvent geoEvent)
-             {
+            public static void Postfix(ref EncounterEventArt __result, GeoscapeEvent geoEvent)
+            {
                 try
                 {
-             /* if (geoEvent.EventID.Equals("Anu_Pissed1"))
-              {
-                  __result.EventBackground = Helper.CreateSpriteFromImageFile("combat.png");
-              }
-             */
-                    if(geoEvent.EventID.Equals("PROG_FS0"))
+                    /* if (geoEvent.EventID.Equals("Anu_Pissed1"))
+                     {
+                         __result.EventBackground = Helper.CreateSpriteFromImageFile("combat.png");
+                     }
+                    */
+                    if (geoEvent.EventID.Contains("SDI"))
+                    {
+                        __result.EventLeader = Helper.CreateSpriteFromImageFile("BG_alistair_small.png");
+                    }
+
+                    if (geoEvent.EventID.Equals("PROG_FS0"))
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("FesteringSkiesAfterHamerfall.png");
                     }
+
+                    if (geoEvent.EventID.Equals("DarkEvent"))
+                    {
+                        __result.EventLeader = Helper.CreateSpriteFromImageFile("BG_alistair_small.png");
+                    }
+
+                    if (geoEvent.EventID.Equals("DarkEvent") && (geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_02"
+                        || geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_05" || geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_08"))
+                    {
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_05.jpg");
+                    }
+
+                    if (geoEvent.EventID.Equals("DarkEvent") && geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_11")
+                    {
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_11.jpg");
+                    }
+
+                    if (geoEvent.EventID.Equals("DarkEvent") && (geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_12" || geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_09"))
+                    {
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_12.jpg");
+                    }
+                    if (geoEvent.EventID.Equals("DarkEvent") && geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_13")
+                    {
+                        __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_13.jpg");
+                    }
+
 
                     if (geoEvent.EventID.Equals("IntroBetterGeo_2"))
                     {
@@ -551,27 +566,64 @@ namespace PhoenixRising.BetterGeoscape
                     if (geoEvent.EventID.Equals("IntroBetterGeo_1"))
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("BG_Intro_1.jpg");
+                        __result.EventLeader = Helper.CreateSpriteFromImageFile("BG_alistair_small.png");
                     }
                     if (geoEvent.EventID.Equals("IntroBetterGeo_0"))
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("BG_Intro_0.jpg");
                     }
-
-
-                    /*   if (geoEvent.EventID.Equals("SDI_01"))
-                       {
-                           __result.EventLeader = Helper.CreateSpriteFromImageFile("oldsb.png");
-                       }*/
-
                 }
                 catch (Exception e)
                 {
-                Logger.Error(e);
+                    Logger.Error(e);
                 }
-             }
+            }
         }
-        
-        
+
+        /*  [HarmonyPatch(typeof(GeoHavenDefenseMission), "OnUpdateMission")]
+
+          public static class GeoHavenDefenseMission_UpdateGeoscapeMissionState_ChangeToInfestation_patch
+          {
+              public static void Postfix()
+              {
+                  try
+                  {
+                      SharedData sharedData = GameUtl.GameComponent<SharedData>();
+
+                      Logger.Always("Update Geoscape Mission was invoked");
+                      // __instance.AttackerFaction == sharedData.AlienFactionDef &&
+
+                      if (DefenseMission.AttackerDeployment >= 1 && DefenseMission.DefenderDeployment <= 2)
+                      {
+                          Logger.Always("First check was passed");
+                          DefenseMission.CompleteUpdateableMission();
+                          //  __instance.Site.ActiveMission = null;
+                          DefenseMission.Site.GeoLevel.AlienFaction.InfestHaven(DefenseMission.Site);
+                          //  
+                          Logger.Always("Infestation should have happened");
+
+                      }
+
+                       if (__instance.AttackerDeployment>=1 && __instance.DefenderDeployment <= 2) 
+                      {
+
+                          Logger.Always("First check was passed");
+                          __instance.CompleteUpdateableMission();
+                          //  __instance.Site.ActiveMission = null;
+                          __instance.Site.GeoLevel.AlienFaction.InfestHaven(__instance.Site);
+                        //  
+                          Logger.Always("Infestation should have happened");
+                      }
+
+                  }
+                  catch (Exception e)
+                  {
+                      Logger.Error(e);
+                  }
+
+              }
+          }*/
+
         [HarmonyPatch(typeof(GeoSite), "CreateHavenDefenseMission")]
         public static class GeoSite_CreateHavenDefenseMission_IncreaseAttackHavenVoidOmen_patch
         {
@@ -594,9 +646,10 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Error(e);
                 }
-
             }
         }
+
+        
 
         [HarmonyPatch(typeof(GeoAlienFaction), "AlienBaseDestroyed")]
         public static class GeoAlienFaction_AlienBaseDestroyed_RemoveVoidOmenDestroyedPC_patch
@@ -606,21 +659,44 @@ namespace PhoenixRising.BetterGeoscape
                 try
                 {
                     Logger.Always("Lair or Citadal destroyed");
-                    if (alienBase.AlienBaseTypeDef.Keyword=="lair" || alienBase.AlienBaseTypeDef.Keyword == "citadel" 
-                        || (alienBase.AlienBaseTypeDef.Keyword == "nest" && __instance.GeoLevel.CurrentDifficultyLevel.Order==1))
+                    if (alienBase.AlienBaseTypeDef.Keyword == "lair" || alienBase.AlienBaseTypeDef.Keyword == "citadel"
+                        || (alienBase.AlienBaseTypeDef.Keyword == "nest" && __instance.GeoLevel.CurrentDifficultyLevel.Order == 1))
                     {
                         Logger.Always("Lair or Citadal destroyed, Void Omen should be removed");
                         VoidOmens.RemoveEarliestVoidOmen(__instance.GeoLevel);
-                        
+
                     }
                 }
                 catch (Exception e)
                 {
                     Logger.Error(e);
                 }
+            }
+        }
 
+        [HarmonyPatch(typeof(GeoMarketplace), "OnSiteVisited")]
+
+        public static class GeoMarketplace_OnSiteVisited_MarketPlace_patch
+        {
+            public static void Prefix(GeoMarketplace __instance, GeoLevelController ____level, TheMarketplaceSettingsDef ____settings)
+            {
+                try
+                {
+                    if (____level.EventSystem.GetVariable(____settings.NumberOfDLC5MissionsCompletedVariable) == 0)
+                    {
+                        ____level.EventSystem.SetVariable(____settings.NumberOfDLC5MissionsCompletedVariable, 4);
+                        ____level.EventSystem.SetVariable(____settings.DLC5IntroCompletedVariable, 1);
+                        ____level.EventSystem.SetVariable(____settings.DLC5FinalMovieCompletedVariable, 1);
+                        __instance.UpdateOptions(____level.Timing);
+                    }
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
             }
         }
     }
 }
+
 

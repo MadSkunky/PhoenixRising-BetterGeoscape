@@ -12,7 +12,7 @@ namespace PhoenixRising.BetterGeoscape
 {
     internal class AugmentationWOCH
     {
-        //When getting an augment, the character's Stamina is set to 0 and each augment reduces corruption by a 1/3
+        //When getting an augment, the character's Stamina is set to 0
         [HarmonyPatch(typeof(UIModuleBionics), "OnAugmentApplied")]
         public static class UIModuleBionics_OnAugmentApplied_SetStaminaTo0_patch
         {
