@@ -13,91 +13,100 @@ namespace PhoenixRising.BetterGeoscape
     internal class PandoranProgress
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
+        private static bool ApplyChangeDifficultyLevel = true;
         public static void Apply_Changes()
         {
             try
             {
-                int pandoranEvolutionLegend = BetterGeoscapeMain.Config.evolutionPointsLegend;
+                if (ApplyChangeDifficultyLevel)
+                {
+                    int pandoranEvolutionLegend = BetterGeoscapeMain.Config.evolutionPointsLegend;
 
-                // All sources of evolution due to scaling removed, leaving only evolution per day
-                // Additional source of evolution will be number of surviving Pandoran colonies, modulated by difficulty level
-                GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
-                            
-                veryhard.NestLimitations.MaxNumber = 3; //vanilla 6
-                veryhard.NestLimitations.HoursBuildTime = 90; //vanilla 45
-                veryhard.LairLimitations.MaxNumber = 3; // vanilla 5
-                veryhard.LairLimitations.MaxConcurrent = 3; //vanilla 4
-                veryhard.LairLimitations.HoursBuildTime = 100; //vanilla 50
-                veryhard.CitadelLimitations.HoursBuildTime = 180; //vanilla 60
-                veryhard.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
-                veryhard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
-                veryhard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
-                veryhard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
-                veryhard.InfestationOutcomeChance = -50;
+                    // All sources of evolution due to scaling removed, leaving only evolution per day
+                    // Additional source of evolution will be number of surviving Pandoran colonies, modulated by difficulty level
+                    GameDifficultyLevelDef veryhard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("VeryHard_GameDifficultyLevelDef"));
 
-                //reducing evolution per day because there other sources of evolution points now
-                veryhard.EvolutionProgressPerDay = pandoranEvolutionLegend; //vanilla 100
+                    veryhard.NestLimitations.MaxNumber = 3; //vanilla 6
+                    veryhard.NestLimitations.HoursBuildTime = 90; //vanilla 45
+                    veryhard.LairLimitations.MaxNumber = 3; // vanilla 5
+                    veryhard.LairLimitations.MaxConcurrent = 3; //vanilla 4
+                    veryhard.LairLimitations.HoursBuildTime = 100; //vanilla 50
+                    veryhard.CitadelLimitations.HoursBuildTime = 180; //vanilla 60
+                    veryhard.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
+                    veryhard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
+                    veryhard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
+                    veryhard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                    veryhard.ApplyInfestationOutcomeChange = 0;
+                    veryhard.ApplyDamageHavenOutcomeChange = 0;
 
-                //Hero
-                GameDifficultyLevelDef hard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Hard_GameDifficultyLevelDef"));
+                    //reducing evolution per day because there other sources of evolution points now
+                    veryhard.EvolutionProgressPerDay = pandoranEvolutionLegend; //vanilla 100
 
-                hard.NestLimitations.MaxNumber = 3; //vanilla 5
-                hard.NestLimitations.HoursBuildTime = 90; //vanilla 50
-                hard.LairLimitations.MaxNumber = 3; // vanilla 4
-                hard.LairLimitations.MaxConcurrent = 3; //vanilla 3
-                hard.LairLimitations.HoursBuildTime = 100; //vanilla 80
-                hard.CitadelLimitations.HoursBuildTime = 180; //vanilla 100
-                hard.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
-                hard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
-                hard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
-                hard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
-                hard.InfestationOutcomeChance = 0;
+                    //Hero
+                    GameDifficultyLevelDef hard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Hard_GameDifficultyLevelDef"));
 
-                //reducing evolution per day because there other sources of evolution points now
-                hard.EvolutionProgressPerDay = 60; //vanilla 70
+                    hard.NestLimitations.MaxNumber = 3; //vanilla 5
+                    hard.NestLimitations.HoursBuildTime = 90; //vanilla 50
+                    hard.LairLimitations.MaxNumber = 3; // vanilla 4
+                    hard.LairLimitations.MaxConcurrent = 3; //vanilla 3
+                    hard.LairLimitations.HoursBuildTime = 100; //vanilla 80
+                    hard.CitadelLimitations.HoursBuildTime = 180; //vanilla 100
+                    hard.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
+                    hard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
+                    hard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
+                    hard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                    hard.ApplyInfestationOutcomeChange = 0;
+                    hard.ApplyDamageHavenOutcomeChange = 0;
 
-                //Standard
-                GameDifficultyLevelDef standard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Standard_GameDifficultyLevelDef"));
+                    //reducing evolution per day because there other sources of evolution points now
+                    hard.EvolutionProgressPerDay = 60; //vanilla 70
 
-                standard.NestLimitations.MaxNumber = 3; //vanilla 4
-                standard.NestLimitations.HoursBuildTime = 90; //vanilla 55
-                standard.LairLimitations.MaxNumber = 3; // vanilla 3
-                standard.LairLimitations.MaxConcurrent = 3; //vanilla 3
-                standard.LairLimitations.HoursBuildTime = 100; //vanilla 120
-                standard.CitadelLimitations.HoursBuildTime = 180; //vanilla 145
-                standard.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
-                standard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
-                standard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
-                standard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
-                standard.InfestationOutcomeChance = 0;
+                    //Standard
+                    GameDifficultyLevelDef standard = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Standard_GameDifficultyLevelDef"));
 
-                //reducing evolution per day because there other sources of evolution points now
-                standard.EvolutionProgressPerDay = 40; //vanilla 55
+                    standard.NestLimitations.MaxNumber = 3; //vanilla 4
+                    standard.NestLimitations.HoursBuildTime = 90; //vanilla 55
+                    standard.LairLimitations.MaxNumber = 3; // vanilla 3
+                    standard.LairLimitations.MaxConcurrent = 3; //vanilla 3
+                    standard.LairLimitations.HoursBuildTime = 100; //vanilla 120
+                    standard.CitadelLimitations.HoursBuildTime = 180; //vanilla 145
+                    standard.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
+                    standard.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
+                    standard.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
+                    standard.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                    standard.ApplyDamageHavenOutcomeChange = 0;
+                    standard.ApplyInfestationOutcomeChange = 0;
 
-                //Easy
-                GameDifficultyLevelDef easy = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Easy_GameDifficultyLevelDef"));
+                    //reducing evolution per day because there other sources of evolution points now
+                    standard.EvolutionProgressPerDay = 40; //vanilla 55
 
-                easy.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
-                easy.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
-                easy.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
-                easy.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
-                easy.InfestationOutcomeChance = 0;
+                    //Easy
+                    GameDifficultyLevelDef easy = Repo.GetAllDefs<GameDifficultyLevelDef>().FirstOrDefault(a => a.name.Equals("Easy_GameDifficultyLevelDef"));
 
-                //keeping evolution per day because low enough already
-                easy.EvolutionProgressPerDay = 35; //vanilla 35
+                    easy.EvolutionPointsGainOnMissionLoss = 0; //vanilla 10
+                    easy.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0; //vanilla 10
+                    easy.AlienBaseTypeEvolutionParams[1].EvolutionPerDestroyedBase = 0; //vanilla 20
+                    easy.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0; //vanilla 40
+                    easy.ApplyInfestationOutcomeChange = 0;
+                    easy.ApplyDamageHavenOutcomeChange = 0;
 
-                //Remove faction diplo penalties for not destroying revealed PCs and increase rewards for haven leader
-                GeoAlienBaseTypeDef nestType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Nest_GeoAlienBaseTypeDef"));              
-                GeoAlienBaseTypeDef lairType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Lair_GeoAlienBaseTypeDef"));
-                GeoAlienBaseTypeDef citadelType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Citadel_GeoAlienBaseTypeDef"));
-                GeoAlienBaseTypeDef palaceType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Palace_GeoAlienBaseTypeDef"));
+                    //keeping evolution per day because low enough already
+                    easy.EvolutionProgressPerDay = 35; //vanilla 35
 
-                nestType.FactionDiplomacyPenaltyPerHaven = 0; //vanilla -1
-                nestType.HavenLeaderDiplomacyReward = 12; //vanilla 8 
-                lairType.FactionDiplomacyPenaltyPerHaven = 0; //vanilla -1
-                lairType.HavenLeaderDiplomacyReward = 16; //vanilla 12 
-                citadelType.FactionDiplomacyPenaltyPerHaven = 0; //vanilla -1
-                citadelType.HavenLeaderDiplomacyReward = 20; //vanilla 16 
+                    //Remove faction diplo penalties for not destroying revealed PCs and increase rewards for haven leader
+                    GeoAlienBaseTypeDef nestType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Nest_GeoAlienBaseTypeDef"));
+                    GeoAlienBaseTypeDef lairType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Lair_GeoAlienBaseTypeDef"));
+                    GeoAlienBaseTypeDef citadelType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Citadel_GeoAlienBaseTypeDef"));
+                    GeoAlienBaseTypeDef palaceType = Repo.GetAllDefs<GeoAlienBaseTypeDef>().FirstOrDefault(a => a.name.Equals("Palace_GeoAlienBaseTypeDef"));
+
+                    nestType.FactionDiplomacyPenaltyPerHaven = 0; //vanilla -1
+                    nestType.HavenLeaderDiplomacyReward = 12; //vanilla 8 
+                    lairType.FactionDiplomacyPenaltyPerHaven = 0; //vanilla -1
+                    lairType.HavenLeaderDiplomacyReward = 16; //vanilla 12 
+                    citadelType.FactionDiplomacyPenaltyPerHaven = 0; //vanilla -1
+                    citadelType.HavenLeaderDiplomacyReward = 20; //vanilla 16 
+                    ApplyChangeDifficultyLevel = false;
+                }
             }
             catch (Exception e)
             {

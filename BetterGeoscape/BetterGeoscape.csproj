@@ -91,6 +91,7 @@
     <Compile Include="ChangesToEvents.cs" />
     <Compile Include="ChangesToAmbushes.cs" />
     <Compile Include="AugmentationWOCH.cs" />
+    <Compile Include="DestroyedHavensToScavengingSites.cs" />
     <Compile Include="InfestationOptionEvent.cs" />
     <Compile Include="InfestationOptionMission.cs" />
     <Compile Include="Intro.cs" />

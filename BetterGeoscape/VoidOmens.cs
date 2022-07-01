@@ -1,27 +1,18 @@
 ﻿using Base.Defs;
 using Base.Entities.Effects;
 using Base.Entities.Effects.ApplicationConditions;
-using Base.UI;
 using PhoenixPoint.Common.Core;
 using PhoenixPoint.Common.Entities;
 using PhoenixPoint.Common.Levels.Missions;
-using PhoenixPoint.Geoscape.Core;
-using PhoenixPoint.Geoscape.Entities;
-using PhoenixPoint.Geoscape.Entities.Missions;
 using PhoenixPoint.Geoscape.Entities.Missions.Outcomes;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
 using PhoenixPoint.Geoscape.Entities.Sites;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Levels;
-using PhoenixPoint.Geoscape.Levels.Factions;
-using PhoenixPoint.Tactical.AI;
 using PhoenixPoint.Tactical.Entities;
-using PhoenixPoint.Tactical.Entities.Abilities;
-using PhoenixPoint.Tactical.Entities.Weapons;
 using PhoenixPoint.Tactical.Levels.FactionEffects;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -31,7 +22,7 @@ namespace PhoenixRising.BetterGeoscape
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
 
-        public static bool[] darkEventsCheck = new bool[18];
+        public static bool[] voidOmensCheck = new bool[18];
         //VO#3 is WP cost +50%
         public static bool VoidOmen3Active = false;
         public static bool VoidOmen3Activated = false;
@@ -58,11 +49,11 @@ namespace PhoenixRising.BetterGeoscape
 
                 for (int i = 1; i < difficulty + 1; i++)
                 {
-                    for (int j = 1; j < darkEventsCheck.Count()-1; j++)
+                    for (int j = 1; j < voidOmensCheck.Count() - 1; j++)
                     {
                         if (level.EventSystem.GetVariable(voidOmen + i) == j)
                         {
-                            if (j == 1 && darkEventsCheck[j] == false)
+                            if (j == 1 && voidOmensCheck[j] == false)
                             {
                                 level.EventSystem.ExplorationAmbushChance = 100;
                                 CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
@@ -70,10 +61,10 @@ namespace PhoenixRising.BetterGeoscape
                                 AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 1;
                                 AmbushALN.CratesDeploymentPointsRange.Min = 50;
                                 AmbushALN.CratesDeploymentPointsRange.Max = 70;
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable "+voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable "+voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 2 && darkEventsCheck[j] == false)
+                            if (j == 2 && voidOmensCheck[j] == false)
                             {
                                 foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
                                 {
@@ -95,34 +86,36 @@ namespace PhoenixRising.BetterGeoscape
                                     diplomacyMissionOutcomeDef.DiplomacyToFaction.Max = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Max * 0.5f);
                                     diplomacyMissionOutcomeDef.DiplomacyToFaction.Min = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Min * 0.5f);
                                 }
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
 
                             }
-                            if (j == 3 && darkEventsCheck[j] == false)
+                            if (j == 3 && voidOmensCheck[j] == false)
                             {
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 4 && darkEventsCheck[j] == false) //pending adding extra XP gain
+                            if (j == 4 && voidOmensCheck[j] == false) //pending adding extra XP gain
                             {
-                             VoidOmen4Active=true;
-                                
-                                /*   foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
-                                {
-                                    missionTypeDef.MaxPlayerUnits = 6;
-                                }*/
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                VoidOmen4Active = true;
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 5 && darkEventsCheck[j] == false)
+                            if (j == 5 && voidOmensCheck[j] == false)
                             {
                                 foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
                                 {
+
                                     if (missionTypeDef.name.Contains("Haven") && !missionTypeDef.name.Contains("Infestation"))
                                     {
                                         TacCrateDataDef cratesNotResources = Repo.GetAllDefs<TacCrateDataDef>().FirstOrDefault(ged => ged.name.Equals("Default_TacCrateDataDef"));
-                                        missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Enemy;
+                                        if (missionTypeDef.name.Contains("Civ"))
+                                        {
+                                            missionTypeDef.ParticipantsRelations[1].MutualRelation = FactionRelation.Enemy;
+                                        }
+                                        else if (!missionTypeDef.name.Contains("Civ"))
+                                        {
+                                            missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Enemy;
+                                        }
                                         missionTypeDef.ParticipantsData[1].PredeterminedFactionEffects = missionTypeDef.ParticipantsData[0].PredeterminedFactionEffects;
                                         missionTypeDef.MissionSpecificCrates = cratesNotResources;
                                         missionTypeDef.FactionItemsRange.Min = 2;
@@ -131,10 +124,10 @@ namespace PhoenixRising.BetterGeoscape
                                         missionTypeDef.CratesDeploymentPointsRange.Max = 30;
                                     }
                                 }
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 6 && darkEventsCheck[j] == false)
+                            if (j == 6 && voidOmensCheck[j] == false)
                             {
                                 level.CurrentDifficultyLevel.EvolutionPointsGainOnMissionLoss = 20;
                                 level.CurrentDifficultyLevel.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 30;
@@ -145,17 +138,17 @@ namespace PhoenixRising.BetterGeoscape
                                     if (lab.name == "E_ResourceGenerator [ResearchLab_PhoenixFacilityDef]" || lab.name == "E_ResourceGenerator [BionicsLab_PhoenixFacilityDef]")
                                         lab.BaseResourcesOutput.Values.Add(new ResourceUnit { Type = ResourceType.Research, Value = 2 });
                                 }
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
 
                             }
-                            if (j == 7 && darkEventsCheck[j] == false)
+                            if (j == 7 && voidOmensCheck[j] == false)
                             {
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
 
-                            if (j == 8 && darkEventsCheck[j] == false)
+                            if (j == 8 && voidOmensCheck[j] == false)
                             {
                                 GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
                                 foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
@@ -175,75 +168,75 @@ namespace PhoenixRising.BetterGeoscape
                                 }
                                 GeoHavenZoneDef havenLab = Repo.GetAllDefs<GeoHavenZoneDef>().FirstOrDefault(ged => ged.name.Equals("Research_GeoHavenZoneDef"));
                                 havenLab.ProvidesResearch = 2;
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                          
-                            if (j == 9 && darkEventsCheck[j] == false)
+
+                            if (j == 9 && voidOmensCheck[j] == false)
                             {
                                 FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
                                 festeringSkiesSettingsDef.HavenAttackCounterModifier = 0.66f;
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            
-                            if (j == 10 && darkEventsCheck[j] == false)
+
+                            if (j == 10 && voidOmensCheck[j] == false)
                             {
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 11 && darkEventsCheck[j] == false)
+                            if (j == 11 && voidOmensCheck[j] == false)
                             {
-                             /*   FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
-                                festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 15;*/
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
-                                
-                            }
-                            if (j == 12 && darkEventsCheck[j] == false)
-                            {
-                                VoidOmen12Active = true;
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                /*   FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
+                                   festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 15;*/
+                                //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
 
                             }
-                            if (j == 13 && darkEventsCheck[j] == false)
+                            if (j == 12 && voidOmensCheck[j] == false)
                             {
-                                level.CurrentDifficultyLevel.NestLimitations.MaxConcurrent = 1000;
-                                level.CurrentDifficultyLevel.LairLimitations.MaxConcurrent = 1000;
-                                level.CurrentDifficultyLevel.CitadelLimitations.MaxConcurrent = 1000;
-                            
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);                      
-                                darkEventsCheck[j] = true;
+                                VoidOmen12Active = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
+
                             }
-                            if (j == 14 && darkEventsCheck[j] == false)
+                            if (j == 13 && voidOmensCheck[j] == false)
+                            {
+                                level.CurrentDifficultyLevel.NestLimitations.HoursBuildTime /= 2;
+                                level.CurrentDifficultyLevel.LairLimitations.HoursBuildTime /= 2;
+                                level.CurrentDifficultyLevel.CitadelLimitations.HoursBuildTime /= 2;
+
+                                Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i + ", so Pandoran nests take " + level.CurrentDifficultyLevel.NestLimitations.HoursBuildTime + " hours");
+                                voidOmensCheck[j] = true;
+                            }
+                            if (j == 14 && voidOmensCheck[j] == false)
                             {
                                 TacticalPerceptionDef tacticalPerceptionDef = Repo.GetAllDefs<TacticalPerceptionDef>().FirstOrDefault((TacticalPerceptionDef a) => a.name.Equals("Soldier_PerceptionDef"));
                                 tacticalPerceptionDef.PerceptionRange = 20;
-                               // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                // Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 15 && darkEventsCheck[j] == false)
+                            if (j == 15 && voidOmensCheck[j] == false)
                             {
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 16 && darkEventsCheck[j] == false)
+                            if (j == 16 && voidOmensCheck[j] == false)
                             {
-                                if (!darkEventsCheck[15])
+                                if (!voidOmensCheck[15])
                                 {
                                     SetUmbraRandomValue(0.16f);
                                 }
-                                if (darkEventsCheck[15])
+                                if (voidOmensCheck[15])
                                 {
                                     SetUmbraRandomValue(0.32f);
                                 }
-                              //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
-                                darkEventsCheck[j] = true;
+                                //  Logger.Always(voidOmen + j + " is now in effect, held in variable " + voidOmen + i);
+                                voidOmensCheck[j] = true;
                             }
-                            if (j == 17 && darkEventsCheck[j] == false)
+                            if (j == 17 && voidOmensCheck[j] == false)
                             {
-                                darkEventsCheck[j] = true;
+                                voidOmensCheck[j] = true;
                             }
                         }
                     }
@@ -260,15 +253,15 @@ namespace PhoenixRising.BetterGeoscape
             try
             {
                 int difficulty = level.CurrentDifficultyLevel.Order;
-                int[] voidOmensInPlay = CheckForAlreadyRolledVoidOmens(level);
+                int[] voidOmensInPlay = CheckFordVoidOmensInPlay(level);
                 Logger.Always("Checking if method invocation is working, these are the Void Omens in play " + voidOmensInPlay[0] + " "
                     + voidOmensInPlay[1] + " " + voidOmensInPlay[2] + " " + voidOmensInPlay[3]);
 
-                for (int i = 1; i < darkEventsCheck.Count()-1; i++)
+                for (int i = 1; i < voidOmensCheck.Count() - 1; i++)
                 {
-                    if (!voidOmensInPlay.Contains(i) && darkEventsCheck[i])
+                    if (!voidOmensInPlay.Contains(i) && voidOmensCheck[i])
                     {
-                        if (darkEventsCheck[1])
+                        if (voidOmensCheck[1])
                         {
                             level.EventSystem.ExplorationAmbushChance = 70;
                             CustomMissionTypeDef AmbushALN = Repo.GetAllDefs<CustomMissionTypeDef>().FirstOrDefault(ged => ged.name.Equals("AmbushAlien_CustomMissionTypeDef"));
@@ -276,12 +269,12 @@ namespace PhoenixRising.BetterGeoscape
                             AmbushALN.ParticipantsData[0].ReinforcementsTurns.Min = 2;
                             AmbushALN.CratesDeploymentPointsRange.Min = 30;
                             AmbushALN.CratesDeploymentPointsRange.Max = 50;
-                            darkEventsCheck[1] = false;
-                         //   Logger.Always("Exploration ambush chance is now " + level.EventSystem.ExplorationAmbushChance);
-                          //  Logger.Always("Alien ambushes can now have a max of  " + AmbushALN.CratesDeploymentPointsRange.Max / 10 + " crates");
+                            voidOmensCheck[1] = false;
+                            //   Logger.Always("Exploration ambush chance is now " + level.EventSystem.ExplorationAmbushChance);
+                            //  Logger.Always("Alien ambushes can now have a max of  " + AmbushALN.CratesDeploymentPointsRange.Max / 10 + " crates");
                             Logger.Always("The check for VO#1 went ok");
                         }
-                        else if (darkEventsCheck[2])
+                        else if (voidOmensCheck[2])
                         {
                             foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
                             {
@@ -303,35 +296,39 @@ namespace PhoenixRising.BetterGeoscape
                                 diplomacyMissionOutcomeDef.DiplomacyToFaction.Max = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Max * 2f);
                                 diplomacyMissionOutcomeDef.DiplomacyToFaction.Min = Mathf.RoundToInt(diplomacyMissionOutcomeDef.DiplomacyToFaction.Min * 2f);
                             }
-                            darkEventsCheck[2] = false;
+                            voidOmensCheck[2] = false;
                             Logger.Always("The check for VO#2 went ok");
                         }
-                        else if (darkEventsCheck[3])
+                        else if (voidOmensCheck[3])
                         {
-                        
-                            darkEventsCheck[3] = false;
+
+                            voidOmensCheck[3] = false;
                             Logger.Always("The check for VO#3 went ok");
                         }
 
-                        else if (darkEventsCheck[4])
+                        else if (voidOmensCheck[4])
                         {
-                          VoidOmen4Active = false;
-                            /*  foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
-                            {
-                                missionTypeDef.MaxPlayerUnits = 8;
-                            }*/
-                            darkEventsCheck[4] = false;
+                            VoidOmen4Active = false;
+                            voidOmensCheck[4] = false;
                             Logger.Always("The check for VO#4 went ok");
                         }
 
-                        else if (darkEventsCheck[5])
+                        else if (voidOmensCheck[5])
                         {
                             foreach (CustomMissionTypeDef missionTypeDef in Repo.GetAllDefs<CustomMissionTypeDef>())
                             {
                                 if (missionTypeDef.name.Contains("Haven") && !missionTypeDef.name.Contains("Infestation"))
                                 {
-                                    TacticalFactionEffectDef defendersCanBeRecruited = Repo.GetAllDefs<TacticalFactionEffectDef>().FirstOrDefault(ged => ged.name.Equals("CanBeRecruitedByPhoenix_FactionEffectDef"));                                   
-                                    missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Friend;
+                                    TacticalFactionEffectDef defendersCanBeRecruited = Repo.GetAllDefs<TacticalFactionEffectDef>().FirstOrDefault(ged => ged.name.Equals("CanBeRecruitedByPhoenix_FactionEffectDef"));
+
+                                    if (missionTypeDef.name.Contains("Civ"))
+                                    {
+                                        missionTypeDef.ParticipantsRelations[1].MutualRelation = FactionRelation.Friend;
+                                    }
+                                    else if (!missionTypeDef.name.Contains("Civ"))
+                                    {
+                                        missionTypeDef.ParticipantsRelations[2].MutualRelation = FactionRelation.Friend;
+                                    }
                                     EffectDef[] predeterminedFactionEffects = new EffectDef[1] { defendersCanBeRecruited };
                                     missionTypeDef.ParticipantsData[1].PredeterminedFactionEffects = predeterminedFactionEffects;
                                     missionTypeDef.FactionItemsRange.Min = 0;
@@ -340,11 +337,11 @@ namespace PhoenixRising.BetterGeoscape
                                     missionTypeDef.CratesDeploymentPointsRange.Max = 0;
                                 }
                             }
-                            darkEventsCheck[5] = false;
+                            voidOmensCheck[5] = false;
                             Logger.Always("The check for VO#5 went ok");
                         }
 
-                        else if (darkEventsCheck[6])
+                        else if (voidOmensCheck[6])
                         {
                             level.CurrentDifficultyLevel.EvolutionPointsGainOnMissionLoss = 0;
                             level.CurrentDifficultyLevel.AlienBaseTypeEvolutionParams[0].EvolutionPerDestroyedBase = 0;
@@ -352,24 +349,24 @@ namespace PhoenixRising.BetterGeoscape
                             level.CurrentDifficultyLevel.AlienBaseTypeEvolutionParams[2].EvolutionPerDestroyedBase = 0;
                             foreach (ResourceGeneratorFacilityComponentDef lab in Repo.GetAllDefs<ResourceGeneratorFacilityComponentDef>())
                             {
-                                if (lab.name == "E_ResourceGenerator [ResearchLab_PhoenixFacilityDef]" 
-                                    || lab.name == "E_ResourceGenerator [BionicsLab_PhoenixFacilityDef]" 
-                                    && lab.BaseResourcesOutput.Values[1]!=null)
+                                if (lab.name == "E_ResourceGenerator [ResearchLab_PhoenixFacilityDef]"
+                                    || lab.name == "E_ResourceGenerator [BionicsLab_PhoenixFacilityDef]"
+                                    && lab.BaseResourcesOutput.Values[1] != null)
                                 {
                                     lab.BaseResourcesOutput.Values.Remove(lab.BaseResourcesOutput.Values[1]);
                                 }
                             }
-                            darkEventsCheck[6] = false;
+                            voidOmensCheck[6] = false;
                             Logger.Always("The check for VO#6 went ok");
                         }
 
-                        else if (darkEventsCheck[7])
+                        else if (voidOmensCheck[7])
                         {
-                            darkEventsCheck[7] = false;
+                            voidOmensCheck[7] = false;
                             Logger.Always("The check for VO#7 went ok");
                         }
 
-                        else if (darkEventsCheck[8])
+                        else if (voidOmensCheck[8])
                         {
                             GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
                             foreach (GeoscapeEventDef geoEvent in Repo.GetAllDefs<GeoscapeEventDef>())
@@ -390,81 +387,75 @@ namespace PhoenixRising.BetterGeoscape
                             GeoHavenZoneDef havenLab = Repo.GetAllDefs<GeoHavenZoneDef>().FirstOrDefault(ged => ged.name.Equals("Research_GeoHavenZoneDef"));
                             havenLab.ProvidesResearch = 1;
                             Logger.Always("The check for VO#8 went ok");
-                            darkEventsCheck[8] = false;
+                            voidOmensCheck[8] = false;
                         }
 
-                        else if (darkEventsCheck[9])
+                        else if (voidOmensCheck[9])
                         {
                             FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
                             festeringSkiesSettingsDef.HavenAttackCounterModifier = 1.33f;
-                            darkEventsCheck[9] = false;
+                            voidOmensCheck[9] = false;
                             Logger.Always("The check for VO#9 went ok");
-                        }     
-                        
-                        else if (darkEventsCheck[10])
+                        }
+
+                        else if (voidOmensCheck[10])
                         {
-                            darkEventsCheck[10] = false;
+                            voidOmensCheck[10] = false;
                             Logger.Always("The check for VO#10 went ok");
                         }
 
-                        else if (darkEventsCheck[11])
+                        else if (voidOmensCheck[11])
                         {
-                         /*   FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
-                            festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 3;*/
-                            darkEventsCheck[11] = false;
+                            /*   FesteringSkiesSettingsDef festeringSkiesSettingsDef = Repo.GetAllDefs<FesteringSkiesSettingsDef>().FirstOrDefault(ged => ged.name.Equals("FesteringSkiesSettingsDef"));
+                               festeringSkiesSettingsDef.DisruptionThreshholdBaseValue = 3;*/
+                            voidOmensCheck[11] = false;
                             Logger.Always("The check for VO#11 went ok");
                         }
 
-                        else if (darkEventsCheck[12])
+                        else if (voidOmensCheck[12])
                         {
-                           VoidOmen12Active=false;
-                            darkEventsCheck[12] = false;
+                            VoidOmen12Active = false;
+                            voidOmensCheck[12] = false;
                             Logger.Always("The check for VO#12 went ok");
                         }
 
-                        else if (darkEventsCheck[13])
-                        {                        
-                                if (level.CurrentDifficultyLevel.Order == 1)
-                                {
-                                    level.CurrentDifficultyLevel.NestLimitations.MaxConcurrent = 2;
-                                    level.CurrentDifficultyLevel.LairLimitations.MaxConcurrent = 2;
-                                    level.CurrentDifficultyLevel.CitadelLimitations.MaxConcurrent = 2;
-                                }
-                                else
-                                {
-                                level.CurrentDifficultyLevel.NestLimitations.MaxConcurrent = 3;
-                                level.CurrentDifficultyLevel.LairLimitations.MaxConcurrent = 3;
-                                level.CurrentDifficultyLevel.CitadelLimitations.MaxConcurrent = 3;
-                                }                        
-                            darkEventsCheck[13] = false;
-                            Logger.Always("The check for VO#13 went ok");
+                        else if (voidOmensCheck[13])
+                        {
+
+                            level.CurrentDifficultyLevel.NestLimitations.HoursBuildTime *= 2;
+                            level.CurrentDifficultyLevel.LairLimitations.HoursBuildTime *= 2;
+                            level.CurrentDifficultyLevel.CitadelLimitations.HoursBuildTime *= 2;
+
+                            voidOmensCheck[13] = false;
+
+                            Logger.Always("The check for VO#13 went ok" + " so Pandoran nests take " + level.CurrentDifficultyLevel.NestLimitations.HoursBuildTime + " hours");
                         }
 
-                        else if (darkEventsCheck[14])
+                        else if (voidOmensCheck[14])
                         {
                             TacticalPerceptionDef tacticalPerceptionDef = Repo.GetAllDefs<TacticalPerceptionDef>().FirstOrDefault((TacticalPerceptionDef a) => a.name.Equals("Soldier_PerceptionDef"));
                             tacticalPerceptionDef.PerceptionRange = 30;
-                            darkEventsCheck[14] = false;
+                            voidOmensCheck[14] = false;
                             Logger.Always("The check for VO#14 went ok");
                         }
-                        
-                        else if (darkEventsCheck[15])
+
+                        else if (voidOmensCheck[15])
                         {
-                            darkEventsCheck[15] = false;
+                            voidOmensCheck[15] = false;
                             Logger.Always("The check for VO#15 went ok");
                         }
 
-                        else if (darkEventsCheck[16])
+                        else if (voidOmensCheck[16])
                         {
                             SetUmbraRandomValue(0);
 
-                            darkEventsCheck[16] = false;
+                            voidOmensCheck[16] = false;
                             Logger.Always("The check for VO#16 went ok");
                         }
 
-                        else if (darkEventsCheck[17])
-                        {                           
-                            darkEventsCheck[17] = false;
+                        else if (voidOmensCheck[17])
+                        {
+                            voidOmensCheck[17] = false;
                             Logger.Always("The check for VO#17 went ok");
                         }
 
@@ -482,85 +473,114 @@ namespace PhoenixRising.BetterGeoscape
             try
             {
 
-                int difficulty = level.CurrentDifficultyLevel.Order;
-                string voidOmen = "VoidOmen_";
+                VoidOmen3Active = false;
+                VoidOmen7Active = false;
+                VoidOmen10Active = false;
+                VoidOmen15Active = false;
+                VoidOmen16Active = false;
 
-                for (int i = 1; i < difficulty + 1; i++)
+                int[] rolledVoidOmens = CheckFordVoidOmensInPlay(level);
+
+                if (rolledVoidOmens.Contains(3))
                 {
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 3)
-                    {
-                        VoidOmen3Active = true;
-                    }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 7)
-                    {
-                        VoidOmen7Active = true;
-                    }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 10)
-                    {
-                        VoidOmen10Active = true;
-                    }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 15)
-                    {
-                        VoidOmen15Active = true;
-                    }
-                    if (level.EventSystem.GetVariable(voidOmen + i) == 16)
-                    {
-                        VoidOmen16Active = true;
-                    }
+                    VoidOmen3Active = true;
                 }
+                if (rolledVoidOmens.Contains(7))
+                {
+                    VoidOmen7Active = true;
+                }
+                if (rolledVoidOmens.Contains(10))
+                {
+                    VoidOmen10Active = true;
+                }
+                if (rolledVoidOmens.Contains(15))
+                {
+                    VoidOmen15Active = true;
+                }
+                if (rolledVoidOmens.Contains(16))
+                {
+                    VoidOmen16Active = true;
+                }
+
             }
             catch (Exception e)
             {
                 Logger.Error(e);
             }
-        }  
+        }
 
         public static int[] CheckForAlreadyRolledVoidOmens(GeoLevelController geoLevelController)
         {
             try
             {
                 int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
+                int[] allVoidOmensAlreadyRolled = new int[20];
                 string triggeredVoidOmens = "TriggeredVoidOmen_";
-                string voidOmen = "VoidOmen_";
-
-                int[] allTheDarkEventsAlreadyRolled = new int[19];
-                // And an array to record which variables hold which Dark Events
-                int[] allTheDarkEventsVariables = new int[difficulty];
 
                 for (int x = 1; x < 20; x++)
                 {
                     if (geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) != 0)
                     {
-                        allTheDarkEventsAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x);
-                      //  Logger.Always("Check Triggered Void Omens " + allTheDarkEventsAlreadyRolled[x]);
+                        allVoidOmensAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x);
                     }
                 }
-                int countVoidOmensY = 0;
-                int countVoidOmensX = 0;
+                return allVoidOmensAlreadyRolled;
+            }
+
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+            throw new InvalidOperationException();
+        }
+
+
+        public static int[] CheckFordVoidOmensInPlay(GeoLevelController geoLevelController)
+        {
+            try
+            {
+                int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
+                string voidOmen = "VoidOmen_";
+
+                // An array to record all the Void Omens rolled so far
+                int[] allVoidOmensAlreadyRolled = CheckForAlreadyRolledVoidOmens(geoLevelController);
+                // An array to record which variables hold which Void Omens
+                int[] voidOmensInPlay = new int[difficulty];
+
+                // This is a variable to close the loop below when the array of Void Omens in play is full               
                 int variablesUsed = 0;
-                // Then we check our Dark Event variables to see which one has the earliest Dark Event already rolled                                
+
+                // We will check our Void Omen variables to see which one has the earliest Void Omen already rolled                                
                 for (int x = 1; x < 20; x++)
                 {
-                    // We will look through the DarkEvents variables in the order in which they were filled
+                    // We will look through the Void Omen variables in the order in which they were filled
                     for (int y = 0; y < difficulty; y++)
                     {
-                        // And record which variable holds which Dark Event
-                        if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
+                        // And record which variable holds which Void Omen, by checking it against the array of already rolled Void Omens
+                        if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == allVoidOmensAlreadyRolled[x])
                         {
-                            allTheDarkEventsVariables[difficulty - y - 1] = allTheDarkEventsAlreadyRolled[x];
-                         //   Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + allTheDarkEventsVariables[difficulty - y - 1]);
+                            voidOmensInPlay[difficulty - y - 1] = allVoidOmensAlreadyRolled[x];
+                            //  Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + voidOmensInPlay[difficulty - y - 1]);
                             variablesUsed++;
                         }
-                        countVoidOmensY++;
+                        // We also have to record which variables are empty
+                        else if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == 0)
+                        {
+                            voidOmensInPlay[difficulty - y - 1] = 0;
+                            //  Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + voidOmensInPlay[difficulty - y - 1]);
+                            variablesUsed++;
+                        }
                     }
-                  //  Logger.Always("the count of variables used is " + variablesUsed);
+                    //  Logger.Always("the count of variables used is " + variablesUsed);
                     if (variablesUsed == difficulty)
                     {
                         x = 20;
                     }
-                    countVoidOmensX++;
+
                 }
-                return allTheDarkEventsVariables;
+                Logger.Always("The Void Omens already in play are " + voidOmensInPlay[0] + " " + voidOmensInPlay[1] + " " + voidOmensInPlay[2] + " " + voidOmensInPlay[3]);
+                return voidOmensInPlay;
             }
             catch (Exception e)
             {
@@ -579,24 +599,23 @@ namespace PhoenixRising.BetterGeoscape
                 string voidOmen = "VoidOmen_";
 
                 // And an array to record which variables hold which Dark Events
-                int[] allTheDarkEventsVariables = CheckForAlreadyRolledVoidOmens(geoLevelController);
-                Logger.Always("Checking if method invocation is working, these are allTheDarkEventsVariables " + allTheDarkEventsVariables[0] +" "
-                    + allTheDarkEventsVariables[1] + " " + allTheDarkEventsVariables[2] + " " + allTheDarkEventsVariables[3]);
-                
+                int[] voidOmensinPlay = CheckFordVoidOmensInPlay(geoLevelController);
+                Logger.Always("Checking if method invocation is working, these are all the Void Omens in play " + voidOmensinPlay[0] + " "
+                    + voidOmensinPlay[1] + " " + voidOmensinPlay[2] + " " + voidOmensinPlay[3]);
+
                 int replacedVoidOmen = 0;
 
                 for (int x = 1; x < 20; x++)
                 {
-                    
-                    // We check, starting from the earliest, which Dark Event is still in play
-                    if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
+                    // We check, starting from the earliest, which Void Omen is still in play
+                    if (voidOmensinPlay.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
                     {
                         // Then we locate in which Variable it is recorded
                         for (int y = 0; y < difficulty; y++)
                         {
                             // Once we find it, we want to remove it
                             // Added the check to skip empty Void Omen variables, to hopefully make this method work even when list is not full
-                            if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) && allTheDarkEventsVariables[difficulty - y - 1] !=0)
+                            if (voidOmensinPlay[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) && voidOmensinPlay[difficulty - y - 1] != 0)
                             {
                                 Logger.Always("The Void Omen Variable to be replaced is " + voidOmen + (difficulty - y) +
                                    " now holds VO " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));
@@ -605,76 +624,76 @@ namespace PhoenixRising.BetterGeoscape
                                 Logger.Always("The Void Omen Variable " + voidOmen + (difficulty - y) +
                                     " is now " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));
                                 y = difficulty;
-                                x = 20;                                
+                                x = 20;
                             }
                         }
                     }
-                }               
+                }
 
                 if (replacedVoidOmen != 0)
                 {
-                    string objectiveToBeReplaced = (string)CHReworkMain.DarkEvents_Title.GetValue(replacedVoidOmen - 1);
+                    string objectiveToBeReplaced = (string)CHReworkMain.VoidOmens_Title.GetValue(replacedVoidOmen - 1);
                     Logger.Always("The target event that will be replaced is " + objectiveToBeReplaced);
-                    CHReworkMain.RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
+                    CHReworkMain.RemoveVoidOmenObjective(objectiveToBeReplaced, geoLevelController);
                 }
             }
             catch (Exception e)
             {
                 Logger.Error(e);
-            }          
+            }
         }
 
         public static void RemoveAllVoidOmens(GeoLevelController geoLevelController)
         {
-        try
+            try
             {
                 int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
                 string triggeredVoidOmens = "TriggeredVoidOmen_";
                 string voidOmen = "VoidOmen_";
 
                 // And an array to record which variables hold which Dark Events
-                int[] allTheDarkEventsVariables = CheckForAlreadyRolledVoidOmens(geoLevelController);
-                Logger.Always("Checking if method invocation is working, these are allTheDarkEventsVariables " + allTheDarkEventsVariables[0] + " "
-                    + allTheDarkEventsVariables[1] + " " + allTheDarkEventsVariables[2] + " " + allTheDarkEventsVariables[3]);
+                int[] voidOmensinPlay = CheckFordVoidOmensInPlay(geoLevelController);
+                Logger.Always("Checking if method invocation is working, these are all the Void Omens in play " + voidOmensinPlay[0] + " "
+                    + voidOmensinPlay[1] + " " + voidOmensinPlay[2] + " " + voidOmensinPlay[3]);
 
                 int replacedVoidOmen = 0;
 
                 for (int x = 1; x < 20; x++)
                 {
-                    // We check, starting from the earliest, which Dark Event is still in play
-                    if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
+                    // We check, starting from the earliest, which Void Omen is still in play
+                    if (voidOmensinPlay.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
                     {
                         // Then we locate in which Variable it is recorded
                         for (int y = 0; y < difficulty; y++)
                         {
                             // Once we find it, we want to remove it
-                            if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
+                            if (voidOmensinPlay[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
                             {
                                 Logger.Always("The Void Omen Variable to be replaced is " + voidOmen + (difficulty - y) +
                                    " now holds VO " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));
                                 replacedVoidOmen = geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y));
                                 geoLevelController.EventSystem.SetVariable(voidOmen + (difficulty - y), 0);
                                 Logger.Always("The Void Omen Variable " + voidOmen + (difficulty - y) +
-                                    " is now " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));                                
+                                    " is now " + geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)));
                             }
                         }
                     }
                     if (replacedVoidOmen != 0)
                     {
-                        string objectiveToBeReplaced = (string)CHReworkMain.DarkEvents_Title.GetValue(replacedVoidOmen - 1);
+                        string objectiveToBeReplaced = (string)CHReworkMain.VoidOmens_Title.GetValue(replacedVoidOmen - 1);
                         Logger.Always("The target event that will be replaced is " + objectiveToBeReplaced);
-                        CHReworkMain.RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
+                        CHReworkMain.RemoveVoidOmenObjective(objectiveToBeReplaced, geoLevelController);
                     }
                 }
             }
-         catch (Exception e)
+            catch (Exception e)
             {
                 Logger.Error(e);
             }
 
         }
 
-        public static void SetUmbraRandomValue(float value) 
+        public static void SetUmbraRandomValue(float value)
         {
             try
             {
@@ -692,7 +711,7 @@ namespace PhoenixRising.BetterGeoscape
 
         }
 
-        
+
 
     }
 }

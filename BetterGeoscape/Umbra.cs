@@ -24,6 +24,7 @@ namespace PhoenixRising.BetterGeoscape
 
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
         public static string variableUmbraALNResReq = "Umbra_Encounter_Variable";
+        public static bool UmbraResearched = false;
 
         public static void ChangeUmbra()
 
@@ -138,91 +139,118 @@ namespace PhoenixRising.BetterGeoscape
 
                 try
                 {
-                    if (!VoidOmens.VoidOmen16Active)
+                    if (UmbraResearched)
                     {
-                        ClassTagDef crabTag = Repo.GetAllDefs<ClassTagDef>().FirstOrDefault
-                       (ged => ged.name.Equals("Crabman_ClassTagDef"));
-                        ClassTagDef fishTag = Repo.GetAllDefs<ClassTagDef>().FirstOrDefault
-                       (ged => ged.name.Equals("Fishman_ClassTagDef"));
 
-                        if (prevFaction.IsControlledByPlayer)
+                        if (!VoidOmens.VoidOmen16Active)
                         {
-                            totalCharactersWithDelirium = 0;
-                            totalDeliriumOnMission = 0;
+                            ClassTagDef crabTag = Repo.GetAllDefs<ClassTagDef>().FirstOrDefault
+                           (ged => ged.name.Equals("Crabman_ClassTagDef"));
+                            ClassTagDef fishTag = Repo.GetAllDefs<ClassTagDef>().FirstOrDefault
+                           (ged => ged.name.Equals("Fishman_ClassTagDef"));
 
-                            foreach (TacticalActor actor in nextFaction.TacticalActors)
+                            if (prevFaction.IsControlledByPlayer)
                             {
-                                if (actor.CharacterStats.Corruption.Value > 0)
-                                {
-                                    totalCharactersWithDelirium++;
-                                    totalDeliriumOnMission += (int)actor.CharacterStats.Corruption.Value.BaseValue;
-
-                                }
-                            }
-                        }
-                        Logger.Always("Total Delirium on mission is " + totalDeliriumOnMission);
-                        Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
-                        if (!prevFaction.IsControlledByPlayer)
-                        {
-                            Logger.Always("The prevFaction is " + prevFaction.Faction.FactionDef.name);
-                            Logger.Always("Total Delirium on mission is " + totalDeliriumOnMission);
-                            Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
-                            if (totalDeliriumOnMission >= 10 || totalCharactersWithDelirium >= 5)
-                            {
-
-                                DeathBelcherAbilityDef oilcrabDeathBelcherAbility =
-                               Repo.GetAllDefs<DeathBelcherAbilityDef>().FirstOrDefault
-                               (ged => ged.name.Equals("Oilcrab_Die_DeathBelcher_AbilityDef"));
-
-                                DeathBelcherAbilityDef oilfishDeathBelcherAbility =
-                               Repo.GetAllDefs<DeathBelcherAbilityDef>().FirstOrDefault
-                               (ged => ged.name.Equals("Oilfish_Die_DeathBelcher_AbilityDef"));
+                                totalCharactersWithDelirium = 0;
+                                totalDeliriumOnMission = 0;
 
                                 foreach (TacticalActor actor in nextFaction.TacticalActors)
                                 {
-                                    Logger.Always("The next faction is " + nextFaction.Faction.FactionDef.name);
-                                    Logger.Always("The actor is " + actor.name);
-                                    if (actor.GameTags.Contains(crabTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilcrabDeathBelcherAbility) == null
-                                        && !actor.name.Contains("Oilcrab"))
-
+                                    if (actor.CharacterStats.Corruption.Value > 0)
                                     {
-                                        int roll = UnityEngine.Random.Range(0, 100);
-                                        if (VoidOmens.VoidOmen15Active && roll >= 68)
-                                        {
-                                            Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
-                                            AddArthronUmbraDeathBelcherAbility(actor);
-                                        }
-                                        else if (!VoidOmens.VoidOmen15Active && roll >= 84)
-                                        {
-                                            Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
-                                            AddArthronUmbraDeathBelcherAbility(actor);
-                                        }
+                                        totalCharactersWithDelirium++;
+                                        totalDeliriumOnMission += (int)actor.CharacterStats.Corruption.Value.BaseValue;
 
                                     }
-                                    if (actor.GameTags.Contains(fishTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilfishDeathBelcherAbility) == null
-                                        && !actor.name.Contains("Oilfish"))
+                                }
+                            }
+                            Logger.Always("Total Delirium on mission is " + totalDeliriumOnMission);
+                            Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
+                            if (!prevFaction.IsControlledByPlayer)
+                            {
+                                Logger.Always("The prevFaction is " + prevFaction.Faction.FactionDef.name);
+                                Logger.Always("Total Delirium on mission is " + totalDeliriumOnMission);
+                                Logger.Always("Number of characters with Delirium is " + totalCharactersWithDelirium);
+                                if (totalDeliriumOnMission >= 20 || totalCharactersWithDelirium >= 6)
+                                {
+
+                                    DeathBelcherAbilityDef oilcrabDeathBelcherAbility =
+                                   Repo.GetAllDefs<DeathBelcherAbilityDef>().FirstOrDefault
+                                   (ged => ged.name.Equals("Oilcrab_Die_DeathBelcher_AbilityDef"));
+
+                                    DeathBelcherAbilityDef oilfishDeathBelcherAbility =
+                                   Repo.GetAllDefs<DeathBelcherAbilityDef>().FirstOrDefault
+                                   (ged => ged.name.Equals("Oilfish_Die_DeathBelcher_AbilityDef"));
+
+                                    foreach (TacticalActor actor in nextFaction.TacticalActors)
                                     {
-                                        int roll = UnityEngine.Random.Range(0, 100);
-                                        if (VoidOmens.VoidOmen15Active && roll >= 68)
+                                        Logger.Always("The next faction is " + nextFaction.Faction.FactionDef.name);
+                                        Logger.Always("The actor is " + actor.name);
+                                        if (actor.GameTags.Contains(crabTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilcrabDeathBelcherAbility) == null
+                                            && !actor.name.Contains("Oilcrab"))
+
                                         {
-                                            Logger.Always("This Triton here " + actor + ", got past the crabtag and the blecher ability check!");
-                                            AddTritonUmbraDeathBelcherAbility(actor);
+                                            int roll = UnityEngine.Random.Range(0, 100);
+                                            if (VoidOmens.VoidOmen15Active && roll >= 68)
+                                            {
+                                                Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
+                                                AddArthronUmbraDeathBelcherAbility(actor);
+                                            }
+                                            else if (!VoidOmens.VoidOmen15Active && roll >= 84)
+                                            {
+                                                Logger.Always("This Arthron here " + actor + ", got past the crabtag and the blecher ability check!");
+                                                AddArthronUmbraDeathBelcherAbility(actor);
+                                            }
+
                                         }
-                                        else if (!VoidOmens.VoidOmen15Active && roll >= 84)
+                                        if (actor.GameTags.Contains(fishTag) && actor.GetAbilityWithDef<DeathBelcherAbility>(oilfishDeathBelcherAbility) == null
+                                            && !actor.name.Contains("Oilfish"))
                                         {
-                                            Logger.Always("This Triton here " + actor + ", got past the crabtag and the blecher ability check!");
-                                            AddTritonUmbraDeathBelcherAbility(actor);
+                                            int roll = UnityEngine.Random.Range(0, 100);
+                                            if (VoidOmens.VoidOmen15Active && roll >= 68)
+                                            {
+                                                Logger.Always("This Triton here " + actor + ", got past the crabtag and the blecher ability check!");
+                                                AddTritonUmbraDeathBelcherAbility(actor);
+                                            }
+                                            else if (!VoidOmens.VoidOmen15Active && roll >= 84)
+                                            {
+                                                Logger.Always("This Triton here " + actor + ", got past the crabtag and the blecher ability check!");
+                                                AddTritonUmbraDeathBelcherAbility(actor);
+                                            }
                                         }
                                     }
                                 }
                             }
                         }
+                        else
+                        {
+                            RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
+                            FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
+                            Logger.Always("The randon Crab Umbra value is " + randomValueCrabUmbra.ThresholdValue);
+                        }
                     }
-                    else
+                }
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+            }
+        }
+        
+        [HarmonyPatch(typeof(Research), "CompleteResearch")]
+        public static class Research_NewTurnEvent_CalculateDelirium_Patch
+        {
+            public static void Postfix(ResearchElement research) 
+            { 
+                try
+                {
+                  //  Logger.Always("Research patch invoked, research is " + research.ResearchID);
+
+                    if (research.ResearchID == "ALN_CrabmanUmbra_ResearchDef") 
                     {
-                        RandomValueEffectConditionDef randomValueCrabUmbra = Repo.GetAllDefs<RandomValueEffectConditionDef>().
-                        FirstOrDefault(ged => ged.name.Equals("E_RandomValue [UmbralCrabmen_FactionEffectDef]"));
-                        Logger.Always("The randon Crab Umbra value is " + randomValueCrabUmbra.ThresholdValue);
+                        research.Faction.GeoLevel.EventSystem.SetVariable("UmbraResearched", 1);
+                        Logger.Always("Umbra Researched variable is set to " + research.Faction.GeoLevel.EventSystem.GetVariable("UmbraResearched"));
+                    
                     }
 
                 }
@@ -230,6 +258,23 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Error(e);
                 }
+            }
+        }
+
+
+        public static void CheckForUmbraResearch(GeoLevelController level)
+        {
+            try
+            {
+                if (level.EventSystem.GetVariable("UmbraResearched") == 1 ) 
+                {
+                    UmbraResearched = true;
+
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
             }
         }
 

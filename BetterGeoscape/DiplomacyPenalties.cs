@@ -64,48 +64,45 @@ namespace PhoenixRising.BetterGeoscape
 
 
                 //Increase diplo penalties in 25, 50 and 75 diplo missions
-                GeoscapeEventDef ProgAnuSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN2_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgNJSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ1_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynSupportivePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY1_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynSupportiveTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY1_WIN2_GeoscapeEventDef"));
-                GeoscapeEventDef ProgAnuPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN4_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgNJPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ2__WIN_GeoscapeEventDef"));
+                GeoscapeEventDef ProgAnuSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN2_GeoscapeEventDef"));
+                GeoscapeEventDef ProgNJSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ1_GeoscapeEventDef"));
+                GeoscapeEventDef ProgSynSupportive = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY1_GeoscapeEventDef"));
+
+                GeoscapeEventDef ProgAnuPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN4_GeoscapeEventDef"));
+                GeoscapeEventDef ProgNJPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ2_GeoscapeEventDef"));
                 GeoscapeEventDef ProgSynPact = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgAnuAlliance1 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgAnuAlliance2 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_WIN2_GeoscapeEventDef"));
-                GeoscapeEventDef ProgNJAlliance = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ3_WIN_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynAllianceTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN1_GeoscapeEventDef"));
-                GeoscapeEventDef ProgSynAlliancePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_WIN2_GeoscapeEventDef"));
+                
+                
+                GeoscapeEventDef ProgAnuAlliance = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_AN6_GeoscapeEventDef"));
+                GeoscapeEventDef ProgNJAlliance = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_NJ3_GeoscapeEventDef"));
+                GeoscapeEventDef ProgSynAllianceTerra = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_T_GeoscapeEventDef"));
+                GeoscapeEventDef ProgSynAlliancePoly = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY4_P_GeoscapeEventDef"));
 
                 //Anu
                 ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
                 ProgAnuSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -10)); 
                 ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -15));
                 ProgAnuPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
-                ProgAnuAlliance1.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
-                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -20));
-                ProgAnuAlliance2.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -15));
+                ProgAnuAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
+                ProgAnuAlliance.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -20));
+                ProgAnuAlliance.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -15));
                 
                 //Synedrion
                 //Supportive Polyphonic
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Polyphonic",1,false));
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -5));
-                ProgSynSupportivePoly.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -10));
+                ProgSynSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
+                ProgSynSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -5));
+                                               
                 //Supportive Terra
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15));
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Terraformers",1,false));
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -5));
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -10));
-                ProgSynSupportiveTerra.GeoscapeEventData.Choices[1].Outcome.VariablesChange.Add(CommonMethods.GenerateVariableChange("Polyphonic", 1, false));
+                ProgSynSupportive.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15));
+                ProgSynSupportive.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -5));
+                
                 //Aligned
                 ProgSynPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -18));
                 ProgSynPact.GeoscapeEventData.Choices[1].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -18));
                 ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15));
                 ProgSynPact.GeoscapeEventData.Choices[2].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
                 //Aliance Polyphonic             
-                OutcomeDiplomacyChange outcomeAlliancePolyphonic = ProgSynAlliancePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
-                outcomeAlliancePolyphonic.Value=-20;
+                ProgSynAlliancePoly.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -8));
                 //Alliance Terra
                 ProgSynAllianceTerra.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -20));
 
@@ -113,10 +110,9 @@ namespace PhoenixRising.BetterGeoscape
                 ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -10)); 
                 ProgNJSupportive.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -10));
                 ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -15)); 
-                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(NewJericho, PhoenixPoint, -15));
-                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -20)); 
-                OutcomeDiplomacyChange outcomeDiplomacyChange = ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy[1];
-                outcomeDiplomacyChange.Value = -20;
+                ProgNJPact.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -15));
+                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Anu, PhoenixPoint, -20));
+                ProgNJAlliance.GeoscapeEventData.Choices[0].Outcome.Diplomacy.Add(CommonMethods.GenerateDiplomacyOutcome(Synedrion, PhoenixPoint, -20));
 
                 //Change Reward introductory mission Synedrion
                 GeoscapeEventDef ProgSynIntroWin = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("PROG_SY0_WIN_GeoscapeEventDef"));

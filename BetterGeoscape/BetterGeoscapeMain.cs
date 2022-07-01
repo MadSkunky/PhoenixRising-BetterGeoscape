@@ -41,6 +41,8 @@ namespace PhoenixRising.BetterGeoscape
 
             AirCombat.ModifyAirCombatDefs();
 
+            Umbra.ChangeUmbra();
+
             if (Config.ActivateReverseEngineeringResearch) 
             { 
             ReverseEgineeringResearch.Apply_Changes();

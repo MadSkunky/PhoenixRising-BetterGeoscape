@@ -45,7 +45,7 @@ namespace PhoenixRising.BetterGeoscape
 
 
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
-
+     
         public static void Apply_Changes()
         {
 
@@ -178,9 +178,7 @@ namespace PhoenixRising.BetterGeoscape
                 GeoscapeEventDef sdi10 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_10_GeoscapeEventDef"));
                 sdi10.GeoscapeEventData.Choices[0].Outcome.OutcomeText.General.LocalizationKey = "SDI10_OUTCOME";
                 GeoscapeEventDef sdi20 = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals("SDI_20_GeoscapeEventDef"));
-                sdi20.GeoscapeEventData.Choices[0].Outcome.GameOverVictoryFaction = null;
-
-
+                sdi20.GeoscapeEventData.Choices[0].Outcome.GameOverVictoryFaction = null;             
             }
 
             catch (Exception e)
@@ -189,9 +187,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        //  public static string darkEventDescription;
-        //  public static string darkEventTitle;
-
+       
         // Current and last ODI level
         public static int CurrentODI_Level = 0;
         // All SDI (ODI) event IDs, levels as array, index 0 - 19
@@ -219,20 +215,20 @@ namespace PhoenixRising.BetterGeoscape
     "SDI_20"
         };
 
-        public static readonly string[] DarkEvents_Title = new string[]
+        public static readonly string[] VoidOmens_Title = new string[]
         {
-        "DARK_EVENT_TITLE_01","DARK_EVENT_TITLE_02","DARK_EVENT_TITLE_03","DARK_EVENT_TITLE_04","DARK_EVENT_TITLE_05","DARK_EVENT_TITLE_06",
-        "DARK_EVENT_TITLE_07","DARK_EVENT_TITLE_08","DARK_EVENT_TITLE_09","DARK_EVENT_TITLE_10","DARK_EVENT_TITLE_11","DARK_EVENT_TITLE_12",
-        "DARK_EVENT_TITLE_13","DARK_EVENT_TITLE_14","DARK_EVENT_TITLE_15","DARK_EVENT_TITLE_16","DARK_EVENT_TITLE_17","DARK_EVENT_TITLE_18",
-        "DARK_EVENT_TITLE_19","DARK_EVENT_TITLE_20",
+        "VOID_OMEN_TITLE_01","VOID_OMEN_TITLE_02","VOID_OMEN_TITLE_03","VOID_OMEN_TITLE_04","VOID_OMEN_TITLE_05","VOID_OMEN_TITLE_06",
+        "VOID_OMEN_TITLE_07","VOID_OMEN_TITLE_08","VOID_OMEN_TITLE_09","VOID_OMEN_TITLE_10","VOID_OMEN_TITLE_11","VOID_OMEN_TITLE_12",
+        "VOID_OMEN_TITLE_13","VOID_OMEN_TITLE_14","VOID_OMEN_TITLE_15","VOID_OMEN_TITLE_16","VOID_OMEN_TITLE_17","VOID_OMEN_TITLE_18",
+        "VOID_OMEN_TITLE_19","VOID_OMEN_TITLE_20",
         };
-        public static readonly string[] DarkEvents_Description = new string[]
+        public static readonly string[] VoidOmens_Description = new string[]
         {
-        "DARK_EVENT_DESCRIPTION_TEXT_01","DARK_EVENT_DESCRIPTION_TEXT_02","DARK_EVENT_DESCRIPTION_TEXT_03","DARK_EVENT_DESCRIPTION_TEXT_04",
-        "DARK_EVENT_DESCRIPTION_TEXT_05","DARK_EVENT_DESCRIPTION_TEXT_06","DARK_EVENT_DESCRIPTION_TEXT_07","DARK_EVENT_DESCRIPTION_TEXT_08",
-        "DARK_EVENT_DESCRIPTION_TEXT_09","DARK_EVENT_DESCRIPTION_TEXT_10","DARK_EVENT_DESCRIPTION_TEXT_11","DARK_EVENT_DESCRIPTION_TEXT_12",
-        "DARK_EVENT_DESCRIPTION_TEXT_13","DARK_EVENT_DESCRIPTION_TEXT_14","DARK_EVENT_DESCRIPTION_TEXT_15","DARK_EVENT_DESCRIPTION_TEXT_16",
-        "DARK_EVENT_DESCRIPTION_TEXT_17","DARK_EVENT_DESCRIPTION_TEXT_18","DARK_EVENT_DESCRIPTION_TEXT_19","DARK_EVENT_DESCRIPTION_TEXT_20",
+        "VOID_OMEN_DESCRIPTION_TEXT_01","VOID_OMEN_DESCRIPTION_TEXT_02","VOID_OMEN_DESCRIPTION_TEXT_03","VOID_OMEN_DESCRIPTION_TEXT_04",
+        "VOID_OMEN_DESCRIPTION_TEXT_05","VOID_OMEN_DESCRIPTION_TEXT_06","VOID_OMEN_DESCRIPTION_TEXT_07","VOID_OMEN_DESCRIPTION_TEXT_08",
+        "VOID_OMEN_DESCRIPTION_TEXT_09","VOID_OMEN_DESCRIPTION_TEXT_10","VOID_OMEN_DESCRIPTION_TEXT_11","VOID_OMEN_DESCRIPTION_TEXT_12",
+        "VOID_OMEN_DESCRIPTION_TEXT_13","VOID_OMEN_DESCRIPTION_TEXT_14","VOID_OMEN_DESCRIPTION_TEXT_15","VOID_OMEN_DESCRIPTION_TEXT_16",
+        "VOID_OMEN_DESCRIPTION_TEXT_17","VOID_OMEN_DESCRIPTION_TEXT_18","VOID_OMEN_DESCRIPTION_TEXT_19","VOID_OMEN_DESCRIPTION_TEXT_20",
         };
 
 
@@ -275,14 +271,12 @@ namespace PhoenixRising.BetterGeoscape
                     GeoscapeEventContext geoscapeEventContext = new GeoscapeEventContext(geoAlienFaction, geoLevelController.ViewerFaction);
                     GeoscapeEventDef oDIEventToTrigger = geoLevelController.EventSystem.GetEventByID(ODI_EventIDs[CurrentODI_Level]);
 
-                    // Dark Events roll
-                    // Before the roll, Dark Event has not been rolled
-                    bool darkEventRolled = false;
-                    int darkEventRoll = 0;
-                    // We want this in case a Dark Event is taken out of play (because replaced by another)
-                    int darkEventReplaced = 0;
+                    // Void Omens roll
+                    // Before the roll, Void Omen has not been rolled
+                    bool voidOmenRolled = false;
+                    int voidOmenRoll = 0;
                     // Create variable reflecting difficulty level, 1 being the easiest, and 4 the hardest
-                    // This will determine amount of possible simultaneous dark events
+                    // This will determine amount of possible simultaneous Void Omens
                     int difficulty = geoLevelController.CurrentDifficultyLevel.Order;
                     string triggeredVoidOmens = "TriggeredVoidOmen_";
                     string voidOmen = "VoidOmen_";
@@ -300,202 +294,101 @@ namespace PhoenixRising.BetterGeoscape
                         if (roll >= 2 && roll <= 10)
                         {
 
-                            // If a Dark Event rolls
-                            // Create list of dark events currently implemented
-                            List<int> darkEvents = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14, 17 };
+                            // If a Void Omen rolls
+                            // Create list of Void Omens currently implemented
+                            List<int> voidOmensList = new List<int> { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 13, 14};
+                            Logger.Always("The Void Omens initially available for the roll are " + voidOmensList.Count());
                             if (geoAlienFaction.Research.HasCompleted("ALN_CrabmanUmbra_ResearchDef"))
                             {
-                                darkEvents.Add(15);
-                                darkEvents.Add(16);
-                                Logger.Always("The list of Void Omens is now " + darkEvents.Count + " long");
+                                voidOmensList.Add(15);
+                                voidOmensList.Add(16);
+                                Logger.Always("The list of Void Omens is now " + voidOmensList.Count() + " long");
                             }
                             if (geoAlienFaction.GeoLevel.EventSystem.GetVariable("BehemothEggHatched") == 1)
                             {
-                                darkEvents.Add(11);
-                                Logger.Always("The list of Void Omens is now " + darkEvents.Count + " long");
+                                voidOmensList.Add(11);
+                                Logger.Always("The list of Void Omens is now " + voidOmensList.Count() + " long");
                             }
-                            // Array to track how many Dark Events have already appeared (will get filled up later)
-                            int[] alreadyRolledDarkEvents = new int[19];
-                            int countI = 0;
-                            // This is the Voland loop, the loop you do when you don't know any better
-                            // The loop will try a 100 times if necessary to get a valid random dark event (one that has not been in play before)                                                 
-                            for (int i = 0; i < 100; i++)
+                            if (geoAlienFaction.GeoLevel.EventSystem.GetVariable("Infestation_Encounter_Variable") == 1)
                             {
+                                voidOmensList.Add(17);
+                                Logger.Always("The list of Void Omens is now " + voidOmensList.Count() + " long");
+                            }
 
-                                // Get a random dark event from the Dark Events list
-                                darkEventRoll = darkEvents.GetRandomElement();
-                                countI++;
-                                // Check if this event has already appeared 
-                                for (int j = 1; j < 19; j++)
+                            // Check for already rolled Void Omens
+                            int[] allVoidOmensAlreadyRolled = VoidOmens.CheckForAlreadyRolledVoidOmens(geoLevelController);
+                            //Remove already rolled Void Omens from the list of available Void Omens
+                            for (int i = 1; i < allVoidOmensAlreadyRolled.Length; i++)
+                            {
+                                if (voidOmensList.Contains(allVoidOmensAlreadyRolled[i]) && allVoidOmensAlreadyRolled[i] != 0)
                                 {
-                                    // There are 19 variables documenting what ODI event accompanied which Dark Event, the "TriggeredVoidOmens[1-19]"
-                                    // If the dark event chosen at random has been triggered before, it will be added to the alreadyRolledDarkEvents array
-                                    if (geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + j) == darkEventRoll)
-                                    {
-                                        alreadyRolledDarkEvents[j] = darkEventRoll;
-                                    }
+                                    voidOmensList.Remove(allVoidOmensAlreadyRolled[i]);
                                 }
-                                Logger.Always("The Void Omen rolled is_" + darkEventRoll);
-                                // If the randomly chosen Dark Event has not appeared yet, make it happen!     
-                                if (!alreadyRolledDarkEvents.Contains(darkEventRoll))
+                            }
+                            Logger.Always("The Void Omens already rolled are " + allVoidOmensAlreadyRolled);
+                            Logger.Always("The Void Omens available for the roll after the crib are " + voidOmensList);
+
+                            // Get a random dark event from the available Void Omens list
+                            voidOmenRoll = voidOmensList.GetRandomElement();
+                            Logger.Always("The Void Omen rolled is " + voidOmenRoll);
+
+                            // We can have as many simulateneous Void Omens in play as the mathematical expression of the difficulty level
+                            // Lets check how many Void Omens are already in play and if there is space for more
+                            int[] voidOmensInPlay = VoidOmens.CheckFordVoidOmensInPlay(geoLevelController);
+                            Logger.Always("The Void Omens currently in play are " + voidOmensInPlay);
+                            //If there is no space, we have to remove the earliest one
+                            if (!voidOmensInPlay.Contains(0))
+                            {
+                                VoidOmens.RemoveEarliestVoidOmen(geoLevelController);
+                            }
+                            //Then let's find a spot for the new Void Omen
+                            for (int t = 0; t < difficulty; t++)
+                            {
+                                // There will be as many Void Omen variables (each storing an active Void Omen) as the ME of the difficulty level
+                                // The first empty Dark Event variable will receive the new Void Omen
+                                if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - t)) == 0)
                                 {
-                                    // We can have as many simulateneous Dark Events in play as the mathematical expression of the difficulty level
-                                    for (int t = 0; t < difficulty; t++)
+                                    // This is the regular code to modify a Def, in this case the ODI event to which the Void Omen will be attached,
+                                    // so that it sets the Void Omen variable
+                                    oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
                                     {
-                                        // There will be as many Dark Event variables (each storing an active Dark Event) as the ME of the difficulty level
-                                        // The first empty Dark Event variable will receive the new Dark Event
-                                        if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - t)) == 0)
-                                        {
-                                            // This is the regular code to modify a Def, in this case the ODI event to which the Dark Event will be attached,
-                                            // so that it sets the Dark Event variable
-                                            oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
-                                            {
-                                                VariableName = voidOmen + (difficulty - t),
-                                                Value = { Min = darkEventRoll, Max = darkEventRoll },
-                                                IsSetOperation = true,
-                                            });
-                                            // This records which ODI event triggered which Dark Event
-                                            geoLevelController.EventSystem.SetVariable(triggeredVoidOmens + CurrentODI_Level, darkEventRoll);
-                                            // Raise the flag, we have a Dark Event!
-                                            darkEventRolled = true;
-                                            // Then close both loops:
-                                            t = 4;
-                                            i = 100;
-                                        }
-                                    }
-                                    // If we managed to roll a Dark Event, because we found a dark event not in use and we found a variable to log it in,
-                                    // the Voland loop ends here
-                                    if (darkEventRolled)
-                                    {
-
-                                    }
-                                    // But if all the Dark Event variables are already in use, we have to find the earliest TriggeredDarkEvent still in play
-                                    // to replace it with the new darkevent
-
-                                    else if (darkEventRolled == false)
-                                    {
-                                        Logger.Always("The i loop was done " + countI + " times");
-                                        // So we create a new array and a new loop to record all the Dark Events already rolled.
-                                        int[] allTheDarkEventsAlreadyRolled = new int[19];
-                                        // And an array to record which variables hold which Dark Events
-                                        int[] allTheDarkEventsVariables = new int[difficulty];
-
-                                        for (int x = 1; x < 20; x++)
-                                        {
-                                            if (geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x) != 0)
-                                            {
-                                                allTheDarkEventsAlreadyRolled[x] = geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x);
-                                                Logger.Always("Check Triggered Void Omens " + allTheDarkEventsAlreadyRolled[x]);
-                                            }
-                                        }
-                                        int countVoidOmensY = 0;
-                                        int countVoidOmensX = 0;
-                                        int variablesUsed = 0;
-                                        // Then we check our Dark Event variables to see which one has the earliest Dark Event already rolled                                
-                                        for (int x = 1; x < 20; x++)
-                                        {
-
-                                            // We will look through the DarkEvents variables in the order in which they were filled
-                                            for (int y = 0; y < difficulty; y++)
-                                            {
-
-                                                // And record which variable holds which Dark Event
-                                                if (geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - y)) == allTheDarkEventsAlreadyRolled[x])
-                                                {
-                                                    allTheDarkEventsVariables[difficulty - y - 1] = allTheDarkEventsAlreadyRolled[x];
-                                                    Logger.Always("Check Variable " + (difficulty - y) + " holding Void Omen " + allTheDarkEventsVariables[difficulty - y - 1]);
-                                                    variablesUsed++;
-                                                }
-
-                                                countVoidOmensY++;
-                                            }
-                                            Logger.Always("the count of variables used is " + variablesUsed);
-                                            if (variablesUsed == difficulty)
-                                            {
-                                                x = 20;
-                                            }
-                                            countVoidOmensX++;
-                                        }
-                                        Logger.Always("The y loop was done " + countVoidOmensY);
-                                        Logger.Always("The x loop was done " + countVoidOmensX);
-                                        // Then we try to find in the array of the Dark Variables which one appeared the earliest
-                                        int xCounter = 0;
-                                        for (int x = 1; x < 20; x++)
-                                        {
-                                            xCounter++;
-                                            // We check, starting from the earliest, which Dark Event is still in play
-                                            if (allTheDarkEventsVariables.Contains(geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x)))
-                                            {
-                                                // Then we locate in which Variable it is recorded
-                                                for (int y = 0; y < difficulty; y++)
-                                                {
-                                                    // Once we find it, that's where we want to put our new Dark Event
-                                                    if (allTheDarkEventsVariables[difficulty - y - 1] == geoLevelController.EventSystem.GetVariable(triggeredVoidOmens + x))
-                                                    {
-                                                        darkEventReplaced = allTheDarkEventsVariables[difficulty - y - 1];
-                                                        Logger.Always("The Void Omen that will be replaced is " + darkEventReplaced);
-                                                        oDIEventToTrigger.GeoscapeEventData.Choices[0].Outcome.VariablesChange.Add(new OutcomeVariableChange
-                                                        {
-                                                            VariableName = voidOmen + (difficulty - y),
-                                                            Value = { Min = darkEventRoll, Max = darkEventRoll },
-                                                            IsSetOperation = true,
-                                                        });
-                                                        Logger.Always("The Void Omen Variable we are using is " + voidOmen + (difficulty - y));
-                                                        geoLevelController.EventSystem.SetVariable(triggeredVoidOmens + CurrentODI_Level, darkEventRoll);
-                                                        // And the flag is raised here too!
-                                                        darkEventRolled = true;
-                                                        Logger.Always("Void Omen rolled " + darkEventRolled);
-                                                        // Close the loops when you leave!
-                                                        y = 5;
-                                                        x = 20;
-                                                        i = 100;
-                                                        Logger.Always("Everything working in this method");
-                                                        Logger.Always("This x loop was done " + xCounter + " times");
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }
+                                        VariableName = voidOmen + (difficulty - t),
+                                        Value = { Min = voidOmenRoll, Max = voidOmenRoll },
+                                        IsSetOperation = true,
+                                    });
+                                    // This records which ODI event triggered which Void Omen
+                                    geoLevelController.EventSystem.SetVariable(triggeredVoidOmens + CurrentODI_Level, voidOmenRoll);
+                                    // Raise the flag, we have a Void Omen!
+                                    voidOmenRolled = true;
+                                    // Then close the loop:
+                                    t = 4;
                                 }
                             }
                         }
                     }
+
                     // The ODI event is triggered
                     geoLevelController.EventSystem.TriggerGeoscapeEvent(ODI_EventIDs[CurrentODI_Level], geoscapeEventContext);
                     geoLevelController.EventSystem.SetVariable("BC_SDI", CurrentODI_Level);
                     //UpdateODITracker(CurrentODI_Level, geoLevelController); not used currently, because clogs the UI
-                    // And if a Dark Event has been rolled, a Dark Event will appear
-                    if (darkEventRolled && geoLevelController.EventSystem.GetVariable(voidOmen + difficulty) == darkEventRoll && geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - 1)) == 0)
+                    // And if a Void Omen has been rolled, a Void Omen will appear
+                    if (voidOmenRolled && geoLevelController.EventSystem.GetVariable(voidOmen + difficulty) == voidOmenRoll && geoLevelController.EventSystem.GetVariable(voidOmen + (difficulty - 1)) == 0)
                     {
                         GeoscapeEventDef voidOmenIntro = geoLevelController.EventSystem.GetEventByID("VoidOmen");
                         voidOmenIntro.GeoscapeEventData.Title.LocalizationKey = "VOID_OMEN_INTRO_TITLE";
                         voidOmenIntro.GeoscapeEventData.Description[0].General.LocalizationKey = "VOID_OMEN_INTRO";
-                        if (darkEventRoll == 1 || darkEventRoll == 13 || darkEventRoll == 8)
-                        {
-
-                        }
-                        geoLevelController.EventSystem.TriggerGeoscapeEvent("VoidOmen", geoscapeEventContext);
+                        geoLevelController.EventSystem.TriggerGeoscapeEvent("VoidOmenIntro", geoscapeEventContext);
                     }
-
-                    if (darkEventRolled)
+                    // This adds the Void Omen to the objective list, for now still called Dark Events in the code because don't want to mess with existing savegames
+                    if (voidOmenRolled)
                     {
-                        string title = (string)DarkEvents_Title.GetValue(darkEventRoll - 1);
-                        string description = (string)DarkEvents_Description.GetValue(darkEventRoll - 1);
-                        GeoscapeEventDef darkEvent = geoLevelController.EventSystem.GetEventByID("DarkEvent");
-                        darkEvent.GeoscapeEventData.Title.LocalizationKey = title;
-                        darkEvent.GeoscapeEventData.Description[0].General.LocalizationKey = description;
-                        geoLevelController.EventSystem.TriggerGeoscapeEvent("DarkEvent", geoscapeEventContext);
-                        CreateDarkEventObjective(title, description, geoLevelController);
-
-                        if (darkEventReplaced != 0)
-                        {
-                            Logger.Always((string)DarkEvents_Title.GetValue(1));
-                            Logger.Always((string)DarkEvents_Title.GetValue(0));
-                            string objectiveToBeReplaced = (string)DarkEvents_Title.GetValue(darkEventReplaced - 1);
-                            Logger.Always("The target event that will be replaced is " + objectiveToBeReplaced);
-                            RemoveDarkEventObjective(objectiveToBeReplaced, geoLevelController);
-                            darkEventReplaced = 0;
-                        }
+                        string title = (string)VoidOmens_Title.GetValue(voidOmenRoll - 1);
+                        string description = (string)VoidOmens_Description.GetValue(voidOmenRoll - 1);
+                        GeoscapeEventDef voidOmenEvent = geoLevelController.EventSystem.GetEventByID("VoidOmen");
+                        voidOmenEvent.GeoscapeEventData.Title.LocalizationKey = title;
+                        voidOmenEvent.GeoscapeEventData.Description[0].General.LocalizationKey = description;
+                        geoLevelController.EventSystem.TriggerGeoscapeEvent("VoidOmen", geoscapeEventContext);
+                        CreateVoidOmenObjective(title, description, geoLevelController);
                     }
                 }
             }
@@ -506,16 +399,16 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-        public static void CreateDarkEventObjective(string title, string description, GeoLevelController level)
+        public static void CreateVoidOmenObjective(string title, string description, GeoLevelController level)
         {
             try
             {
-                DiplomaticGeoFactionObjective darkEventObjective = new DiplomaticGeoFactionObjective(level.PhoenixFaction, level.PhoenixFaction)
+                DiplomaticGeoFactionObjective voidOmenObjective = new DiplomaticGeoFactionObjective(level.PhoenixFaction, level.PhoenixFaction)
                 {
                     Title = new LocalizedTextBind(title),
                     Description = new LocalizedTextBind(description),
                 };
-                level.PhoenixFaction.AddObjective(darkEventObjective);
+                level.PhoenixFaction.AddObjective(voidOmenObjective);
             }
             catch (Exception e)
             {
@@ -565,7 +458,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    if (__instance.Title != null && __instance.Title.LocalizationKey.Contains("DARK_EVENT_TITLE_"))
+                    if (__instance.Title != null && __instance.Title.LocalizationKey.Contains("VOID_OMEN_TITLE_"))
                     {
                         __result = Helper.CreateSpriteFromImageFile("Void-04P.png");
                     }
@@ -585,7 +478,7 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     try
                     {
-                        if (DarkEvents_Title.Contains(objectiveText))
+                        if (VoidOmens_Title.Contains(objectiveText))
                         {
                             icon = Helper.CreateSpriteFromImageFile("Void-04P.png");
                             tooltipText.LocalizationKey = objectiveText;
@@ -599,17 +492,16 @@ namespace PhoenixRising.BetterGeoscape
             }*/
 
 
-        public static void RemoveDarkEventObjective(string title, GeoLevelController level)
+        public static void RemoveVoidOmenObjective(string title, GeoLevelController level)
         {
             try
             {
-                DiplomaticGeoFactionObjective darkEventObjective =
+                DiplomaticGeoFactionObjective voidOmenObjective =
             (DiplomaticGeoFactionObjective)level.PhoenixFaction.Objectives.FirstOrDefault(ged => ged.Title.LocalizationKey.Equals(title));
-                string checktitle = darkEventObjective.GetTitle();
-                Logger.Always("the title in the RemoveDarkEventObjective method is " + title);
-                // Logger.Always("the localizedTextBind in the RemoveDarkEventObjective method is " + localizedTextBind);
+                string checktitle = voidOmenObjective.GetTitle();
+                Logger.Always("the title in the RemoveVoidOmenObjective method is " + title);
                 Logger.Always("if we found the objective, there should be something here " + checktitle);
-                level.PhoenixFaction.RemoveObjective(darkEventObjective);
+                level.PhoenixFaction.RemoveObjective(voidOmenObjective);
             }
             catch (Exception e)
             {

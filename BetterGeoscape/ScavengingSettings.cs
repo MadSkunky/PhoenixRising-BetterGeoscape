@@ -21,6 +21,7 @@ namespace PhoenixRising.BetterGeoscape
                 try
 
                 {
+                    //Crate_ScavengingSite_ResourcePacksCrateDef here chances of type of resources in crates
 
                     int initialScavSites = BetterGeoscapeMain.Config.InitialScavSites;
                     int crateScavSites = BetterGeoscapeMain.Config.ChancesScavCrates;

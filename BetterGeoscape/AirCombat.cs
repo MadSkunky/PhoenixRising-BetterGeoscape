@@ -58,6 +58,11 @@ namespace PhoenixRising.BetterGeoscape
                 railGunWDef.Accuracy = 70;
                 laserGunWDef.Accuracy = 85;
 
+                afterburnerMDef.AmmoCount = 3;
+                flaresMDef.AmmoCount = 3;
+                jammerMDef.AmmoCount= 3;
+
+
             }
 
 

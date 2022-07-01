@@ -14,12 +14,20 @@ namespace PhoenixRising.BetterGeoscape
     internal class CommonMethods
     {
         private static readonly DefRepository Repo = BetterGeoscapeMain.Repo;
+        public static GeoFactionDef phoenixPoint = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Phoenix_GeoPhoenixFactionDef"));
+        public static GeoFactionDef NewJericho = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("NewJericho_GeoFactionDef"));
+        public static GeoFactionDef Anu = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Anu_GeoFactionDef"));
+        public static GeoFactionDef Synedrion = Repo.GetAllDefs<GeoFactionDef>().FirstOrDefault(ged => ged.name.Equals("Synedrion_GeoFactionDef"));
+
 
         public static void SetStaminaToZero(GeoCharacter __instance)
         {
             try
             {
-                __instance.Fatigue.Stamina.SetToMin();
+                if (__instance.Fatigue.Stamina != null && __instance.Fatigue.Stamina > 0)
+                {
+                    __instance.Fatigue.Stamina.SetToMin();
+                }
             }
 
             catch (Exception e)
@@ -113,6 +121,25 @@ namespace PhoenixRising.BetterGeoscape
             }
             throw new InvalidOperationException();
         }
+
+        public static void ApplyRepPenaltyForRevealDiploMission(string eventIDRevealMission, GeoFactionDef partyFaction, int value)
+        {
+            try
+            {
+                GeoscapeEventDef eventDef = Repo.GetAllDefs<GeoscapeEventDef>().FirstOrDefault(ged => ged.name.Equals(eventIDRevealMission));
+                eventDef.GeoscapeEventData.Choices[0].Outcome.Diplomacy[0] = GenerateDiplomacyOutcome(partyFaction, phoenixPoint, value);
+
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e);
+            }
+
+
+
+        }
+
+
     }
 
 }

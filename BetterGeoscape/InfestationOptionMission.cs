@@ -12,9 +12,11 @@ using PhoenixPoint.Geoscape.Entities.Missions.Outcomes;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.View.ViewControllers.Modal;
+using PhoenixPoint.Tactical.View.ViewModules;
 using System;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace PhoenixRising.BetterGeoscape
 {
@@ -43,6 +45,7 @@ namespace PhoenixRising.BetterGeoscape
                 ResourceMissionOutcomeDef mutagenRewardInfestation = Helper.CreateDefFromClone(sourceMissonResourceReward, "2E579AB8-3744-4994-8036-B5018B5E2E15", "InfestationReward");
                 mutagenRewardInfestation.Resources.Values.Clear();
                 mutagenRewardInfestation.Resources.Values.Add(new ResourceUnit { Type = ResourceType.Mutagen, Value = 800 });
+                
 
 
 
@@ -52,6 +55,10 @@ namespace PhoenixRising.BetterGeoscape
                     {
                         missionTypeDef.Outcomes[0].DestroySite = true;
                         missionTypeDef.Outcomes[0].Outcomes[2] = mutagenRewardInfestation;
+                        missionTypeDef.Outcomes[0].BriefingModalBind.Title.LocalizationKey = "KEY_MISSION_HAVEN_INFESTED_VICTORY_NAME";
+                        missionTypeDef.Outcomes[0].BriefingModalBind.Description.LocalizationKey = "KEY_MISSION_HAVEN_INFESTED_VICTORY_DESCRIPTION";
+                        missionTypeDef.BriefingModalBind.Title.LocalizationKey= "KEY_MISSION_HAVEN_INFESTED_NAME";
+                        missionTypeDef.BriefingModalBind.Description.LocalizationKey = "KEY_MISSION_HAVEN_INFESTED_DESCRIPTION";
                     }
                 }
 
@@ -65,7 +72,8 @@ namespace PhoenixRising.BetterGeoscape
 
         // Copied and adapted from Mad´s Assorted Adjustments
         internal static GeoHavenDefenseMission DefenseMission = null;
-        internal static GeoSite geoSite = null;
+        internal static GeoSite GeoSiteForInfestation = null;
+        internal static GeoSite GeoSiteForScavenging = null;
         public static string InfestedHavensVariable = "Number_of_Infested_Havens";
 
         // Store mission for other patches
@@ -104,11 +112,11 @@ namespace PhoenixRising.BetterGeoscape
                     
 
                     int roll = UnityEngine.Random.Range(0, 6 + __instance.GeoLevel.CurrentDifficultyLevel.Order);
-                    int[] rolledVoidOmens = VoidOmens.CheckForAlreadyRolledVoidOmens(__instance.GeoLevel);
-                    if (attacker.PPFactionDef == sharedData.AlienFactionDef && __instance.IsInMist && __instance.GeoLevel.EventSystem.GetVariable("Infestation_Encounter_Variable") == 1
-                     && (roll >= 6 || rolledVoidOmens.Contains(17)))
+                    int[] rolledVoidOmens = VoidOmens.CheckFordVoidOmensInPlay(__instance.GeoLevel);
+                    if (attacker.PPFactionDef == sharedData.AlienFactionDef && __instance.IsInMist /*&& __instance.GeoLevel.EventSystem.GetVariable("Infestation_Encounter_Variable") == 1
+                     && (roll >= 6 || rolledVoidOmens.Contains(17))*/)
                     {
-                        geoSite = __instance;
+                        GeoSiteForInfestation = __instance;
                         __instance.ActiveMission = null;
                         __instance.ActiveMission?.Cancel();
 
@@ -118,6 +126,13 @@ namespace PhoenixRising.BetterGeoscape
                         __instance.RefreshVisuals();
                         return false;
                     }
+                    int roll2 = UnityEngine.Random.Range(0, 10);
+                    if (!__instance.IsInMist /*&& rolledVoidOmens.Contains(12) && roll2 > 5*/) 
+                    { 
+                        GeoSiteForScavenging = __instance;
+                        Logger.Always(__instance.SiteName.LocalizeEnglish() + "ready to spawn a scavenging site");
+                    }
+
                     Logger.Always("Defense mission is not null, the conditions for infestation were not fulfilled, so return true");
                     return true;
                 }
@@ -137,9 +152,9 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    if (DefenseMission != null && entry.Parameters.Contains(DefenseMission.Site.SiteName))
+                    if (GeoSiteForInfestation != null && entry.Parameters.Contains(GeoSiteForInfestation.SiteName))
                     {
-                        entry.Text = new LocalizedTextBind(DefenseMission.Site.Owner + " " + DefenseMission.Haven.Site.Name + " has succumbed to Pandoran infestation!", true);
+                        entry.Text = new LocalizedTextBind(GeoSiteForInfestation.Owner + " " + DefenseMission.Haven.Site.Name + " has succumbed to Pandoran infestation!", true);
 
                     }
                 }
@@ -160,12 +175,12 @@ namespace PhoenixRising.BetterGeoscape
                 {
                     Logger.Always("Method is invoked");
 
-                    if (geoSite != null && site == geoSite && mission is GeoHavenDefenseMission)
+                    if (GeoSiteForInfestation != null && site == GeoSiteForInfestation && mission is GeoHavenDefenseMission)
                     {
-                        Logger.Always("geoSite is " + geoSite.name);
-                        site.GeoLevel.AlienFaction.InfestHaven(geoSite);
+                        Logger.Always("GeoSiteForInfestation is " + GeoSiteForInfestation.name);
+                        site.GeoLevel.AlienFaction.InfestHaven(GeoSiteForInfestation);
                         Logger.Always("We got to here, haven should be infested!");
-                        geoSite = null;
+                        GeoSiteForInfestation = null;
                     }
                 }
                 catch (Exception e)
@@ -175,7 +190,7 @@ namespace PhoenixRising.BetterGeoscape
             }
         }
 
-       
+        
         [HarmonyPatch(typeof(InfestedHavenOutcomeDataBind), "ModalShowHandler")]
 
         public static class InfestedHavenOutcomeDataBind_Patch_ConvertDestructionToInfestation
@@ -195,6 +210,13 @@ namespace PhoenixRising.BetterGeoscape
                             ____modal.OnModalHide += __instance.ModalHideHandler;
                         }
 
+                        Text description = __instance.GetComponentInChildren<DescriptionController>().Description;
+                        description.GetComponent<I2.Loc.Localize>().enabled = false;
+                        description.text = "We destroyed the monstrosity that had taken over the remaining inhabitants of the haven, delivering them from a fate worse than death";
+                        Text title = __instance.TopBar.Title;
+                        title.GetComponent<I2.Loc.Localize>().enabled = false;
+                        title.text = "NODE DESTOYED";
+                        
                         GeoInfestationCleanseMission geoInfestationCleanseMission = (GeoInfestationCleanseMission)modal.Data;
                         GeoSite site = geoInfestationCleanseMission.Site;
                          __instance.Background.sprite = Helper.CreateSpriteFromImageFile("BG_Intro_1.jpg");

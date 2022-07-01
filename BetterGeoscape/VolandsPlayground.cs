@@ -4,13 +4,16 @@ using Base.Defs;
 using Base.UI;
 using Harmony;
 using PhoenixPoint.Common.Core;
+using PhoenixPoint.Common.Entities.GameTagsTypes;
 using PhoenixPoint.Geoscape.Core;
 using PhoenixPoint.Geoscape.Entities;
 using PhoenixPoint.Geoscape.Entities.PhoenixBases.FacilityComponents;
+using PhoenixPoint.Geoscape.Entities.Sites;
 using PhoenixPoint.Geoscape.Events;
 using PhoenixPoint.Geoscape.Events.Eventus;
 using PhoenixPoint.Geoscape.Levels;
 using PhoenixPoint.Geoscape.Levels.Factions;
+using PhoenixPoint.Geoscape.View;
 using PhoenixPoint.Geoscape.View.ViewStates;
 using PhoenixPoint.Tactical.Entities.Abilities;
 using PhoenixPoint.Tactical.Entities.Statuses;
@@ -238,10 +241,10 @@ namespace PhoenixRising.BetterGeoscape
                     PartyType = (OutcomeDiplomacyChange.ChangeTarget)1,
                 });
 
-                GeoscapeEventDef darkEvent = Helper.CreateDefFromClone(sourceLoseGeoEvent, "4585B351-3403-4798-B45A-B9DAD77361ED", "DarkEventDef");
-                darkEvent.GeoscapeEventData.EventID = "DarkEvent";
-                GeoscapeEventDef voidOmen = Helper.CreateDefFromClone(sourceLoseGeoEvent, "396AE9AA-3E2F-440A-83D0-C89255DCB92D", "VoidOmenEventDef");
-                voidOmen.GeoscapeEventData.EventID = "VoidOmen";
+                GeoscapeEventDef voidOmenEvent = Helper.CreateDefFromClone(sourceLoseGeoEvent, "4585B351-3403-4798-B45A-B9DAD77361ED", "VoidOmenDef");
+                voidOmenEvent.GeoscapeEventData.EventID = "VoidOmen";
+                GeoscapeEventDef voidOmenIntro = Helper.CreateDefFromClone(sourceLoseGeoEvent, "396AE9AA-3E2F-440A-83D0-C89255DCB92D", "VoidOmenIntroEventDef");
+                voidOmenIntro.GeoscapeEventData.EventID = "VoidOmenIntro";
 
 
                 Intro.CreateIntro();
@@ -354,6 +357,7 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
+                    Umbra.CheckForUmbraResearch(level);
                     Umbra.SetUmbraEvolution(level);
                     VoidOmens.CheckForVoidOmensRequiringTacticalPatching(level);
                     if (VoidOmens.VoidOmen16Active && VoidOmens.VoidOmen15Active)
@@ -374,7 +378,7 @@ namespace PhoenixRising.BetterGeoscape
 
 
         [HarmonyPatch(typeof(GeoAlienFaction), "UpdateFactionHourly")]
-        public static class GeoAlienFaction_UpdateFactionHourly_DarkEvents_Patch
+        public static class GeoAlienFaction_UpdateFactionHourly_VoidOmens_Patch
         {
             public static void Postfix(GeoFaction __instance)
             {
@@ -383,6 +387,28 @@ namespace PhoenixRising.BetterGeoscape
                     VoidOmens.CreateVoidOmens(__instance.GeoLevel);
                     VoidOmens.CheckForRemovedVoidOmens(__instance.GeoLevel);
                     Umbra.SetUmbraEvolution(__instance.GeoLevel);
+                    Umbra.CheckForUmbraResearch(__instance.GeoLevel);
+
+                  /*  if (InfestationOptionMission.GeoSiteForScavenging != null)
+                    {
+                        MissionTagDef missionTagCrates = Repo.GetAllDefs<MissionTagDef>().FirstOrDefault(ged => ged.name.Equals("Contains_ResourceCrates_MissionTagDef"));
+                        ICollection<MissionTagDef> missionTags = new List<MissionTagDef>
+                        {
+                            missionTagCrates
+                        };
+                        Logger.Always("GeoSiteForScavenging is " + InfestationOptionMission.GeoSiteForScavenging.name);
+                        InfestationOptionMission.GeoSiteForScavenging.CreateScavengingMission();
+                        GeoSiteVisualsDefs instance = GeoSiteVisualsDefs.Instance;
+                        GeoScavengingSite component3 = InfestationOptionMission.GeoSiteForScavenging.GetComponent<GeoScavengingSite>();
+                        Material scavengingSite = instance.GetScavengingSite(component3.IsOvergrown, component3.IsResourceSite, component3.IsVehicleSite, component3.IsRecruitsSite, site.State);
+                
+
+                        InfestationOptionMission.GeoSiteForScavenging.ReplaceSiteVisuals(scavengingSite);
+                        Logger.Always("We got to here, scavenging mission should have spawned!");
+                        
+                        InfestationOptionMission.GeoSiteForScavenging = null;
+
+                    }*/
                 }
                 catch (Exception e)
                 {
@@ -403,6 +429,7 @@ namespace PhoenixRising.BetterGeoscape
                         if (VoidOmens.VoidOmen3Active && __instance.TacticalActor.IsControlledByPlayer)
                         {
                             __result += Mathf.RoundToInt(__result * 0.5f);
+                            Logger.Always("WP cost increased to " + __result);
                         }
                     }
                 }
@@ -461,10 +488,32 @@ namespace PhoenixRising.BetterGeoscape
             {
                 try
                 {
-                    int[] voidOmensInEffect = VoidOmens.CheckForAlreadyRolledVoidOmens(__instance.GeoLevel);
+                    int[] voidOmensInEffect = VoidOmens.CheckFordVoidOmensInPlay(__instance.GeoLevel);
                     if (voidOmensInEffect.Contains(11))
                     {
                         __result += 3 * __instance.GeoLevel.CurrentDifficultyLevel.Order;
+                    }
+                }
+
+                catch (Exception e)
+                {
+                    Logger.Error(e);
+                }
+
+            }
+        }
+        /*
+        [HarmonyPatch(typeof(GeoBehemothActor), "UpdateHourly")]
+        public static class GeoBehemothActor_UpdateHourly_VoidOmenBehemothRoamsMore_Patch
+        {
+            public static void Postfix(int ____disruptionThreshhold, GeoBehemothActor __instance)
+            {
+                try
+                {
+                    int[] voidOmensInEffect = VoidOmens.CheckForAlreadyRolledVoidOmens(__instance.GeoLevel);
+                    if (voidOmensInEffect.Contains(11))
+                    {
+                        ____disruptionThreshhold = __instance.CalculateDisruptionThreshhold();
                     }
                 }
 
@@ -532,27 +581,27 @@ namespace PhoenixRising.BetterGeoscape
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("FesteringSkiesAfterHamerfall.png");
                     }
 
-                    if (geoEvent.EventID.Equals("DarkEvent"))
+                    if (geoEvent.EventID.Equals("VoidOmen"))
                     {
                         __result.EventLeader = Helper.CreateSpriteFromImageFile("BG_alistair_small.png");
                     }
 
-                    if (geoEvent.EventID.Equals("DarkEvent") && (geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_02"
-                        || geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_05" || geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_08"))
+                    if (geoEvent.EventID.Equals("VoidOmen") && (geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_02"
+                        || geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_05" || geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_08"))
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_05.jpg");
                     }
 
-                    if (geoEvent.EventID.Equals("DarkEvent") && geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_11")
+                    if (geoEvent.EventID.Equals("VoidOmen") && geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_11")
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_11.jpg");
                     }
 
-                    if (geoEvent.EventID.Equals("DarkEvent") && (geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_12" || geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_09"))
+                    if (geoEvent.EventID.Equals("VoidOmen") && (geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_12" || geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_09"))
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_12.jpg");
                     }
-                    if (geoEvent.EventID.Equals("DarkEvent") && geoEvent.EventData.Title.LocalizationKey == "DARK_EVENT_TITLE_13")
+                    if (geoEvent.EventID.Equals("VoidOmen") && geoEvent.EventData.Title.LocalizationKey == "VOID_OMEN_TITLE_13")
                     {
                         __result.EventBackground = Helper.CreateSpriteFromImageFile("VO_13.jpg");
                     }
